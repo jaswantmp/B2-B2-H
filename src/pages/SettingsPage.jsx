@@ -2,19 +2,23 @@
 import { useState } from 'react'
 import {
   Settings, User, Bell, Palette, Shield, Save,
-  CheckCircle, Eye, EyeOff, Sun, Moon, Monitor,
+  CheckCircle, Eye, EyeOff, Sun, Moon, Monitor, Award
 } from 'lucide-react'
+import { useSearchParams } from 'react-router-dom'
 import PulseAvatar from '../components/PulseAvatar.jsx'
 import { useTheme } from '../context/ThemeContext.jsx'
 import { useAuth } from '../context/AuthContext.jsx'
 import { updateProfile } from '../services/api.js'
+import SkillsSection from '../components/SkillsSection.jsx'
 
 const SECTIONS = [
   { key: 'profile',       label: 'Profile',            icon: User    },
+  { key: 'skills',        label: 'Skills',             icon: Award   },
   { key: 'appearance',    label: 'Appearance',         icon: Palette },
   { key: 'notifications', label: 'Notifications',      icon: Bell    },
   { key: 'privacy',       label: 'Privacy & Security', icon: Shield  },
 ]
+
 
 const STATUS_OPTIONS = [
   { value: 'LOOKING_FOR_TEAM',    label: 'Looking For Team',    color: '#10B981' },
@@ -45,7 +49,7 @@ function SectionNav({ active, onChange }) {
           onClick={() => onChange(key)}
           className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium transition-all w-full text-left ${
             active === key
-              ? 'bg-violet-700/20 text-violet-300 border border-violet-700/30'
+              ? 'bg-violet-50 dark:bg-violet-700/20 text-violet-700 dark:text-violet-300 border border-violet-200 dark:border-violet-700/30'
               : 'theme-muted hover:bg-[var(--bg-raised)] hover:theme-text border border-transparent'
           }`}
           aria-current={active === key ? 'page' : undefined}
@@ -243,7 +247,7 @@ function AppearanceSection() {
               )}
               className={`p-4 rounded-xl border text-left transition-all ${
                 theme === key || (key === 'system' && false)
-                  ? 'border-violet-600 bg-violet-900/20'
+                  ? 'border-violet-300 dark:border-violet-600 bg-violet-50 dark:bg-violet-900/20'
                   : 'border theme-divider hover:border-violet-500/50'
               }`}
               style={theme !== key ? { backgroundColor: 'var(--bg-raised)' } : {}}
@@ -251,10 +255,10 @@ function AppearanceSection() {
             >
               <Icon
                 size={22}
-                className={`mb-2 ${theme === key ? 'text-violet-400' : 'theme-muted'}`}
+                className={`mb-2 ${theme === key ? 'text-violet-600 dark:text-violet-400' : 'theme-muted'}`}
                 aria-hidden="true"
               />
-              <p className={`font-semibold text-sm ${theme === key ? 'text-violet-300' : 'theme-text'}`}>
+              <p className={`font-semibold text-sm ${theme === key ? 'text-violet-700 dark:text-violet-300' : 'theme-text'}`}>
                 {label}
               </p>
               <p className="text-xs theme-muted mt-0.5">{desc}</p>
@@ -269,7 +273,7 @@ function AppearanceSection() {
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 rounded-full bg-violet-600 border-2 border-violet-400" aria-label="Volt Violet" />
           <span className="text-sm theme-muted">Volt Violet (#7C3AED)</span>
-          <span className="text-xs px-2 py-0.5 rounded-full bg-violet-900/30 border border-violet-800/40 text-violet-400 ml-1">Active</span>
+          <span className="text-xs px-2 py-0.5 rounded-full bg-violet-100 dark:bg-violet-900/30 border border-violet-400 dark:border-violet-800/40 text-violet-800 dark:text-violet-400 font-semibold ml-1">Active</span>
         </div>
       </div>
     </div>
@@ -419,10 +423,17 @@ function PrivacySection() {
 
 // ── Main page ────────────────────────────────────────────────────────────────
 export default function SettingsPage() {
-  const [activeSection, setActiveSection] = useState('profile')
+  const [searchParams, setSearchParams] = useSearchParams()
+  const [activeSection, setActiveSection] = useState(searchParams.get('tab') || 'profile')
+
+  const handleSectionChange = (section) => {
+    setActiveSection(section)
+    setSearchParams({ tab: section })
+  }
 
   const CONTENT = {
     profile:       <ProfileSection />,
+    skills:        <SkillsSection />,
     appearance:    <AppearanceSection />,
     notifications: <NotificationsSection />,
     privacy:       <PrivacySection />,
@@ -435,7 +446,7 @@ export default function SettingsPage() {
       {/* Header */}
       <div className="mb-6">
         <h1 className="text-2xl font-bold theme-text mb-1 flex items-center gap-2">
-          <Settings size={22} className="text-violet-400" />
+          <Settings size={22} className="text-violet-800 dark:text-violet-400" />
           Settings
         </h1>
         <p className="theme-muted text-sm">Manage your profile, preferences, and account.</p>
@@ -444,7 +455,7 @@ export default function SettingsPage() {
       <div className="flex flex-col lg:flex-row gap-6">
         {/* Nav */}
         <div className="lg:w-52 flex-shrink-0">
-          <SectionNav active={activeSection} onChange={setActiveSection} />
+          <SectionNav active={activeSection} onChange={handleSectionChange} />
         </div>
 
         {/* Content panel */}
@@ -460,6 +471,7 @@ export default function SettingsPage() {
           </div>
         </div>
       </div>
+
     </div>
   )
 }

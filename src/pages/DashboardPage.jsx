@@ -1,6 +1,6 @@
 // src/pages/DashboardPage.jsx
 import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import {
   Sparkles, TrendingUp, Users, Calendar, ArrowRight,
   Bell, Trophy, ChevronRight, Zap, Clock,
@@ -22,6 +22,7 @@ const STATUS_OPTIONS = [
 
 export default function DashboardPage() {
   const { user } = useAuth()
+  const navigate = useNavigate()
   const [status, setStatus]         = useState(user?.status || 'LOOKING_FOR_TEAM')
   const [statusOpen, setStatusOpen] = useState(false)
 
@@ -31,6 +32,14 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    if (user && user.onboarding_completed === false && !sessionStorage.getItem('onboarding_skipped')) {
+      sessionStorage.setItem('onboarding_skipped', 'true')
+      navigate('/onboarding')
+    }
+  }, [user, navigate])
+
+  useEffect(() => {
+    if (!user?.id) return
     const fetchDashboardData = async () => {
       try {
         const [hList, rList, nList] = await Promise.all([
@@ -57,7 +66,7 @@ export default function DashboardPage() {
       }
     }
     fetchDashboardData()
-  }, [])
+  }, [user])
 
   const unread             = notificationsList.filter(n => !n.read).length
   const upcomingHackathons = hackathonsList.slice(0, 3)
@@ -69,6 +78,30 @@ export default function DashboardPage() {
 
   return (
     <div className="p-6 lg:p-8 space-y-8 max-w-7xl">
+
+      {/* Onboarding Promo Banner */}
+      {user?.onboarding_completed === false && (
+        <div className="rounded-2xl p-5 border border-violet-500/20 bg-gradient-to-r from-violet-950/20 via-slate-900 to-cyan-950/20 flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="flex items-start gap-4">
+            <div className="w-10 h-10 rounded-xl bg-violet-900/40 border border-violet-700/50 flex items-center justify-center flex-shrink-0 mt-0.5">
+              <Sparkles className="text-violet-400" size={20} />
+            </div>
+            <div>
+              <h3 className="font-bold text-slate-100 mb-1">Complete your Onboarding Profile</h3>
+              <p className="text-xs text-slate-400 max-w-xl">
+                Unlock customized AI Team Matches, Builder Discovery, and automated recommendation filters by spending 2 minutes in our onboarding wizard.
+              </p>
+            </div>
+          </div>
+          <Link
+            to="/onboarding"
+            className="flex-shrink-0 px-4 py-2.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white text-xs font-semibold flex items-center justify-center gap-1.5 transition-all shadow-lg shadow-violet-600/10"
+          >
+            Start Onboarding
+            <ArrowRight size={13} />
+          </Link>
+        </div>
+      )}
 
       {/* ── Welcome banner ─────────────────────────────────────────── */}
       <section aria-label="Welcome">

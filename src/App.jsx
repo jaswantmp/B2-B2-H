@@ -22,6 +22,8 @@ import GeneratorPage       from './pages/GeneratorPage.jsx'
 import AIProjectIdeaPage   from './pages/AIProjectIdeaPage.jsx'
 import NotificationsPage   from './pages/NotificationsPage.jsx'
 import SettingsPage        from './pages/SettingsPage.jsx'
+import AITeamMatcherPage   from './pages/AITeamMatcherPage.jsx'
+import OnboardingPage      from './pages/OnboardingPage.jsx'
 
 export default function App() {
   return (
@@ -40,6 +42,7 @@ export default function App() {
               <Route element={<ProtectedRoute />}>
                 <Route element={<MainLayout />}>
                   <Route path="/dashboard"       element={<DashboardPage />} />
+                  <Route path="/onboarding"      element={<OnboardingPage />} />
                   <Route path="/discover"        element={<DiscoverPage />} />
                   <Route path="/builders/:id"    element={<BuilderProfilePage />} />
                   <Route path="/profile/:id"     element={<BuilderProfilePage />} />
@@ -52,6 +55,7 @@ export default function App() {
                   <Route path="/ai-project-generator" element={<AIProjectIdeaPage />} />
                   <Route path="/notifications"   element={<NotificationsPage />} />
                   <Route path="/settings"        element={<SettingsPage />} />
+                  <Route path="/ai-team-matcher" element={<AITeamMatcherPage />} />
                 </Route>
               </Route>
 

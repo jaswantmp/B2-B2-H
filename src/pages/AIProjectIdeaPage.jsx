@@ -1,9 +1,11 @@
 // src/pages/AIProjectIdeaPage.jsx
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import {
-  Brain, Sparkles, Code2, Users, Lightbulb, Plus, X, AlertCircle, RefreshCw, Cpu
+  Brain, Sparkles, Code2, Users, Lightbulb, Plus, X, AlertCircle, RefreshCw, Cpu, ArrowRight
 } from 'lucide-react'
 import { generateProjectIdea } from '../services/api.js'
+import { useAuth } from '../context/AuthContext.jsx'
 
 const SUGGESTED_DOMAINS = [
   'Education',
@@ -18,12 +20,34 @@ const POPULAR_SKILLS = [
 ]
 
 export default function AIProjectIdeaPage() {
+  const { user } = useAuth()
   const [domain, setDomain] = useState('')
   const [skillInput, setSkillInput] = useState('')
   const [skills, setSkills] = useState([])
   const [loading, setLoading] = useState(false)
   const [result, setResult] = useState(null)
   const [error, setError] = useState('')
+
+  if (user && user.onboarding_completed === false) {
+    return (
+      <div className="p-6 lg:p-8 max-w-4xl min-h-[70vh] flex flex-col items-center justify-center text-center space-y-5">
+        <div className="w-16 h-16 rounded-2xl bg-violet-900/30 border border-violet-800/40 flex items-center justify-center mx-auto">
+          <Brain className="text-violet-400 animate-pulse" size={28} />
+        </div>
+        <h2 className="text-2xl font-bold theme-text">AI Project Blueprint Generator is Locked</h2>
+        <p className="theme-muted text-sm max-w-md leading-relaxed">
+          You must complete your profile onboarding before generating custom hackathon project blueprints.
+        </p>
+        <Link
+          to="/onboarding"
+          className="px-5 py-2.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white font-semibold text-sm transition-all shadow-lg shadow-violet-500/20 flex items-center gap-2"
+        >
+          Complete Onboarding
+          <ArrowRight size={16} />
+        </Link>
+      </div>
+    )
+  }
 
   const handleAddSkill = (skill) => {
     const trimmed = skill.trim()
@@ -136,7 +160,7 @@ export default function AIProjectIdeaPage() {
                       onClick={() => { setDomain(d); setError('') }}
                       className={`text-xs px-2.5 py-1.5 rounded-lg transition-all border ${
                         domain === d
-                          ? 'bg-violet-750 border-violet-500 text-white'
+                          ? 'bg-violet-100 dark:bg-violet-950/40 border-violet-400 dark:border-violet-700/50 text-violet-800 dark:text-violet-400 font-semibold'
                           : 'theme-btn-ghost hover:text-violet-400'
                       }`}
                       style={domain !== d ? { backgroundColor: 'var(--bg-raised)' } : {}}
@@ -185,7 +209,7 @@ export default function AIProjectIdeaPage() {
                   {skills.map(s => (
                     <span
                       key={s}
-                      className="inline-flex items-center gap-1 text-xs px-2.5 py-1 rounded-md border font-medium bg-violet-600/10 border-violet-500/30 text-violet-300"
+                      className="inline-flex items-center gap-1 text-xs px-2.5 py-1 rounded-md border font-semibold bg-violet-100 dark:bg-violet-900/30 border-violet-400 dark:border-violet-800/40 text-violet-800 dark:text-violet-400"
                     >
                       {s}
                       <button
@@ -216,7 +240,7 @@ export default function AIProjectIdeaPage() {
                         onClick={() => handleTogglePopularSkill(skill)}
                         className={`text-xs px-2 py-1 rounded-md border transition-all ${
                           active
-                            ? 'bg-violet-750 border-violet-500 text-white'
+                            ? 'bg-violet-100 dark:bg-violet-950/40 border-violet-400 dark:border-violet-700/50 text-violet-800 dark:text-violet-400 font-semibold'
                             : 'theme-btn-ghost'
                         }`}
                       >
@@ -326,7 +350,7 @@ export default function AIProjectIdeaPage() {
             >
               {/* Project title */}
               <div>
-                <span className="text-xs font-bold uppercase tracking-wider text-violet-400 bg-violet-950/40 border border-violet-800/30 px-2.5 py-1 rounded-full">
+                <span className="text-xs font-semibold uppercase tracking-wider text-violet-800 dark:text-violet-400 bg-violet-100 dark:bg-violet-900/30 border border-violet-400 dark:border-violet-800/40 px-2.5 py-1 rounded-full">
                   Project Blueprint
                 </span>
                 <h2 className="text-2xl font-bold theme-text mt-3 mb-1.5">{result.project_name}</h2>
@@ -364,7 +388,7 @@ export default function AIProjectIdeaPage() {
                   {result.tech_stack.map(tech => (
                     <span
                       key={tech}
-                      className="text-xs px-3 py-1.5 rounded-lg border font-medium bg-cyan-950/20 border-cyan-800/40 text-cyan-300 flex items-center gap-1.5"
+                      className="text-xs px-3 py-1.5 rounded-lg border font-semibold bg-cyan-100 dark:bg-cyan-950/30 border-cyan-400 dark:border-cyan-800/40 text-cyan-800 dark:text-cyan-300 flex items-center gap-1.5"
                     >
                       <Cpu size={12} />
                       {tech}
@@ -376,7 +400,7 @@ export default function AIProjectIdeaPage() {
               {/* Team Roles */}
               <div className="space-y-2.5 border-t theme-divider pt-4">
                 <h3 className="text-xs font-semibold theme-muted uppercase tracking-wider flex items-center gap-1.5">
-                  <Users size={14} className="text-violet-400" />
+                  <Users size={14} className="text-violet-800 dark:text-violet-400" />
                   Suggested Team Roles
                 </h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -386,7 +410,7 @@ export default function AIProjectIdeaPage() {
                       className="flex items-center gap-3 p-3 rounded-xl border"
                       style={{ backgroundColor: 'var(--bg-raised)', borderColor: 'var(--border-subtle)' }}
                     >
-                      <span className="w-6 h-6 rounded-full bg-violet-700/25 border border-violet-500/50 flex items-center justify-center text-xs font-bold text-violet-300">
+                      <span className="w-6 h-6 rounded-full bg-violet-100 dark:bg-violet-900/30 border border-violet-400 dark:border-violet-800/40 flex items-center justify-center text-xs font-bold text-violet-800 dark:text-violet-400">
                         {idx + 1}
                       </span>
                       <span className="text-sm font-semibold theme-text">{role}</span>

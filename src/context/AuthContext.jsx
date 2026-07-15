@@ -13,11 +13,11 @@ const DEMO_PASSWORD = 'password123'
 // Intentionally does NOT spread `currentUser` from data.js so the demo user
 // has a clean, clearly-labelled identity instead of inheriting a seed profile.
 const DEMO_USER = {
-  id: 1,
+  id: '61ace078-841c-48e7-b038-4e485a54a187',
   name: 'Jaswant MP',
   username: 'jaswantmp',
   email: DEMO_EMAIL,
-  avatar: 'https://api.dicebear.com/8.x/notionists/svg?seed=JaswantMP&backgroundColor=c0aede',
+  avatar: 'https://api.dicebear.com/8.x/adventurer/svg?seed=JaswantMP',
   university: 'SKCET',  
   college: 'SKCET',
   district: 'Dindigul',
@@ -55,6 +55,17 @@ const DEMO_USER = {
 }
 
 const delay = (ms = 700) => new Promise(r => setTimeout(r, ms))
+
+function formatError(errData, fallback) {
+  if (!errData || !errData.detail) return fallback
+  if (Array.isArray(errData.detail)) {
+    return errData.detail.map(e => e.msg || JSON.stringify(e)).join(', ')
+  }
+  if (typeof errData.detail === 'string') {
+    return errData.detail
+  }
+  return JSON.stringify(errData.detail)
+}
 
 function decorateUser(userObj) {
   if (!userObj) return null
@@ -117,7 +128,7 @@ export function AuthProvider({ children }) {
       })
       if (!response.ok) {
         const errData = await response.json().catch(() => ({}))
-        throw new Error(errData.detail || 'Login failed. Please check your credentials.')
+        throw new Error(formatError(errData, 'Login failed. Please check your credentials.'))
       }
       const data = await response.json()
       const decorated = decorateUser(data.user)
@@ -141,13 +152,13 @@ export function AuthProvider({ children }) {
   // ── Sign up ─────────────────────────────────────────────────────────────
   // Builds a clean new user from the submitted form — does NOT inherit
   // any fields from the seed data or the demo user.
-  const signup = useCallback(async ({ name, email, college, branch }) => {
+  const signup = useCallback(async ({ name, email, college, branch, password }) => {
     const trimmedName = name.trim()
     const rawUserObj = {
       name: trimmedName,
       username: trimmedName.toLowerCase().replace(/\s+/g, ''),
       email: email.trim().toLowerCase(),
-      avatar: `https://api.dicebear.com/8.x/notionists/svg?seed=${encodeURIComponent(trimmedName)}&backgroundColor=b6e3f4`,
+      avatar: `https://api.dicebear.com/8.x/adventurer/svg?seed=${encodeURIComponent(trimmedName)}`,
       university: college.trim(),
       college: college.trim(),
       district: '',
@@ -177,19 +188,19 @@ export function AuthProvider({ children }) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...rawUserObj,
-          password: 'password123',
+          password: password || 'password123',
         }),
       })
       if (!response.ok) {
         const errData = await response.json().catch(() => ({}))
-        throw new Error(errData.detail || 'Registration failed. Please check details.')
+        throw new Error(formatError(errData, 'Registration failed. Please check details.'))
       }
       const dbUser = await response.json()
       
       const loginResponse = await fetch(`${BASE}/api/v1/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: dbUser.email, password: 'password123' }),
+        body: JSON.stringify({ email: dbUser.email, password: password || 'password123' }),
       })
       if (!loginResponse.ok) {
         throw new Error('Auto-login failed after registration.')
@@ -217,6 +228,36 @@ export function AuthProvider({ children }) {
     return { success: true, email: email.trim().toLowerCase() }
   }, [])
 
+  // ── Refresh User ───────────────────────────────────────────────────────
+  const refreshUser = useCallback(async () => {
+    const stored = readStoredSession()
+    const token = stored?.token || ''
+    
+    if (BASE) {
+      const response = await fetch(`${BASE}/api/v1/auth/me`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
+        },
+      })
+      if (!response.ok) {
+        throw new Error('Failed to refresh user profile.')
+      }
+      const data = await response.json()
+      const decorated = decorateUser(data)
+      setUser(decorated)
+      persistSession(decorated, token)
+      return decorated
+    } else {
+      // Mock mode
+      const decorated = decorateUser({ ...DEMO_USER, onboarding_completed: true })
+      setUser(decorated)
+      persistSession(decorated, token)
+      return decorated
+    }
+  }, [])
+
   // ── Logout ──────────────────────────────────────────────────────────────
   const logout = useCallback(() => {
     localStorage.removeItem(STORAGE_KEY)
@@ -232,6 +273,7 @@ export function AuthProvider({ children }) {
         login,
         signup,
         logout,
+        refreshUser,
         requestPasswordReset,
         DEMO_EMAIL,
         DEMO_PASSWORD,

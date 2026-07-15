@@ -178,16 +178,20 @@ export default function DiscoverPage() {
                 style={{ backgroundColor: 'var(--bg-raised)' }}>
                 <SearchIcon size={24} className="theme-muted" />
               </div>
-              <p className="theme-text font-medium mb-1">No builders match your search</p>
-              <p className="theme-muted text-sm mb-4">
-                Try different keywords, a shorter query, or remove some filters.
-              </p>
-              <button
-                onClick={clearAll}
-                className="text-violet-400 hover:text-violet-300 text-sm transition-colors"
-              >
-                Clear everything
-              </button>
+              <p className="theme-text font-medium mb-1">No builders found.</p>
+              {(search || filters.skills?.length > 0 || filters.statuses?.length > 0 || filters.colleges?.length > 0 || filters.cities?.length > 0) ? (
+                <>
+                  <p className="theme-muted text-sm mb-4">
+                    Try different keywords, a shorter query, or remove some filters.
+                  </p>
+                  <button
+                    onClick={clearAll}
+                    className="text-violet-400 hover:text-violet-300 text-sm transition-colors"
+                  >
+                    Clear everything
+                  </button>
+                </>
+              ) : null}
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">

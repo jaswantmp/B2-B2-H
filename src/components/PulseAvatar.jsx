@@ -23,6 +23,21 @@ export default function PulseAvatar({ user, size = 'md', showTooltip = true, cla
   }
   const s = sizes[size] || sizes.md
 
+  const username = user?.name || user?.username || 'User'
+  const defaultAvatar = `https://api.dicebear.com/8.x/adventurer/svg?seed=${encodeURIComponent(username)}`
+
+  const isUrlValid = (url) => {
+    if (!url) return false
+    try {
+      new URL(url)
+      return true
+    } catch (_) {
+      return false
+    }
+  }
+
+  const src = isUrlValid(user?.avatar) ? user.avatar : defaultAvatar
+
   return (
     <div className={`relative inline-flex flex-shrink-0 ${s.wrap} ${className}`} title={showTooltip ? config.label : undefined}>
       {/* Pulse animation ring */}
@@ -41,8 +56,11 @@ export default function PulseAvatar({ user, size = 'md', showTooltip = true, cla
       />
       {/* Avatar image */}
       <img
-        src={user?.avatar || `https://api.dicebear.com/8.x/avataaars/svg?seed=${user?.name}`}
-        alt={`${user?.name || 'User'}'s avatar`}
+        src={src}
+        onError={(e) => {
+          e.currentTarget.src = defaultAvatar
+        }}
+        alt={`${username}'s avatar`}
         className={`${s.img} rounded-full object-cover bg-slate-700`}
         style={{ padding: '2px' }}
       />

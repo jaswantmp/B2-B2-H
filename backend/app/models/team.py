@@ -21,6 +21,7 @@ class Team(Base):
     description: Mapped[str | None] = mapped_column(String(500))
     hackathon_id: Mapped[int | None] = mapped_column(Integer, nullable=True)  # References mock/real hackathon ID
     status: Mapped[str] = mapped_column(String(30), default="recruiting", nullable=False)  # recruiting, active, etc.
+    max_members: Mapped[int] = mapped_column(Integer, default=5, nullable=False)
     leader_id: Mapped[str] = mapped_column(
         UUID(as_uuid=False),
         ForeignKey("users.id", ondelete="RESTRICT"),

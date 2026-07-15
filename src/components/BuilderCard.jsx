@@ -35,14 +35,14 @@ export default function BuilderCard({ user, onInvite }) {
 
       {/* Skills */}
       <div className="flex flex-wrap gap-1.5 mb-3">
-        {user.skills.slice(0, 4).map(skill => (
+        {(user.skills || []).slice(0, 4).map(skill => (
           <SkillBadge
             key={skill}
             skill={skill}
             verified={user.verifiedSkills?.includes(skill)}
           />
         ))}
-        {user.skills.length > 4 && (
+        {(user.skills || []).length > 4 && (
           <span className="text-xs theme-muted self-center">+{user.skills.length - 4}</span>
         )}
       </div>

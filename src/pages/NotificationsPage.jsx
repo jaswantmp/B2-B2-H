@@ -5,18 +5,21 @@ import {
   Check, CheckCheck, Trash2, Filter,
 } from 'lucide-react'
 import PulseAvatar from '../components/PulseAvatar.jsx'
-import { getNotifications, markRead as apiMarkRead } from '../services/api.js'
+import { getNotifications, markRead as apiMarkRead, getMyInvitations, acceptInvitation, declineInvitation } from '../services/api.js'
+import { useAuth } from '../context/AuthContext.jsx'
+import { useToast } from '../context/ToastContext.jsx'
 
 
 const TYPE_CONFIG = {
-  invite:    { icon: Mail,      color: 'text-violet-400', bg: 'bg-violet-900/30 border-violet-800/40', label: 'Invite'     },
-  match:     { icon: Sparkles,  color: 'text-cyan-400',   bg: 'bg-cyan-900/30   border-cyan-800/40',   label: 'AI Match'   },
-  update:    { icon: CheckCircle, color: 'text-emerald-400', bg: 'bg-emerald-900/30 border-emerald-800/40', label: 'Update' },
-  hackathon: { icon: Calendar,  color: 'text-amber-400',  bg: 'bg-amber-900/30  border-amber-800/40',  label: 'Hackathon'  },
-  system:    { icon: Info,      color: 'text-slate-400',  bg: 'bg-slate-800/60  border-slate-700/50',  label: 'System'     },
+  invite:    { icon: Mail,      color: 'text-violet-800 dark:text-violet-400', bg: 'bg-violet-100 dark:bg-violet-900/30 border-violet-400 dark:border-violet-800/40', label: 'Invite'     },
+  match:     { icon: Sparkles,  color: 'text-cyan-700 dark:text-cyan-400',   bg: 'bg-cyan-100 dark:bg-cyan-900/30   border-cyan-200 dark:border-cyan-800/40',   label: 'AI Match'   },
+  update:    { icon: CheckCircle, color: 'text-emerald-700 dark:text-emerald-400', bg: 'bg-emerald-100 dark:bg-emerald-900/30 border-emerald-200 dark:border-emerald-800/40', label: 'Update' },
+  hackathon: { icon: Calendar,  color: 'text-amber-700 dark:text-amber-400',  bg: 'bg-amber-100 dark:bg-amber-900/30  border-amber-200 dark:border-amber-800/40',  label: 'Hackathon'  },
+  system:    { icon: Info,      color: 'text-slate-600 dark:text-slate-400',  bg: 'bg-slate-100 dark:bg-slate-800/60  border-slate-200 dark:border-slate-700/50',  label: 'System'     },
+  invite_declined: { icon: Mail, color: 'text-rose-700 dark:text-rose-400', bg: 'bg-rose-100 dark:bg-rose-900/30 border-rose-200 dark:border-rose-800/40', label: 'Declined' },
 }
 
-function NotifCard({ notif, onRead, onDelete }) {
+function NotifCard({ notif, linkedInvite, onRead, onDelete, onAccept, onDecline }) {
   const cfg  = TYPE_CONFIG[notif.type] ?? TYPE_CONFIG.system
   const Icon = cfg.icon
 
@@ -50,7 +53,26 @@ function NotifCard({ notif, onRead, onDelete }) {
               {cfg.label}
             </span>
             <p className="text-sm theme-text leading-relaxed mt-0.5">{notif.message}</p>
-            <p className="text-xs theme-muted mt-1">{notif.time}</p>
+            
+            {/* Accept / Decline buttons if pending invite is linked */}
+            {notif.type === 'invite' && linkedInvite && (
+              <div className="flex items-center gap-2 mt-3">
+                <button
+                  onClick={() => onAccept(linkedInvite.id, notif.id)}
+                  className="px-3.5 py-1.5 bg-violet-600 hover:bg-violet-500 text-white text-xs font-semibold rounded-lg transition-colors shadow-md"
+                >
+                  Accept
+                </button>
+                <button
+                  onClick={() => onDecline(linkedInvite.id, notif.id)}
+                  className="px-3.5 py-1.5 border theme-divider hover:bg-[var(--bg-raised)] theme-text text-xs font-semibold rounded-lg transition-colors"
+                >
+                  Decline
+                </button>
+              </div>
+            )}
+
+            <p className="text-xs theme-muted mt-2">{notif.time}</p>
           </div>
 
           {/* Actions */}
@@ -81,16 +103,32 @@ function NotifCard({ notif, onRead, onDelete }) {
 }
 
 export default function NotificationsPage() {
+  const { user } = useAuth()
+  const { push } = useToast()
   const [notifs, setNotifs]     = useState([])
+  const [invitations, setInvitations] = useState([])
   const [loading, setLoading]   = useState(true)
   const [filter, setFilter]     = useState('all')   // 'all' | 'unread' | type keys
 
-  useEffect(() => {
-    getNotifications().then(data => {
-      setNotifs(data)
+  const fetchData = async () => {
+    if (!user?.id) return
+    try {
+      const [notifData, inviteData] = await Promise.all([
+        getNotifications(),
+        getMyInvitations()
+      ])
+      setNotifs(notifData)
+      setInvitations(inviteData)
+    } catch (err) {
+      console.error(err)
+    } finally {
       setLoading(false)
-    }).catch(console.error)
-  }, [])
+    }
+  }
+
+  useEffect(() => {
+    fetchData()
+  }, [user])
 
   const markRead = async id => {
     try {
@@ -111,13 +149,40 @@ export default function NotificationsPage() {
     }
   }
 
+  const handleAccept = async (inviteId, notifId) => {
+    try {
+      await acceptInvitation(inviteId)
+      push('Invitation accepted')
+      if (notifId) {
+        await apiMarkRead(notifId)
+      }
+      fetchData()
+    } catch (err) {
+      console.error(err)
+      push('Failed to accept invitation', 'error')
+    }
+  }
+
+  const handleDecline = async (inviteId, notifId) => {
+    try {
+      await declineInvitation(inviteId)
+      push('Invitation declined')
+      if (notifId) {
+        await apiMarkRead(notifId)
+      }
+      fetchData()
+    } catch (err) {
+      console.error(err)
+      push('Failed to decline invitation', 'error')
+    }
+  }
+
   const deleteNotif = id => setNotifs(ns => ns.filter(n => n.id !== id))
   const clearRead   = ()  => setNotifs(ns => ns.filter(n => !n.read))
 
   if (loading) {
     return <div className="p-6 lg:p-8 max-w-3xl theme-text">Loading notifications...</div>
   }
-
 
   const unreadCount = notifs.filter(n => !n.read).length
 
@@ -195,10 +260,18 @@ export default function NotificationsPage() {
         <div className="text-center py-20">
           <Bell size={36} className="theme-muted mx-auto mb-3" />
           <p className="theme-text font-medium mb-1">
-            {filter === 'unread' ? 'All caught up!' : 'No notifications here'}
+            {filter === 'unread' 
+              ? 'All caught up!' 
+              : filter === 'invite' 
+                ? 'No pending invitations.' 
+                : 'No notifications.'}
           </p>
           <p className="theme-muted text-sm">
-            {filter === 'unread' ? 'No unread notifications.' : 'Try a different filter.'}
+            {filter === 'unread' 
+              ? 'No unread notifications.' 
+              : filter === 'invite'
+                ? 'You do not have any pending team invitations.'
+                : 'You are all caught up.'}
           </p>
         </div>
       ) : (
@@ -207,8 +280,11 @@ export default function NotificationsPage() {
             <NotifCard
               key={n.id}
               notif={n}
+              linkedInvite={invitations.find(i => i.id === n.invite_id)}
               onRead={markRead}
               onDelete={deleteNotif}
+              onAccept={handleAccept}
+              onDecline={handleDecline}
             />
           ))}
         </div>

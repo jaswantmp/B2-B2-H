@@ -80,3 +80,36 @@ class ProjectMember(Base):
 
     def __repr__(self) -> str:
         return f"<ProjectMember project={self.project_id} user={self.user_id}>"
+
+
+class ProjectApplication(Base):
+    __tablename__ = "project_applications"
+    __table_args__ = (UniqueConstraint("project_id", "user_id", name="uq_project_application"),)
+
+    id: Mapped[str] = mapped_column(
+        UUID(as_uuid=False), primary_key=True, default=lambda: str(uuid.uuid4())
+    )
+    project_id: Mapped[str] = mapped_column(
+        UUID(as_uuid=False),
+        ForeignKey("projects.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    user_id: Mapped[str] = mapped_column(
+        UUID(as_uuid=False),
+        ForeignKey("users.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    status: Mapped[str] = mapped_column(String(30), default="pending", nullable=False)  # pending, accepted, rejected
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime, default=datetime.utcnow, onupdate=datetime.utcnow
+    )
+
+    # Relationships
+    project: Mapped["Project"] = relationship("Project")
+    user: Mapped["User"] = relationship("User")
+
+    def __repr__(self) -> str:
+        return f"<ProjectApplication project={self.project_id} user={self.user_id} status={self.status}>"

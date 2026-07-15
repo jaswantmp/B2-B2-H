@@ -11,6 +11,7 @@ class NotificationBase(BaseModel):
     type: NotificationType
     message: str = Field(..., max_length=500)
     action: str | None = Field(None, max_length=100)
+    invite_id: str | None = None
 
 
 class NotificationCreate(NotificationBase):

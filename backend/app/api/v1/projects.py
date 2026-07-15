@@ -2,8 +2,8 @@
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.orm import Session, joinedload
 from app.database import get_db
-from app.models.project import Project, ProjectMember
-from app.schemas.project import ProjectCreate, ProjectDetailResponse, ProjectResponse, ProjectUpdate
+from app.models.project import Project, ProjectMember, ProjectApplication
+from app.schemas.project import ProjectCreate, ProjectDetailResponse, ProjectResponse, ProjectUpdate, ProjectApplicationResponse
 from app.dependencies import get_current_user
 from app.models.user import User
 
@@ -154,3 +154,64 @@ def delete_project(
     db.delete(project)
     db.commit()
     return None
+
+
+@router.post("/{id}/apply", response_model=ProjectApplicationResponse, status_code=status.HTTP_201_CREATED)
+def apply_to_project(
+    id: str,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    """Apply to join a project workspace."""
+    project = db.query(Project).filter(Project.id == id).first()
+    if not project:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Project not found",
+        )
+
+    # Check if already a member
+    is_member = db.query(ProjectMember).filter(
+        ProjectMember.project_id == id,
+        ProjectMember.user_id == current_user.id
+    ).first()
+    if is_member:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="You are already a member of this project.",
+        )
+
+    # Check if already applied
+    existing_app = db.query(ProjectApplication).filter(
+        ProjectApplication.project_id == id,
+        ProjectApplication.user_id == current_user.id
+    ).first()
+    if existing_app:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="You have already applied to this project.",
+        )
+
+    # Create application
+    application = ProjectApplication(
+        project_id=id,
+        user_id=current_user.id,
+        status="pending"
+    )
+    db.add(application)
+    db.commit()
+    db.refresh(application)
+
+    # Create notification for project creator
+    from app.models.notification import Notification, NotificationType
+    notification = Notification(
+        recipient_id=project.creator_id,
+        sender_id=current_user.id,
+        type=NotificationType.UPDATE,
+        message=f"{current_user.name} has applied to collaborate on your project '{project.title}'.",
+        action="view_team",
+    )
+    db.add(notification)
+    db.commit()
+
+    return application

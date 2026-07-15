@@ -30,6 +30,10 @@ def register(user_in: UserCreate, db: Session = Depends(get_db)):
             detail="A user with this username already exists.",
         )
 
+    avatar_url = user_in.avatar
+    if not avatar_url or not avatar_url.strip():
+        avatar_url = f"https://api.dicebear.com/8.x/adventurer/svg?seed={user_in.username}"
+
     # Hash the password and create user model
     hashed_password = get_password_hash(user_in.password)
     user = User(
@@ -38,7 +42,7 @@ def register(user_in: UserCreate, db: Session = Depends(get_db)):
         email=user_in.email,
         hashed_password=hashed_password,
         bio=user_in.bio,
-        avatar=user_in.avatar,
+        avatar=avatar_url,
         location=user_in.location,
         university=user_in.university,
         college=user_in.college,

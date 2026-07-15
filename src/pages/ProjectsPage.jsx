@@ -2,7 +2,8 @@
 import { useState, useEffect } from 'react'
 import { FolderOpen, Search, Users, Clock, Tag, ArrowRight, ExternalLink } from 'lucide-react'
 import PulseAvatar from '../components/PulseAvatar.jsx'
-import { getProjects } from '../services/api.js'
+import { getProjects, applyProject } from '../services/api.js'
+import { useToast } from '../context/ToastContext.jsx'
 
 
 const CATEGORIES = [
@@ -14,21 +15,37 @@ const CATEGORIES = [
 ]
 
 const CAT_STYLES = {
-  college:    { bg: 'bg-blue-900/30   border-blue-800/40   text-blue-300',    dot: 'bg-blue-400'    },
-  research:   { bg: 'bg-violet-900/30 border-violet-800/40 text-violet-300',  dot: 'bg-violet-400'  },
-  opensource: { bg: 'bg-emerald-900/30 border-emerald-800/40 text-emerald-300', dot: 'bg-emerald-400' },
-  startup:    { bg: 'bg-amber-900/30  border-amber-800/40  text-amber-300',   dot: 'bg-amber-400'   },
+  college:    { bg: 'bg-blue-100 dark:bg-blue-900/30 border-blue-400 dark:border-blue-800/40 text-blue-800 dark:text-blue-400 font-semibold',    dot: 'bg-blue-500 dark:bg-blue-400'    },
+  research:   { bg: 'bg-violet-100 dark:bg-violet-900/30 border-violet-400 dark:border-violet-800/40 text-violet-800 dark:text-violet-400 font-semibold',  dot: 'bg-violet-500 dark:bg-violet-400'  },
+  opensource: { bg: 'bg-emerald-100 dark:bg-emerald-900/30 border-emerald-200 dark:border-emerald-800/40 text-emerald-700 dark:text-emerald-300', dot: 'bg-emerald-500 dark:bg-emerald-400' },
+  startup:    { bg: 'bg-amber-100 dark:bg-amber-900/30 border-amber-200 dark:border-amber-800/40 text-amber-700 dark:text-amber-300',   dot: 'bg-amber-500 dark:bg-amber-400'   },
 }
 
 const STATUS_STYLES = {
-  recruiting: 'bg-amber-900/30 border-amber-800/40 text-amber-300',
-  active:     'bg-emerald-900/30 border-emerald-800/40 text-emerald-300',
-  completed:  'bg-slate-800/60  border-slate-700/50  text-slate-400',
+  recruiting: 'bg-orange-100 dark:bg-amber-900/30 border-orange-400 dark:border-amber-800/40 text-orange-800 dark:text-amber-400 font-semibold',
+  active:     'bg-emerald-50 dark:bg-emerald-900/30 border-emerald-200 dark:border-emerald-800/40 text-emerald-600 dark:text-emerald-300',
+  completed:  'bg-slate-100 dark:bg-slate-800/60 border-slate-200 dark:border-slate-700/50 text-slate-600 dark:text-slate-400',
 }
 
 function ProjectCard({ project }) {
   const cat    = CAT_STYLES[project.category] ?? CAT_STYLES.college
   const status = STATUS_STYLES[project.status] ?? STATUS_STYLES.active
+  const { push } = useToast()
+  const [applying, setApplying] = useState(false)
+  const [applied, setApplied] = useState(false)
+
+  const handleApply = async () => {
+    try {
+      setApplying(true)
+      await applyProject(project.id)
+      push('Application submitted successfully!', 'success')
+      setApplied(true)
+    } catch (err) {
+      push(err.message || 'Failed to submit application.', 'error')
+    } finally {
+      setApplying(false)
+    }
+  }
 
   return (
     <article
@@ -72,7 +89,7 @@ function ProjectCard({ project }) {
         <p className="text-xs font-semibold theme-muted uppercase tracking-wider mb-1.5">Open Roles</p>
         <div className="flex flex-wrap gap-1.5">
           {project.openRoles.map(role => (
-            <span key={role} className="text-xs px-2.5 py-0.5 rounded-full bg-violet-900/30 border border-violet-800/40 text-violet-300 font-medium">
+            <span key={role} className="text-xs px-2.5 py-0.5 rounded-full bg-violet-100 dark:bg-violet-900/30 border border-violet-400 dark:border-violet-800/40 text-violet-800 dark:text-violet-400 font-semibold">
               {role}
             </span>
           ))}
@@ -102,8 +119,12 @@ function ProjectCard({ project }) {
               {new Date(project.deadline).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}
             </span>
           )}
-          <button className="text-xs text-violet-400 hover:text-violet-300 font-medium flex items-center gap-1 transition-colors">
-            Apply <ArrowRight size={11} />
+          <button
+            onClick={handleApply}
+            disabled={applying || applied}
+            className="text-xs text-violet-600 dark:text-violet-400 hover:text-violet-700 dark:hover:text-violet-300 font-medium flex items-center gap-1 transition-colors disabled:opacity-50"
+          >
+            {applying ? 'Applying...' : applied ? 'Applied' : 'Apply'} <ArrowRight size={11} />
           </button>
         </div>
       </div>
@@ -207,7 +228,12 @@ export default function ProjectsPage() {
 
       <p className="text-xs theme-muted mb-5">{filtered.length} project{filtered.length !== 1 ? 's' : ''} found</p>
 
-      {filtered.length === 0 ? (
+      {projectsList.length === 0 ? (
+        <div className="text-center py-20">
+          <FolderOpen size={36} className="theme-muted mx-auto mb-3" />
+          <p className="theme-text font-medium mb-1">No projects available.</p>
+        </div>
+      ) : filtered.length === 0 ? (
         <div className="text-center py-20">
           <FolderOpen size={36} className="theme-muted mx-auto mb-3" />
           <p className="theme-text font-medium mb-1">No projects match your search</p>

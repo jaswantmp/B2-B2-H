@@ -44,7 +44,7 @@ function RoleCard({ role, index }) {
         aria-expanded={open}
       >
         <div className="flex items-center gap-3">
-          <span className="w-7 h-7 rounded-full bg-violet-700/40 border border-violet-600/50 flex items-center justify-center text-xs font-bold text-violet-300 flex-shrink-0">
+          <span className="w-7 h-7 rounded-full bg-violet-100 dark:bg-violet-900/30 border border-violet-400 dark:border-violet-800/40 flex items-center justify-center text-xs font-bold text-violet-800 dark:text-violet-400 flex-shrink-0">
             {index + 1}
           </span>
           <div>
@@ -82,8 +82,8 @@ function RoleCard({ role, index }) {
 }
 
 function BuilderMatchCard({ builder, score, onInvite }) {
-  const scoreColor = score >= 90 ? 'text-emerald-400' : score >= 80 ? 'text-amber-400' : 'text-cyan-400'
-  const scoreBg    = score >= 90 ? 'bg-emerald-900/30 border-emerald-800/40' : score >= 80 ? 'bg-amber-900/30 border-amber-800/40' : 'bg-cyan-900/30 border-cyan-800/40'
+  const scoreColor = score >= 90 ? 'text-emerald-800 dark:text-emerald-400' : score >= 80 ? 'text-amber-800 dark:text-amber-400' : 'text-cyan-800 dark:text-cyan-400'
+  const scoreBg    = score >= 90 ? 'bg-emerald-100 dark:bg-emerald-900/30 border border-emerald-400 dark:border-emerald-800/40 font-semibold' : score >= 80 ? 'bg-amber-100 dark:bg-amber-900/30 border border-amber-400 dark:border-amber-800/40 font-semibold' : 'bg-cyan-100 dark:bg-cyan-900/30 border border-cyan-400 dark:border-cyan-800/40 font-semibold'
 
   return (
     <div

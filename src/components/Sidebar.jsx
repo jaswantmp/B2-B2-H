@@ -4,7 +4,7 @@ import { NavLink, Link, useNavigate } from 'react-router-dom'
 import {
   LayoutDashboard, Users, Sparkles, UsersRound, FolderOpen,
   Calendar, Bell, Settings, Code2, ChevronRight, ChevronUp, Zap, Hammer, LogOut,
-  Lightbulb,
+  Lightbulb, UserCheck,
 } from 'lucide-react'
 import { getNotifications } from '../services/api.js'
 import { useAuth } from '../context/AuthContext.jsx'
@@ -23,9 +23,10 @@ const NAV_MAIN = [
 ]
 
 const NAV_TOOLS = [
-  { to: '/generator',            icon: Zap,       label: 'AI Team Generator' },
-  { to: '/ai-project-generator', icon: Lightbulb, label: 'AI Idea Generator' },
-  { to: '/team-builder',         icon: Hammer,    label: 'Team Builder' },
+  { to: '/generator',            icon: Zap,         label: 'AI Team Generator' },
+  { to: '/ai-project-generator', icon: Lightbulb,   label: 'AI Idea Generator' },
+  { to: '/ai-team-matcher',      icon: UserCheck,   label: 'AI Team Matcher' },
+  { to: '/team-builder',         icon: Hammer,      label: 'Team Builder' },
 ]
 
 const NAV_BOTTOM = [
@@ -41,10 +42,11 @@ export default function Sidebar() {
   const [menuOpen, setMenuOpen] = useState(false)
 
   useEffect(() => {
+    if (!user?.id) return
     getNotifications()
       .then(ns => setUnread(ns.filter(n => !n.read).length))
       .catch(console.error)
-  }, [])
+  }, [user])
 
 
   const navLink = ({ isActive }) =>

@@ -18,6 +18,7 @@ class NotificationType(str, enum.Enum):
     UPDATE = "update"
     HACKATHON = "hackathon"
     SYSTEM = "system"
+    INVITE_DECLINED = "invite_declined"
 
 
 class Notification(Base):
@@ -43,6 +44,11 @@ class Notification(Base):
     )
     message: Mapped[str] = mapped_column(String(500), nullable=False)
     action: Mapped[str | None] = mapped_column(String(100), nullable=True)  # view_invite, view_matches, view_hackathon, etc.
+    invite_id: Mapped[str | None] = mapped_column(
+        UUID(as_uuid=False),
+        ForeignKey("team_invites.id", ondelete="SET NULL"),
+        nullable=True,
+    )
     read: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
 
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)

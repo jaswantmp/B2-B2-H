@@ -73,3 +73,27 @@ def register_for_hackathon(
     db.commit()
     db.refresh(registration)
     return registration
+
+
+@router.delete("/{id}/register")
+def withdraw_from_hackathon(
+    id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    """Withdraw the currently authenticated user from a hackathon."""
+    registration = (
+        db.query(HackathonRegistration)
+        .filter(
+            HackathonRegistration.hackathon_id == id,
+            HackathonRegistration.user_id == current_user.id,
+        )
+        .first()
+    )
+    if not registration:
+        return {"success": True, "message": "You were not registered for this hackathon."}
+
+    db.delete(registration)
+    db.commit()
+    return {"success": True, "message": "Successfully withdrawn from hackathon."}
+

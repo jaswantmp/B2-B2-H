@@ -13,6 +13,7 @@ from app.api.v1.teams import router as teams_router
 from app.api.v1.notifications import router as notifications_router
 from app.api.v1.hackathons import router as hackathons_router
 from app.api.v1.ai import router as ai_router
+from app.api.v1.team_match import router as team_match_router
 
 
 @asynccontextmanager
@@ -23,7 +24,24 @@ async def lifespan(app: FastAPI):
     try:
         with engine.connect() as conn:
             conn.execute(text("SELECT 1"))
+            # Auto-align enum labels for postgres database
+            try:
+                conn.execution_options(isolation_level="AUTOCOMMIT").execute(
+                    text("ALTER TYPE notificationtype ADD VALUE IF NOT EXISTS 'INVITE_DECLINED'")
+                )
+            except Exception as enum_err:
+                print(f"Notice: Could not auto-align enum labels (it might not exist yet): {enum_err}")
         print("Database connection verified successfully.")
+        
+        # Seed default skills
+        from app.database import SessionLocal
+        from app.utils.seed_skills import seed_default_skills
+        db = SessionLocal()
+        try:
+            seed_default_skills(db)
+        finally:
+            db.close()
+            
     except Exception as e:
         print(f"Warning: Database connection verification failed during startup: {e}")
     yield
@@ -57,6 +75,7 @@ app.include_router(teams_router, prefix=settings.api_v1_str if hasattr(settings,
 app.include_router(notifications_router, prefix=settings.api_v1_str if hasattr(settings, 'api_v1_str') else "/api/v1")
 app.include_router(hackathons_router, prefix=settings.api_v1_str if hasattr(settings, 'api_v1_str') else "/api/v1")
 app.include_router(ai_router, prefix=settings.api_v1_str if hasattr(settings, 'api_v1_str') else "/api/v1")
+app.include_router(team_match_router, prefix=settings.api_v1_str if hasattr(settings, 'api_v1_str') else "/api/v1")
 
 
 

@@ -59,6 +59,7 @@ class TeamBase(BaseModel):
     description: str | None = Field(None, max_length=500)
     hackathon_id: int | None = None
     status: str = Field("recruiting", max_length=30)
+    max_members: int = 5
 
 
 class TeamCreate(TeamBase):
@@ -70,6 +71,7 @@ class TeamUpdate(BaseModel):
     description: str | None = Field(None, max_length=500)
     hackathon_id: int | None = None
     status: str | None = Field(None, max_length=30)
+    max_members: int | None = None
     leader_id: str | None = None
 
 
@@ -87,5 +89,28 @@ class TeamDetailResponse(TeamResponse):
     leader: UserResponse
     members: list[TeamMemberResponse] = []
     invites: list[TeamInviteResponse] = []
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class UserTeamInviteResponse(BaseModel):
+    id: str
+    team_id: str
+    team_name: str
+    sender_id: str
+    sender_name: str
+    role: str
+    status: str
+    created_at: datetime
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class TeamInviteActionResponse(BaseModel):
+    success: bool
+    status: str
+    team_id: str | None = None
+    team_name: str | None = None
+    message: str | None = None
 
     model_config = ConfigDict(from_attributes=True)

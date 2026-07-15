@@ -8,7 +8,8 @@ import PulseAvatar from '../components/PulseAvatar.jsx'
 import SkillBadge from '../components/SkillBadge.jsx'
 import TeamHealthRadar from '../components/TeamHealthRadar.jsx'
 import InviteModal from '../components/InviteModal.jsx'
-import { getMyTeam, getBuilders } from '../services/api.js'
+import { getMyTeam, getBuilders, createTeam } from '../services/api.js'
+import { useToast } from '../context/ToastContext.jsx'
 
 
 const COVER_SEVERITY = score => {
@@ -23,8 +24,28 @@ export default function TeamsPage() {
   const [suggested, setSuggested] = useState([])
   const [loading, setLoading] = useState(true)
 
+  const [showCreateModal, setShowCreateModal] = useState(false)
+  const [newTeamName, setNewTeamName] = useState('')
+  const [newTeamDesc, setNewTeamDesc] = useState('')
+  const [newTeamSize, setNewTeamSize] = useState(5)
+
+  const { push } = useToast()
+
   useEffect(() => {
-    Promise.all([getMyTeam(), getBuilders()]).then(([teamData, builders]) => {
+    Promise.all([
+      getMyTeam().catch(err => {
+        if (err.status === 404) {
+          // Gracefully ignore 404: user is not part of a team yet
+          return null
+        }
+        console.error('Failed to load my team:', err)
+        return null
+      }),
+      getBuilders().catch(err => {
+        console.warn('Failed to load builders:', err)
+        return []
+      })
+    ]).then(([teamData, builders]) => {
       setTeam(teamData)
       if (builders && builders.length > 16) {
         setSuggested([
@@ -34,17 +55,130 @@ export default function TeamsPage() {
         ])
       }
       setLoading(false)
-    }).catch(console.error)
+    })
   }, [])
 
-  if (loading || !team) {
+  const handleCreateTeam = async (e) => {
+    e.preventDefault()
+    if (!newTeamName.trim()) return
+    if (newTeamSize < 2 || newTeamSize > 10) {
+      push('Team size must be between 2 and 10.', 'error')
+      return
+    }
+    try {
+      const newTeam = await createTeam({
+        name: newTeamName,
+        description: newTeamDesc,
+        max_members: newTeamSize,
+      })
+      setTeam(newTeam)
+      setShowCreateModal(false)
+      setNewTeamName('')
+      setNewTeamDesc('')
+      setNewTeamSize(5)
+    } catch (err) {
+      console.error('Failed to create team:', err)
+      const detail = err.body?.detail || err.message || 'Failed to create team.'
+      push(detail, 'error')
+    }
+  }
+
+  if (loading) {
     return <div className="p-6 lg:p-8 max-w-6xl theme-text">Loading team details...</div>
+  }
+
+  if (!team) {
+    return (
+      <div className="p-6 lg:p-8 max-w-6xl">
+        <div className="mb-6">
+          <h1 className="text-2xl font-bold theme-text mb-1 flex items-center gap-2">
+            <UsersRound size={22} className="text-violet-400" />
+            My Teams
+          </h1>
+          <p className="theme-muted text-sm">Manage your active teams, track skill coverage, and invite collaborators.</p>
+        </div>
+        <div className="text-center py-20 rounded-2xl border border-dashed theme-divider bg-[var(--bg-surface)]">
+          <UsersRound size={48} className="theme-muted mx-auto mb-4 opacity-50" />
+          <h2 className="text-lg font-bold theme-text mb-1">You are not part of a team yet.</h2>
+          <p className="theme-muted text-sm max-w-md mx-auto mb-6">
+            Create a team or get invited by other builders to get started.
+          </p>
+          <button
+            onClick={() => setShowCreateModal(true)}
+            className="px-5 py-2.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white font-semibold shadow-lg shadow-violet-500/25 transition-all text-sm"
+          >
+            Create Team
+          </button>
+        </div>
+
+        {showCreateModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+            <div className="theme-card max-w-md w-full p-6 border theme-divider shadow-2xl bg-[var(--bg-surface)]">
+              <h2 className="text-xl font-bold theme-text mb-2">Create a New Team</h2>
+              <p className="theme-muted text-sm mb-4">Launch your hackathon team and start collaborating with other builders.</p>
+              <form onSubmit={handleCreateTeam} className="space-y-4">
+                <div>
+                  <label className="block text-xs font-semibold uppercase tracking-wider theme-muted mb-1.5">Team Name</label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="e.g. SKCET Innovators"
+                    value={newTeamName}
+                    onChange={e => setNewTeamName(e.target.value)}
+                    className="w-full px-4 py-2.5 rounded-xl border theme-divider bg-[var(--bg-raised)] theme-text placeholder-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-500 transition-all"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold uppercase tracking-wider theme-muted mb-1.5">Description</label>
+                  <textarea
+                    rows={4}
+                    placeholder="Describe your hackathon project, goals, and target stack..."
+                    value={newTeamDesc}
+                    onChange={e => setNewTeamDesc(e.target.value)}
+                    className="w-full px-4 py-2.5 rounded-xl border theme-divider bg-[var(--bg-raised)] theme-text placeholder-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-500 transition-all resize-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold uppercase tracking-wider theme-muted mb-1.5">Team Size</label>
+                  <select
+                    value={newTeamSize}
+                    onChange={e => setNewTeamSize(Number(e.target.value))}
+                    className="w-full px-4 py-2.5 rounded-xl border theme-divider bg-[var(--bg-raised)] theme-text focus:outline-none focus:ring-2 focus:ring-violet-500/50 focus:border-violet-500 transition-all"
+                  >
+                    {[2, 3, 4, 5, 6, 7, 8, 9, 10].map(sz => (
+                      <option key={sz} value={sz}>{sz}</option>
+                    ))}
+                  </select>
+                </div>
+                <div className="flex justify-end gap-3 pt-2">
+                  <button
+                    type="button"
+                    onClick={() => setShowCreateModal(false)}
+                    className="px-4 py-2 rounded-xl border theme-divider theme-text hover:bg-[var(--bg-raised)] transition-all font-medium text-sm"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="px-4 py-2 rounded-xl bg-violet-600 hover:bg-violet-500 text-white font-medium shadow-lg shadow-violet-500/10 transition-all text-sm"
+                  >
+                    Launch Team
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+      </div>
+    )
   }
 
   const overallScore = Math.round(
     Object.values(team.healthScores).reduce((a, b) => a + b, 0) /
     Object.values(team.healthScores).length
   )
+
+  const capacity = team.max_members || 5
 
 
   return (
@@ -67,7 +201,7 @@ export default function TeamsPage() {
           <div>
             <div className="flex items-center gap-2.5 mb-1">
               <h2 className="text-xl font-bold theme-text">{team.name}</h2>
-              <span className="text-xs px-2 py-0.5 rounded-full font-semibold bg-amber-900/30 border border-amber-800/40 text-amber-400 capitalize">
+              <span className="text-xs px-2 py-0.5 rounded-full font-semibold bg-orange-100 dark:bg-amber-900/30 border border-orange-400 dark:border-amber-800/40 text-orange-800 dark:text-amber-400 capitalize">
                 {team.status}
               </span>
             </div>
@@ -76,9 +210,9 @@ export default function TeamsPage() {
             </p>
           </div>
           {/* Overall score badge */}
-          <div className="flex-shrink-0 text-center px-5 py-3 rounded-xl border border-violet-800/40 bg-violet-900/20">
+          <div className="flex-shrink-0 text-center px-5 py-3 rounded-xl border border-violet-200 dark:border-violet-800/40 bg-violet-50 dark:bg-violet-900/20">
             <div className="text-2xl font-bold gradient-text">{overallScore}%</div>
-            <div className="text-xs text-violet-400">Team readiness</div>
+            <div className="text-xs text-violet-800 dark:text-violet-400 font-semibold">Team readiness</div>
           </div>
         </div>
         <p className="theme-muted text-sm leading-relaxed">{team.description}</p>
@@ -91,7 +225,7 @@ export default function TeamsPage() {
           <section>
             <h2 className="font-semibold theme-text mb-3 flex items-center gap-2 text-sm uppercase tracking-wider">
               <CheckCircle size={15} className="text-emerald-400" />
-              Members ({team.members.length} / {team.members.length + team.missingRoles.length})
+              Members ({team.members.length} / {capacity})
             </h2>
             <div className="space-y-3">
               {team.members.map(m => (
@@ -139,12 +273,12 @@ export default function TeamsPage() {
 
             {/* Suggested builders for open roles */}
             <div
-              className="rounded-xl p-4 border border-violet-800/30"
+              className="rounded-xl p-4 border border-violet-200 dark:border-violet-800/30"
               style={{ backgroundColor: 'var(--bg-raised)' }}
             >
               <div className="flex items-center gap-2 mb-3">
-                <Sparkles size={14} className="text-violet-400" />
-                <span className="text-xs font-semibold text-violet-400">Suggested builders</span>
+                <Sparkles size={14} className="text-violet-800 dark:text-violet-400" />
+                <span className="text-xs font-semibold text-violet-800 dark:text-violet-400">Suggested builders</span>
               </div>
               <div className="space-y-2.5">
                 {suggested.map(({ user, role }) => (
@@ -179,7 +313,7 @@ export default function TeamsPage() {
             style={{ backgroundColor: 'var(--bg-surface)', borderColor: 'var(--border-subtle)' }}
           >
             <h2 className="font-semibold theme-text text-sm mb-1 flex items-center gap-2">
-              <TrendingUp size={15} className="text-violet-400" />
+              <TrendingUp size={15} className="text-violet-800 dark:text-violet-400" />
               Team Health Radar
             </h2>
             <p className="text-xs theme-muted mb-4">Current skill coverage across domains.</p>
@@ -243,7 +377,7 @@ export default function TeamsPage() {
               <div className="flex justify-between">
                 <span className="theme-muted">Team size</span>
                 <span className="theme-text font-medium">
-                  {team.members.length} / {team.members.length + team.missingRoles.length}
+                  {team.members.length} / {capacity}
                 </span>
               </div>
               <div className="flex justify-between">

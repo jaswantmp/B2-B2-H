@@ -4,7 +4,7 @@ import {
   Calendar, MapPin, Users, Trophy, Search, Tag,
   CheckCircle, Clock, ExternalLink, Filter,
 } from 'lucide-react'
-import { getHackathons, registerHackathon } from '../services/api.js'
+import { getHackathons, registerHackathon, withdrawHackathon } from '../services/api.js'
 import { useTheme } from '../context/ThemeContext.jsx'
 
 
@@ -20,16 +20,16 @@ function daysUntil(d) {
 }
 
 const TAG_COLORS = {
-  AI: 'bg-violet-900/50 border-violet-700/60 text-violet-300',
-  Web3: 'bg-cyan-900/50 border-cyan-700/60 text-cyan-300',
-  Blockchain: 'bg-blue-900/50 border-blue-700/60 text-blue-300',
-  Global: 'bg-emerald-900/50 border-emerald-700/60 text-emerald-300',
-  Government: 'bg-amber-900/50 border-amber-700/60 text-amber-300',
-  MLH: 'bg-pink-900/50 border-pink-700/60 text-pink-300',
+  AI: 'bg-violet-100 dark:bg-violet-900/30 border-violet-400 dark:border-violet-800/40 text-violet-800 dark:text-violet-400 font-semibold',
+  Web3: 'bg-orange-100 dark:bg-amber-900/30 border-orange-400 dark:border-amber-800/40 text-orange-800 dark:text-amber-400 font-semibold',
+  Blockchain: 'bg-blue-100 dark:bg-blue-900/30 border-blue-400 dark:border-blue-800/40 text-blue-800 dark:text-blue-400 font-semibold',
+  Global: 'bg-emerald-100 dark:bg-emerald-900/50 border-emerald-400 dark:border-emerald-700/60 text-emerald-800 dark:text-emerald-300 font-semibold',
+  Government: 'bg-amber-100 dark:bg-amber-900/50 border-amber-400 dark:border-amber-700/60 text-amber-800 dark:text-amber-300 font-semibold',
+  MLH: 'bg-pink-100 dark:bg-pink-900/50 border-pink-400 dark:border-pink-700/60 text-pink-800 dark:text-pink-300 font-semibold',
 }
 
 function tagClass(tag) {
-  return TAG_COLORS[tag] ?? 'bg-slate-800/80 border-slate-700 text-slate-400'
+  return TAG_COLORS[tag] ?? 'bg-slate-100 dark:bg-slate-800/80 border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400'
 }
 
 function HackathonCard({ h, isDark, onToggleRegister }) {
@@ -48,7 +48,11 @@ function HackathonCard({ h, isDark, onToggleRegister }) {
   const handleToggle = async () => {
     setLoading(true)
     try {
-      await registerHackathon(h.id)
+      if (registered) {
+        await withdrawHackathon(h.id)
+      } else {
+        await registerHackathon(h.id)
+      }
       const nextReg = !registered
       setRegistered(nextReg)
       if (onToggleRegister) onToggleRegister(h.id, nextReg)
@@ -104,7 +108,7 @@ function HackathonCard({ h, isDark, onToggleRegister }) {
         </div>
         <div className={`flex items-center gap-1.5 ${muted}`}>
           <Trophy size={12} className="flex-shrink-0" />
-          {h.registered.toLocaleString()} registered
+          {(h.registered ?? 0).toLocaleString()} registered
         </div>
       </div>
 
@@ -159,7 +163,15 @@ export default function HackathonsPage() {
 
   useEffect(() => {
     getHackathons().then(data => {
-      setHackathonsList(data)
+      console.log("Hackathons API response sample:", data ? data[0] : null)
+      const normalized = (data || []).map(h => ({
+        ...h,
+        endDate: h.endDate || h.end_date,
+        teamSize: h.teamSize || h.team_size || 'N/A',
+        registered: h.registered ?? h.registered_count ?? 0,
+        userRegistered: h.userRegistered ?? h.user_registered ?? false,
+      }))
+      setHackathonsList(normalized)
       setLoading(false)
     }).catch(console.error)
   }, [])

@@ -9,9 +9,9 @@ import { getMyTeam, getBuilders } from '../services/api.js'
 
 
 const GAP_SEVERITY = score => {
-  if (score >= 70) return { label: 'Covered', cls: 'text-emerald-400', bg: 'bg-emerald-900/20 border-emerald-800/40' }
-  if (score >= 40) return { label: 'Partial',  cls: 'text-amber-400',  bg: 'bg-amber-900/20  border-amber-800/40'  }
-  return               { label: 'Missing',  cls: 'text-red-400',    bg: 'bg-red-900/20    border-red-800/40'    }
+  if (score >= 70) return { label: 'Covered', cls: 'text-emerald-800 dark:text-emerald-400 font-semibold', bg: 'bg-emerald-100 dark:bg-emerald-900/20 border border-emerald-400 dark:border-emerald-800/40' }
+  if (score >= 40) return { label: 'Partial',  cls: 'text-orange-800 dark:text-amber-400 font-semibold',  bg: 'bg-orange-100 dark:bg-amber-900/20 border border-orange-400 dark:border-amber-800/40'  }
+  return               { label: 'Missing',  cls: 'text-red-800 dark:text-red-400 font-semibold',    bg: 'bg-red-100 dark:bg-red-900/20 border border-red-400 dark:border-red-800/40'    }
 }
 
 export default function TeamBuilderPage() {
@@ -21,7 +21,17 @@ export default function TeamBuilderPage() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    Promise.all([getMyTeam(), getBuilders()]).then(([teamData, builders]) => {
+    Promise.all([
+      getMyTeam().catch(err => {
+        if (err.status === 404) return null
+        console.error('Failed to load team:', err)
+        return null
+      }),
+      getBuilders().catch(err => {
+        console.error('Failed to load builders:', err)
+        return []
+      })
+    ]).then(([teamData, builders]) => {
       setTeam(teamData)
       if (builders && builders.length > 16) {
         setSuggested([
@@ -31,11 +41,34 @@ export default function TeamBuilderPage() {
         ])
       }
       setLoading(false)
-    }).catch(console.error)
+    })
   }, [])
 
-  if (loading || !team) {
+  if (loading) {
     return <div className="p-6 lg:p-8 max-w-6xl theme-text">Loading team builder details...</div>
+  }
+
+  if (!team) {
+    return (
+      <div className="p-6 lg:p-8 max-w-6xl">
+        <div className="mb-6">
+          <div className="flex items-center gap-2 mb-1">
+            <Hammer size={20} className="text-violet-400" aria-hidden="true" />
+            <h1 className="text-2xl font-bold theme-text">Team Builder</h1>
+          </div>
+          <p className="theme-muted text-sm">
+            Build a balanced team with AI guidance. See your skill coverage and fill gaps before your hackathon starts.
+          </p>
+        </div>
+        <div className="text-center py-20 rounded-2xl border border-dashed theme-divider bg-[var(--bg-surface)]">
+          <Hammer size={48} className="theme-muted mx-auto mb-4 opacity-50" />
+          <h2 className="text-lg font-bold theme-text mb-1">You are not part of a team yet.</h2>
+          <p className="theme-muted text-sm max-w-md mx-auto">
+            Please create or join a team first to use the Team Builder tool.
+          </p>
+        </div>
+      </div>
+    )
   }
 
 
@@ -62,7 +95,7 @@ export default function TeamBuilderPage() {
                 <h2 className="font-bold text-lg theme-text">{team.name}</h2>
                 <p className="theme-muted text-sm">{team.hackathon}</p>
               </div>
-              <span className="text-xs px-2.5 py-1 rounded-full font-semibold bg-amber-900/30 border border-amber-800/40 text-amber-400">
+              <span className="text-xs px-2.5 py-1 rounded-full font-semibold bg-orange-100 dark:bg-amber-900/30 border border-orange-400 dark:border-amber-800/40 text-orange-800 dark:text-amber-400">
                 Recruiting
               </span>
             </div>
@@ -100,7 +133,7 @@ export default function TeamBuilderPage() {
           {/* Missing roles */}
           <div className="theme-card p-5">
             <h2 className="font-semibold theme-text mb-4 flex items-center gap-2">
-              <AlertTriangle size={16} className="text-amber-400" />
+              <AlertTriangle size={16} className="text-orange-800 dark:text-amber-400" />
               Open Roles ({team.missingRoles.length})
             </h2>
 
@@ -122,8 +155,8 @@ export default function TeamBuilderPage() {
               style={{ backgroundColor: 'var(--bg-raised)' }}
             >
               <div className="flex items-center gap-2 mb-3">
-                <Sparkles size={14} className="text-violet-400" />
-                <span className="text-xs font-semibold text-violet-400">AI-suggested builders to fill your gaps</span>
+                <Sparkles size={14} className="text-violet-800 dark:text-violet-400" />
+                <span className="text-xs font-semibold text-violet-800 dark:text-violet-400">AI-suggested builders to fill your gaps</span>
               </div>
               <div className="space-y-2">
                 {suggested.map(({ user, role, fills }) => (
@@ -135,7 +168,7 @@ export default function TeamBuilderPage() {
                     <PulseAvatar user={user} size="sm" />
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium theme-text">{user.name}</p>
-                      <p className="text-xs theme-muted">{role} · <span className="text-violet-400">{fills}</span></p>
+                      <p className="text-xs theme-muted">{role} · <span className="text-violet-800 dark:text-violet-400 font-semibold">{fills}</span></p>
                     </div>
                     <button
                       onClick={() => setInviteUser(user)}
@@ -178,7 +211,7 @@ export default function TeamBuilderPage() {
           {/* Overall readiness */}
           <div className="rounded-xl p-5 border border-violet-800/30 text-center" style={{ backgroundColor: 'var(--bg-raised)' }}>
             <div className="text-3xl font-bold gradient-text mb-1">56%</div>
-            <p className="text-xs text-violet-400">Overall team readiness</p>
+            <p className="text-xs text-violet-800 dark:text-violet-400 font-semibold">Overall team readiness</p>
             <p className="text-xs theme-muted mt-1">Add 3 more members to reach 90%+</p>
           </div>
         </div>

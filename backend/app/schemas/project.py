@@ -69,3 +69,14 @@ class ProjectDetailResponse(ProjectResponse):
     members: list[ProjectMemberResponse] = []
 
     model_config = ConfigDict(from_attributes=True)
+
+
+class ProjectApplicationResponse(BaseModel):
+    id: str
+    project_id: str
+    user_id: str
+    status: str
+    created_at: datetime
+    updated_at: datetime
+
+    model_config = ConfigDict(from_attributes=True)

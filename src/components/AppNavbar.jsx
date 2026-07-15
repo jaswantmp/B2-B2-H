@@ -17,6 +17,7 @@ const LINKS = [
   { to: '/projects',             label: 'Projects' },
   { to: '/generator',            label: 'AI Team Generator' },
   { to: '/ai-project-generator', label: 'AI Idea Generator' },
+  { to: '/ai-team-matcher',      label: 'AI Team Matcher' },
 ]
 
 export default function AppNavbar() {
@@ -27,10 +28,11 @@ export default function AppNavbar() {
   const navigate = useNavigate()
 
   useEffect(() => {
+    if (!user?.id) return
     getNotifications()
       .then(ns => setUnread(ns.filter(n => !n.read).length))
       .catch(console.error)
-  }, [])
+  }, [user])
 
 
   const handleLogout = () => {

@@ -35,6 +35,14 @@ class UserSkillUpdate(BaseModel):
     is_verified: bool | None = None
 
 
+class AddUserSkillRequest(BaseModel):
+    skill_id: int | None = None
+    skill_name: str | None = None
+    category: str | None = None
+    proficiency: str | None = "intermediate"
+
+
+
 class UserSkillResponse(BaseModel):
     id: int
     user_id: str
@@ -93,12 +101,14 @@ class UserUpdate(BaseModel):
     website: str | None = Field(None, max_length=300)
     status: AvailabilityStatus | None = None
     hackathons_won: int | None = None
+    onboarding_completed: bool | None = None
 
 
 class UserResponse(UserBase):
     id: str
     is_active: bool
     is_verified: bool
+    onboarding_completed: bool
     profile_views: int
     joined_at: datetime
     updated_at: datetime
@@ -111,3 +121,16 @@ class UserDetailResponse(UserResponse):
     user_skills: list[UserSkillResponse] = []
 
     model_config = ConfigDict(from_attributes=True)
+
+
+class OnboardingRequest(BaseModel):
+    college: str | None = None
+    university: str | None = None
+    year: str | None = None
+    branch: str | None = None
+    skills: list[str] = []
+    status: AvailabilityStatus | None = None
+    github: str | None = None
+    linkedin: str | None = None
+    website: str | None = None
+    onboarding_completed: bool = True
