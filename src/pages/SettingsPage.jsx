@@ -1,5 +1,5 @@
 // src/pages/SettingsPage.jsx
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import {
   Settings, User, Bell, Palette, Shield, Save,
   CheckCircle, Eye, EyeOff, Sun, Moon, Monitor, Award
@@ -83,20 +83,41 @@ function SaveButton({ saving, saved, onClick }) {
 
 // ── Profile section ──────────────────────────────────────────────────────────
 function ProfileSection() {
-  const { user } = useAuth()
+  const { user, refreshUser } = useAuth()
   const [form, setForm] = useState({
     name:       user?.name       ?? '',
     bio:        user?.bio        ?? '',
     location:   user?.location   ?? '',
     university: user?.university ?? '',
+    college:    user?.college    ?? '',
     year:       user?.year       ?? '1st Year',
     branch:     user?.branch     ?? '',
     status:     user?.status     ?? 'LOOKING_FOR_TEAM',
     github:     user?.github     ?? '',
+    linkedin:   user?.linkedin   ?? '',
+    website:    user?.website    ?? '',
   })
   const [saving, setSaving] = useState(false)
   const [saved, setSaved]   = useState(false)
   const [showGithub, setShowGithub] = useState(false)
+
+  useEffect(() => {
+    if (user) {
+      setForm({
+        name:       user.name       ?? '',
+        bio:        user.bio        ?? '',
+        location:   user.location   ?? '',
+        university: user.university ?? '',
+        college:    user.college    ?? '',
+        year:       user.year       ?? '1st Year',
+        branch:     user.branch     ?? '',
+        status:     user.status     ?? 'LOOKING_FOR_TEAM',
+        github:     user.github     ?? '',
+        linkedin:   user.linkedin   ?? '',
+        website:    user.website    ?? '',
+      })
+    }
+  }, [user])
 
   const field = (key) => ({
     value: form[key],
@@ -104,11 +125,21 @@ function ProfileSection() {
   })
 
   const handleSave = async () => {
-    setSaving(true)
-    await updateProfile(form)
-    setSaving(false)
-    setSaved(true)
-    setTimeout(() => setSaved(false), 3000)
+    try {
+      setSaving(true)
+      console.log("[SaveProfile] Request Payload:", form)
+      const response = await updateProfile(form)
+      console.log("[SaveProfile] API Response:", response)
+      const updatedUser = await refreshUser()
+      console.log("[SaveProfile] AuthContext Updated User:", updatedUser)
+      console.log("[SaveProfile] localStorage Updated Session:", localStorage.getItem("b2b2h-auth"))
+      setSaved(true)
+      setTimeout(() => setSaved(false), 3000)
+    } catch (err) {
+      console.error("[SaveProfile] Error saving profile:", err)
+    } finally {
+      setSaving(false)
+    }
   }
 
   const inputClass = "theme-input w-full px-3 py-2.5 text-sm"
@@ -152,10 +183,18 @@ function ProfileSection() {
       </div>
 
       {/* Academic */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
           <label className={labelClass}>University</label>
           <input {...field('university')} className={inputClass} placeholder="University name" />
+        </div>
+        <div>
+          <label className={labelClass}>College</label>
+          <input {...field('college')} className={inputClass} placeholder="College name" />
+        </div>
+        <div>
+          <label className={labelClass}>Branch</label>
+          <input {...field('branch')} className={inputClass} placeholder="e.g. Computer Science" />
         </div>
         <div>
           <label className={labelClass}>Year</label>
@@ -164,10 +203,6 @@ function ProfileSection() {
               <option key={y} value={y}>{y}</option>
             ))}
           </select>
-        </div>
-        <div>
-          <label className={labelClass}>Branch</label>
-          <input {...field('branch')} className={inputClass} placeholder="e.g. Computer Science" />
         </div>
       </div>
 
@@ -213,6 +248,18 @@ function ProfileSection() {
             {showGithub ? <EyeOff size={15} /> : <Eye size={15} />}
           </button>
         </div>
+      </div>
+
+      {/* LinkedIn */}
+      <div>
+        <label className={labelClass}>LinkedIn Profile URL</label>
+        <input {...field('linkedin')} className={inputClass} placeholder="https://linkedin.com/in/username" />
+      </div>
+
+      {/* Website */}
+      <div>
+        <label className={labelClass}>Personal Website URL</label>
+        <input {...field('website')} className={inputClass} placeholder="https://yourwebsite.com" />
       </div>
 
       <div className="flex justify-end pt-2">
@@ -282,11 +329,18 @@ function AppearanceSection() {
 
 // ── Notifications section ────────────────────────────────────────────────────
 function NotificationsSection() {
+  const { user, refreshUser } = useAuth()
   const [prefs, setPrefs] = useState(
-    Object.fromEntries(NOTIF_PREFS.map(p => [p.key, true]))
+    user?.notificationPreferences || Object.fromEntries(NOTIF_PREFS.map(p => [p.key, true]))
   )
   const [saving, setSaving] = useState(false)
   const [saved, setSaved]   = useState(false)
+
+  useEffect(() => {
+    if (user && user.notificationPreferences) {
+      setPrefs(user.notificationPreferences)
+    }
+  }, [user])
 
   const toggle = key => {
     setPrefs(p => ({ ...p, [key]: !p[key] }))
@@ -294,11 +348,21 @@ function NotificationsSection() {
   }
 
   const handleSave = async () => {
-    setSaving(true)
-    await updateProfile({ notificationPreferences: prefs })
-    setSaving(false)
-    setSaved(true)
-    setTimeout(() => setSaved(false), 3000)
+    try {
+      setSaving(true)
+      console.log("[SaveNotifications] Request Payload:", { notificationPreferences: prefs })
+      const response = await updateProfile({ notificationPreferences: prefs })
+      console.log("[SaveNotifications] API Response:", response)
+      const updatedUser = await refreshUser()
+      console.log("[SaveNotifications] AuthContext Updated User:", updatedUser)
+      console.log("[SaveNotifications] localStorage Updated Session:", localStorage.getItem("b2b2h-auth"))
+      setSaved(true)
+      setTimeout(() => setSaved(false), 3000)
+    } catch (err) {
+      console.error("[SaveNotifications] Error saving notifications:", err)
+    } finally {
+      setSaving(false)
+    }
   }
 
   return (
@@ -346,17 +410,35 @@ function NotificationsSection() {
 
 // ── Privacy section ──────────────────────────────────────────────────────────
 function PrivacySection() {
-  const [visibility, setVisibility] = useState('public')
-  const [recruiterMode, setRecruiterMode] = useState(false)
+  const { user, refreshUser } = useAuth()
+  const [visibility, setVisibility] = useState(user?.profileVisibility || 'public')
+  const [recruiterMode, setRecruiterMode] = useState(user?.recruiterMode || false)
   const [saving, setSaving] = useState(false)
   const [saved, setSaved]   = useState(false)
 
+  useEffect(() => {
+    if (user) {
+      setVisibility(user.profileVisibility || 'public')
+      setRecruiterMode(user.recruiterMode || false)
+    }
+  }, [user])
+
   const handleSave = async () => {
-    setSaving(true)
-    await updateProfile({ profileVisibility: visibility, recruiterMode })
-    setSaving(false)
-    setSaved(true)
-    setTimeout(() => setSaved(false), 3000)
+    try {
+      setSaving(true)
+      console.log("[SavePrivacy] Request Payload:", { profileVisibility: visibility, recruiterMode })
+      const response = await updateProfile({ profileVisibility: visibility, recruiterMode })
+      console.log("[SavePrivacy] API Response:", response)
+      const updatedUser = await refreshUser()
+      console.log("[SavePrivacy] AuthContext Updated User:", updatedUser)
+      console.log("[SavePrivacy] localStorage Updated Session:", localStorage.getItem("b2b2h-auth"))
+      setSaved(true)
+      setTimeout(() => setSaved(false), 3000)
+    } catch (err) {
+      console.error("[SavePrivacy] Error saving privacy settings:", err)
+    } finally {
+      setSaving(false)
+    }
   }
 
   return (
