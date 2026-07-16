@@ -45,12 +45,12 @@ export default function TeamBuilderPage() {
   }, [])
 
   if (loading) {
-    return <div className="p-6 lg:p-8 max-w-6xl theme-text">Loading team builder details...</div>
+    return <div className="p-4 sm:p-6 lg:p-8 max-w-6xl theme-text">Loading team builder details...</div>
   }
 
   if (!team) {
     return (
-      <div className="p-6 lg:p-8 max-w-6xl">
+      <div className="p-4 sm:p-6 lg:p-8 max-w-6xl">
         <div className="mb-6">
           <div className="flex items-center gap-2 mb-1">
             <Hammer size={20} className="text-violet-400" aria-hidden="true" />
@@ -73,7 +73,7 @@ export default function TeamBuilderPage() {
 
 
   return (
-    <div className="p-6 lg:p-8 max-w-6xl">
+    <div className="p-4 sm:p-6 lg:p-8 max-w-6xl">
       {/* Header */}
       <div className="mb-6">
         <div className="flex items-center gap-2 mb-1">

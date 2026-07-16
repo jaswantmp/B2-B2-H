@@ -30,7 +30,7 @@ export default function AIProjectIdeaPage() {
 
   if (user && user.onboarding_completed === false) {
     return (
-      <div className="p-6 lg:p-8 max-w-4xl min-h-[70vh] flex flex-col items-center justify-center text-center space-y-5">
+      <div className="p-4 sm:p-6 lg:p-8 max-w-4xl min-h-[70vh] flex flex-col items-center justify-center text-center space-y-5">
         <div className="w-16 h-16 rounded-2xl bg-violet-900/30 border border-violet-800/40 flex items-center justify-center mx-auto">
           <Brain className="text-violet-400 animate-pulse" size={28} />
         </div>
@@ -96,7 +96,14 @@ export default function AIProjectIdeaPage() {
       const data = await generateProjectIdea(domain.trim(), skills)
       setResult(data)
     } catch (err) {
-      setError('Failed to generate project idea. Please check your connection and try again.')
+      const status = err.response?.status || err.status
+      if (status === 429) {
+        setError(
+          "⚠️ AI service temporarily unavailable.\n\nThe Gemini API quota has been reached.\nPlease try again later."
+        )
+      } else {
+        setError('Failed to generate project idea. Please check your connection and try again.')
+      }
     } finally {
       setLoading(false)
     }
@@ -111,7 +118,7 @@ export default function AIProjectIdeaPage() {
   }
 
   return (
-    <div className="p-6 lg:p-8 max-w-5xl">
+    <div className="p-4 sm:p-6 lg:p-8 max-w-5xl">
       {/* Header */}
       <div className="mb-8">
         <div className="flex items-center gap-2.5 mb-1">
@@ -253,9 +260,15 @@ export default function AIProjectIdeaPage() {
             </div>
 
             {error && (
-              <div className="flex items-center gap-2 text-xs text-red-400 bg-red-950/20 border border-red-900/50 p-3 rounded-xl">
-                <AlertCircle size={14} />
-                <span>{error}</span>
+              <div
+                className={`flex items-start gap-2.5 text-xs p-3 rounded-xl border ${
+                  error.includes("quota") || error.includes("unavailable")
+                    ? 'text-amber-500 bg-amber-950/10 border-amber-900/50'
+                    : 'text-red-400 bg-red-950/20 border-red-900/50'
+                }`}
+              >
+                <AlertCircle size={14} className="mt-0.5 flex-shrink-0" />
+                <span className="whitespace-pre-line">{error}</span>
               </div>
             )}
 

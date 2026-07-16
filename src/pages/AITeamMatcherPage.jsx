@@ -16,7 +16,7 @@ export default function AITeamMatcherPage() {
 
   if (user && user.onboarding_completed === false) {
     return (
-      <div className="p-6 lg:p-8 max-w-4xl min-h-[70vh] flex flex-col items-center justify-center text-center space-y-5">
+      <div className="p-4 sm:p-6 lg:p-8 max-w-4xl min-h-[70vh] flex flex-col items-center justify-center text-center space-y-5">
         <div className="w-16 h-16 rounded-2xl bg-violet-900/30 border border-violet-800/40 flex items-center justify-center mx-auto">
           <Sparkles className="text-violet-400 animate-pulse" size={28} />
         </div>
@@ -67,7 +67,7 @@ export default function AITeamMatcherPage() {
   }
 
   return (
-    <div className="p-6 lg:p-8 max-w-4xl">
+    <div className="p-4 sm:p-6 lg:p-8 max-w-4xl">
       {/* Header */}
       <div className="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>

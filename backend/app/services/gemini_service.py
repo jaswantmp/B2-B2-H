@@ -2,15 +2,22 @@
 
 from google import genai
 from google.genai import types
+from google.genai.errors import ClientError
 from dotenv import load_dotenv
 import os
+import logging
 from app.schemas.ai import ProjectIdeaResponse
 
 load_dotenv()
 
+logger = logging.getLogger(__name__)
+
 client = genai.Client(
     api_key=os.getenv("GEMINI_API_KEY")
 )
+
+class GeminiQuotaExceededException(Exception):
+    pass
 
 def generate_project_idea(domain: str, difficulty: str) -> ProjectIdeaResponse:
     prompt = f"""
@@ -20,16 +27,26 @@ def generate_project_idea(domain: str, difficulty: str) -> ProjectIdeaResponse:
     Difficulty: {difficulty}
     """
 
-    response = client.models.generate_content(
-        model="gemini-2.5-flash",
-        contents=prompt,
-        config=types.GenerateContentConfig(
-            response_mime_type="application/json",
-            response_schema=ProjectIdeaResponse,
+    try:
+        response = client.models.generate_content(
+            model="gemini-2.5-flash",
+            contents=prompt,
+            config=types.GenerateContentConfig(
+                response_mime_type="application/json",
+                response_schema=ProjectIdeaResponse,
+            )
         )
-    )
+        return ProjectIdeaResponse.model_validate_json(response.text)
+    except ClientError as e:
+        if e.code == 429:
+            logger.error(f"Gemini API quota exceeded (HTTP 429): {str(e)}")
+            raise GeminiQuotaExceededException("Gemini API quota exceeded.") from e
+        logger.error(f"Gemini API client error: {str(e)}")
+        raise e
+    except Exception as e:
+        logger.error(f"Gemini API general error: {str(e)}")
+        raise e
 
-    return ProjectIdeaResponse.model_validate_json(response.text)
 
 
 import logging

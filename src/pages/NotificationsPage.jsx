@@ -181,7 +181,7 @@ export default function NotificationsPage() {
   const clearRead   = ()  => setNotifs(ns => ns.filter(n => !n.read))
 
   if (loading) {
-    return <div className="p-6 lg:p-8 max-w-3xl theme-text">Loading notifications...</div>
+    return <div className="p-4 sm:p-6 lg:p-8 max-w-3xl theme-text">Loading notifications...</div>
   }
 
   const unreadCount = notifs.filter(n => !n.read).length
@@ -199,7 +199,7 @@ export default function NotificationsPage() {
   })
 
   return (
-    <div className="p-6 lg:p-8 max-w-3xl">
+    <div className="p-4 sm:p-6 lg:p-8 max-w-3xl">
       {/* Header */}
       <div className="flex items-center justify-between gap-4 mb-6">
         <div>

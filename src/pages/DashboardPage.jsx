@@ -77,7 +77,7 @@ export default function DashboardPage() {
   if (!user) return null
 
   return (
-    <div className="p-6 lg:p-8 space-y-8 max-w-7xl">
+    <div className="p-4 sm:p-6 lg:p-8 space-y-8 max-w-7xl">
 
       {/* Onboarding Promo Banner */}
       {user?.onboarding_completed === false && (

@@ -177,7 +177,7 @@ export default function HackathonsPage() {
   }, [])
 
   if (loading) {
-    return <div className="p-6 lg:p-8 max-w-7xl theme-text">Loading hackathons...</div>
+    return <div className="p-4 sm:p-6 lg:p-8 max-w-7xl theme-text">Loading hackathons...</div>
   }
 
   const handleToggleRegister = (id, isRegistered) => {
@@ -206,7 +206,7 @@ export default function HackathonsPage() {
 
 
   return (
-    <div className="p-6 lg:p-8 max-w-7xl">
+    <div className="p-4 sm:p-6 lg:p-8 max-w-7xl">
       {/* Page header */}
       <div className="mb-6">
         <h1 className="text-2xl font-bold mb-1 flex items-center gap-2">

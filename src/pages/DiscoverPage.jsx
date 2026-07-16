@@ -84,7 +84,7 @@ export default function DiscoverPage() {
   const hasAnySearch = search.trim() !== '' || totalFilters > 0
 
   return (
-    <div className="p-6 lg:p-8 max-w-7xl">
+    <div className="p-4 sm:p-6 lg:p-8 max-w-7xl">
       {/* Header */}
       <div className="mb-6">
         <h1 className="text-2xl font-bold theme-text mb-1">Discover Builders</h1>

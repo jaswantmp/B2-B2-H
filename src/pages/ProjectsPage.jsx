@@ -146,7 +146,7 @@ export default function ProjectsPage() {
   }, [])
 
   if (loading) {
-    return <div className="p-6 lg:p-8 max-w-7xl theme-text">Loading projects...</div>
+    return <div className="p-4 sm:p-6 lg:p-8 max-w-7xl theme-text">Loading projects...</div>
   }
 
   const filtered = projectsList.filter(p => {
@@ -165,7 +165,7 @@ export default function ProjectsPage() {
 
 
   return (
-    <div className="p-6 lg:p-8 max-w-7xl">
+    <div className="p-4 sm:p-6 lg:p-8 max-w-7xl">
       {/* Header */}
       <div className="mb-6">
         <h1 className="text-2xl font-bold theme-text mb-1 flex items-center gap-2">

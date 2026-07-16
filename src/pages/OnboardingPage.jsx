@@ -111,7 +111,7 @@ export default function OnboardingPage() {
   return (
     <div className="min-h-[calc(100vh-80px)] flex flex-col items-center justify-center p-4 lg:p-8">
       {/* Container */}
-      <div className="max-w-2xl w-full rounded-2xl border border-violet-500/20 bg-slate-950 p-6 lg:p-10 shadow-2xl relative overflow-hidden">
+      <div className="max-w-2xl w-full rounded-2xl border border-violet-500/20 bg-slate-950 p-4 sm:p-6 lg:p-10 shadow-2xl relative overflow-hidden">
         {/* Decorative Background Gradients */}
         <div className="absolute top-0 right-0 w-80 h-80 bg-violet-600/10 rounded-full blur-3xl -z-10" />
         <div className="absolute bottom-0 left-0 w-80 h-80 bg-cyan-600/10 rounded-full blur-3xl -z-10" />

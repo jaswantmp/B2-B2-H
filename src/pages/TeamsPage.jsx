@@ -84,12 +84,12 @@ export default function TeamsPage() {
   }
 
   if (loading) {
-    return <div className="p-6 lg:p-8 max-w-6xl theme-text">Loading team details...</div>
+    return <div className="p-4 sm:p-6 lg:p-8 max-w-6xl theme-text">Loading team details...</div>
   }
 
   if (!team) {
     return (
-      <div className="p-6 lg:p-8 max-w-6xl">
+      <div className="p-4 sm:p-6 lg:p-8 max-w-6xl">
         <div className="mb-6">
           <h1 className="text-2xl font-bold theme-text mb-1 flex items-center gap-2">
             <UsersRound size={22} className="text-violet-400" />
@@ -182,7 +182,7 @@ export default function TeamsPage() {
 
 
   return (
-    <div className="p-6 lg:p-8 max-w-6xl">
+    <div className="p-4 sm:p-6 lg:p-8 max-w-6xl">
       {/* Header */}
       <div className="mb-6">
         <h1 className="text-2xl font-bold theme-text mb-1 flex items-center gap-2">

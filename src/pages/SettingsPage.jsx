@@ -39,7 +39,7 @@ const NOTIF_PREFS = [
 function SectionNav({ active, onChange }) {
   return (
     <nav
-      className="rounded-2xl border p-2 flex lg:flex-col gap-1"
+      className="rounded-2xl border p-2 flex lg:flex-col gap-1 overflow-x-auto whitespace-nowrap scrollbar-thin max-w-full"
       style={{ backgroundColor: 'var(--bg-surface)', borderColor: 'var(--border-subtle)' }}
       aria-label="Settings sections"
     >
@@ -47,7 +47,7 @@ function SectionNav({ active, onChange }) {
         <button
           key={key}
           onClick={() => onChange(key)}
-          className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium transition-all w-full text-left ${
+          className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium transition-all w-auto lg:w-full text-left flex-shrink-0 ${
             active === key
               ? 'bg-violet-50 dark:bg-violet-700/20 text-violet-700 dark:text-violet-300 border border-violet-200 dark:border-violet-700/30'
               : 'theme-muted hover:bg-[var(--bg-raised)] hover:theme-text border border-transparent'
@@ -524,7 +524,7 @@ export default function SettingsPage() {
   const activeLabel = SECTIONS.find(s => s.key === activeSection)?.label ?? 'Settings'
 
   return (
-    <div className="p-6 lg:p-8 max-w-5xl">
+    <div className="p-4 sm:p-6 lg:p-8 max-w-5xl">
       {/* Header */}
       <div className="mb-6">
         <h1 className="text-2xl font-bold theme-text mb-1 flex items-center gap-2">
