@@ -1,5 +1,5 @@
 # app/schemas/ai.py
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
 
 class ProjectIdeaRequest(BaseModel):
     domain: str = Field(..., min_length=1, description="The focus area/domain of the project, e.g. Education, Health")
@@ -9,8 +9,21 @@ class ProjectIdeaRequest(BaseModel):
     difficulty: str | None = Field(None, description="Target difficulty level, e.g. Beginner, Advanced")
 
 class ProjectIdeaResponse(BaseModel):
-    project_name: str = Field(..., description="Generated project name")
+    title: str = Field(..., description="Generated project title/name")
     problem_statement: str = Field(..., description="Target problem statement")
     solution: str = Field(..., description="Proposed AI solution")
+    key_features: list[str] = Field(..., description="Key features of the project")
     tech_stack: list[str] = Field(..., description="Recommended tech stack")
-    team_roles: list[str] = Field(..., description="Required roles for the project team")
+    
+    # Legacy fields for frontend compatibility
+    project_name: str | None = Field(None, description="Legacy field for frontend compatibility")
+    team_roles: list[str] | None = Field(None, description="Legacy field for frontend compatibility")
+
+    @model_validator(mode="after")
+    def populate_compatibility_fields(self) -> "ProjectIdeaResponse":
+        if not self.project_name:
+            self.project_name = self.title
+        if not self.team_roles:
+            self.team_roles = ["Frontend Developer", "Backend Developer", "AI Engineer"]
+        return self
+
