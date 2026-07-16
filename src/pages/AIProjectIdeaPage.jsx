@@ -269,7 +269,7 @@ export default function AIProjectIdeaPage() {
                 {loading ? (
                   <>
                     <RefreshCw size={15} className="animate-spin" />
-                    Generating...
+                    Generating AI Project...
                   </>
                 ) : (
                   <>
@@ -317,7 +317,7 @@ export default function AIProjectIdeaPage() {
             >
               <div className="flex items-center gap-2 mb-4">
                 <span className="w-4 h-4 border-2 border-violet-400/30 border-t-violet-400 rounded-full animate-spin" />
-                <span className="text-sm text-violet-400 font-medium">Formulating your project architecture...</span>
+                <span className="text-sm text-violet-400 font-medium">Gemini is generating a project idea...</span>
               </div>
               <div className="space-y-3">
                 <div className="h-6 bg-violet-800/10 rounded w-1/3 animate-pulse" />

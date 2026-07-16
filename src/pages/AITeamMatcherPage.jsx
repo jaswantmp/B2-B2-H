@@ -86,10 +86,10 @@ export default function AITeamMatcherPage() {
           style={{ backgroundColor: 'var(--bg-surface)' }}
         >
           <RefreshCw size={14} className={loading ? 'animate-spin text-violet-400' : ''} />
-          Refresh
+          {loading ? 'Analyzing Compatibility...' : 'Find Matches'}
         </button>
       </div>
-
+ 
       {/* Matching Criteria Banner */}
       <div
         className="flex items-start gap-3.5 rounded-2xl p-5 mb-8 border border-violet-400 dark:border-violet-800/30 shadow-lg"
@@ -103,10 +103,14 @@ export default function AITeamMatcherPage() {
           </p>
         </div>
       </div>
-
+ 
       {/* Loading Skeleton */}
       {loading && (
         <div className="space-y-6">
+          <div className="flex items-center gap-3 p-4 rounded-xl border border-violet-800/30 bg-violet-950/10 text-violet-400 font-semibold animate-pulse text-sm">
+            <span className="w-4 h-4 border-2 border-violet-400/30 border-t-violet-400 rounded-full animate-spin" />
+            <span>Calculating compatibility scores and generating AI insights...</span>
+          </div>
           {[1, 2, 3].map(i => (
             <div
               key={i}
@@ -210,6 +214,26 @@ export default function AITeamMatcherPage() {
                     style={{ width: `${candidate.compatibility_score}%` }}
                   />
                 </div>
+              </div>
+
+              {/* AI Match Insights card */}
+              <div
+                className="rounded-xl p-4 mb-5 border"
+                style={{
+                  backgroundColor: 'var(--bg-surface)',
+                  borderColor: 'var(--border-subtle)',
+                }}
+              >
+                <div className="flex items-center gap-2 mb-2">
+                  <Sparkles size={14} className="text-violet-400" />
+                  <h4 className="text-xs font-bold theme-text uppercase tracking-wider">
+                    AI Match Insights
+                  </h4>
+                </div>
+                <hr className="theme-divider border-t my-2" style={{ borderColor: 'var(--border-subtle)' }} />
+                <p className="text-sm theme-text-secondary leading-relaxed whitespace-pre-line">
+                  {candidate.ai_explanation || "AI insights unavailable for this match."}
+                </p>
               </div>
 
               {/* Match reasons check list */}

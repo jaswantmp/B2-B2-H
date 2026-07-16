@@ -18,6 +18,8 @@ class TeamMatchCandidate(BaseModel):
     branch: Optional[str] = None
     year: Optional[str] = None
     university: Optional[str] = None
+    ai_explanation: Optional[str] = None
+
 
 
 class TeamMatchResponse(BaseModel):

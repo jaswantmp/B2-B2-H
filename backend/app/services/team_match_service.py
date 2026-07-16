@@ -214,24 +214,10 @@ class TeamMatchService:
         ).all()
 
         matches = []
+        candidate_map = {}
         for c in candidates:
+            candidate_map[c.id] = c
             score, reasons, recommended_role = cls.calculate_match(user, c)
-            
-            # FUTURE READY: Structure for Gemini API to summarize explanations
-            # try:
-            #     from google import genai
-            #     client = genai.Client()
-            #     prompt = (
-            #         f"Describe in one short sentence why {c.name} is a great hackathon teammate "
-            #         f"for {user.name} based on these reasons: {reasons}."
-            #     )
-            #     response = client.models.generate_content(
-            #         model='gemini-2.5-flash',
-            #         contents=prompt
-            #     )
-            #     # Can replace reasons or augment them
-            # except Exception as e:
-            #     logger.warning(f"Error calling Gemini: {e}")
 
             matches.append(TeamMatchCandidate(
                 user_id=c.id,
@@ -249,5 +235,24 @@ class TeamMatchService:
         # Sort descending by compatibility score
         matches.sort(key=lambda x: x.compatibility_score, reverse=True)
 
+        # Generate Gemini explanations ONLY for the top 5 matches
+        from app.services.gemini_service import generate_match_explanation
+
+        user_name = user.name
+        user_skills = [us.skill.name for us in user.user_skills if us.skill]
+
+        for match in matches[:5]:
+            c = candidate_map.get(match.id)
+            if c:
+                cand_skills = [us.skill.name for us in c.user_skills if us.skill]
+                match.ai_explanation = generate_match_explanation(
+                    user_name=user_name,
+                    user_skills=user_skills,
+                    candidate_name=c.name,
+                    candidate_skills=cand_skills,
+                    compatibility_score=match.compatibility_score
+                )
+
         # Return top 10
         return matches[:10]
+
