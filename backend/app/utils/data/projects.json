@@ -1,0 +1,502 @@
+[
+  {
+    "title": "NeuroScan: Brain Tumor Segmentation",
+    "description": "An AI-powered diagnostic helper that performs semantic segmentation of brain MRIs to identify tumor regions using U-Net architecture.",
+    "domain": "AI",
+    "difficulty": "Advanced",
+    "required_skills": ["Python", "PyTorch", "Computer Vision", "Deep Learning", "Data Science"],
+    "team_size": 4,
+    "category": "research",
+    "status": "In Progress"
+  },
+  {
+    "title": "Astra Docs: Collaborative Realtime Editor",
+    "description": "A high-performance markdown editor featuring real-time operational transformation (OT), document sharing, and offline synchronization.",
+    "domain": "Web",
+    "difficulty": "Intermediate",
+    "required_skills": ["TypeScript", "React", "Node.js", "Express.js", "MongoDB", "Figma"],
+    "team_size": 3,
+    "category": "opensource",
+    "status": "Recruiting"
+  },
+  {
+    "title": "SafeRoute: Community Emergency SOS Network",
+    "description": "A mobile application for offline-first community safety, routing users around hazardous areas using peer-to-peer Bluetooth mesh networking.",
+    "domain": "Mobile",
+    "difficulty": "Advanced",
+    "required_skills": ["Flutter", "Android", "iOS", "Firebase", "UI Design", "UX Design"],
+    "team_size": 4,
+    "category": "startup",
+    "status": "In Progress"
+  },
+  {
+    "title": "Sentinel: Automated Intrusion Detection",
+    "description": "An enterprise-grade monitoring dashboard that parses server logs in real-time, matching patterns to flag suspicious SSH login attempts and brute force attacks.",
+    "domain": "Cybersecurity",
+    "difficulty": "Intermediate",
+    "required_skills": ["Python", "FastAPI", "PostgreSQL", "Cybersecurity", "Docker", "DevOps"],
+    "team_size": 3,
+    "category": "college",
+    "status": "Completed"
+  },
+  {
+    "title": "EdgeScale: Multi-cloud Deployment Optimizer",
+    "description": "A developer tool designed to optimize resource usage across AWS and Azure, automatically scaling down idle nodes based on telemetry.",
+    "domain": "Cloud",
+    "difficulty": "Advanced",
+    "required_skills": ["Go", "AWS", "Azure", "Docker", "Kubernetes", "DevOps"],
+    "team_size": 4,
+    "category": "startup",
+    "status": "Recruiting"
+  },
+  {
+    "title": "SmartFlow: Precision Drip Irrigation Controller",
+    "description": "An IoT-based controller that reads soil moisture, temperature, and local weather forecasts to intelligently regulate water valves.",
+    "domain": "IoT",
+    "difficulty": "Intermediate",
+    "required_skills": ["C++", "C", "IoT", "Raspberry Pi", "Microcontrollers", "Python"],
+    "team_size": 3,
+    "category": "college",
+    "status": "Completed"
+  },
+  {
+    "title": "NovaPay: Micropayments Gateway for Creator Economy",
+    "description": "A lightning-fast UPI-integrated micropayment aggregator offering API widgets for news blogs to accept single-article tips.",
+    "domain": "FinTech",
+    "difficulty": "Intermediate",
+    "required_skills": ["JavaScript", "Node.js", "FastAPI", "PostgreSQL", "React", "Business Analysis"],
+    "team_size": 4,
+    "category": "startup",
+    "status": "In Progress"
+  },
+  {
+    "title": "CareHub: Remote Patient Telemetry System",
+    "description": "A centralized dashboard for nursing staff showing real-time heart rate and oxygen saturation readings sent from wearable devices.",
+    "domain": "Healthcare",
+    "difficulty": "Intermediate",
+    "required_skills": ["React", "Express.js", "MongoDB", "Websocket", "HealthTech", "UI Design"],
+    "team_size": 3,
+    "category": "college",
+    "status": "Recruiting"
+  },
+  {
+    "title": "Optima: Fleet Routing and Fuel Optimization Engine",
+    "description": "A logistics tool using genetic algorithms to dynamically route freight carriers, minimizing total travel distance and empty backhauls.",
+    "domain": "Cloud",
+    "difficulty": "Advanced",
+    "required_skills": ["Python", "FastAPI", "PostgreSQL", "Docker", "Kubernetes", "Project Management"],
+    "team_size": 5,
+    "category": "research",
+    "status": "In Progress"
+  },
+  {
+    "title": "Apex Ledger: Smart Contract Auditing Platform",
+    "description": "An AI agent that statically analyzes Solidity smart contracts to find vulnerability patterns such as reentrancy and integer overflow.",
+    "domain": "AI",
+    "difficulty": "Advanced",
+    "required_skills": ["Generative AI", "Blockchain", "Python", "React", "Cybersecurity"],
+    "team_size": 3,
+    "category": "research",
+    "status": "Recruiting"
+  },
+  {
+    "title": "EcoGrid: Decentralized Solar Grid Allocator",
+    "description": "A peer-to-peer energy sharing simulator that records solar power production on local micro-grids and settles payments.",
+    "domain": "IoT",
+    "difficulty": "Advanced",
+    "required_skills": ["IoT", "Blockchain", "Python", "FastAPI", "React", "Figma"],
+    "team_size": 4,
+    "category": "opensource",
+    "status": "In Progress"
+  },
+  {
+    "title": "Breeze: Lightweight State Management for React",
+    "description": "A zero-dependency React state library focusing on performant granular updates and minimal boilerplate code.",
+    "domain": "Web",
+    "difficulty": "Beginner",
+    "required_skills": ["JavaScript", "TypeScript", "React", "UX Design"],
+    "team_size": 2,
+    "category": "opensource",
+    "status": "Completed"
+  },
+  {
+    "title": "MedAI: Diagnostic Assistant for Chest X-Rays",
+    "description": "Deep learning classifier trained to detect pneumonia and other chest abnormalities from diagnostic X-ray images.",
+    "domain": "AI",
+    "difficulty": "Advanced",
+    "required_skills": ["Python", "Deep Learning", "Artificial Intelligence", "FastAPI", "PostgreSQL"],
+    "team_size": 4,
+    "category": "research",
+    "status": "In Progress"
+  },
+  {
+    "title": "Zenith: Distributed Cache Server",
+    "description": "A fast in-memory key-value store supporting custom LRU eviction algorithms and master-slave replication protocol.",
+    "domain": "Cloud",
+    "difficulty": "Advanced",
+    "required_skills": ["C++", "C", "Docker", "DevOps", "Documentation"],
+    "team_size": 3,
+    "category": "opensource",
+    "status": "Completed"
+  },
+  {
+    "title": "TrackPack: High-accuracy Assets Tracker",
+    "description": "A mobile dashboard showing GPS traces, transit status, and temperature limits for cold chain delivery containers.",
+    "domain": "Mobile",
+    "difficulty": "Intermediate",
+    "required_skills": ["Flutter", "Firebase", "IoT", "UI Design", "UX Design"],
+    "team_size": 3,
+    "category": "college",
+    "status": "Recruiting"
+  },
+  {
+    "title": "LockBox: Encrypted Password Manager extension",
+    "description": "A secure web extension implementing PBKDF2 key derivation and AES-GCM to securely encrypt and sync login credentials.",
+    "domain": "Cybersecurity",
+    "difficulty": "Intermediate",
+    "required_skills": ["JavaScript", "TypeScript", "Cybersecurity", "UI Design", "Technical Writing"],
+    "team_size": 3,
+    "category": "opensource",
+    "status": "Completed"
+  },
+  {
+    "title": "Aura: AI-driven Virtual Fashion Assistant",
+    "description": "Use generative models to allow users to try on virtual apparel combinations in real-time using mobile cameras.",
+    "domain": "AI",
+    "difficulty": "Advanced",
+    "required_skills": ["Python", "Generative AI", "React", "Flutter", "Figma", "UI Design"],
+    "team_size": 5,
+    "category": "startup",
+    "status": "In Progress"
+  },
+  {
+    "title": "PortaFolio: Developer Portfolio Generator",
+    "description": "A command-line tool and static generator that parses github profiles and generates professional developer websites.",
+    "domain": "Web",
+    "difficulty": "Beginner",
+    "required_skills": ["JavaScript", "Node.js", "Express.js", "Graphic Design", "Technical Writing"],
+    "team_size": 2,
+    "category": "opensource",
+    "status": "Completed"
+  },
+  {
+    "title": "CardioGuard: Real-time ECG Wearable Interface",
+    "description": "A low-power Bluetooth app that streams cardiac waves, flagging sudden anomalies like tachycardia using localized DSP algorithms.",
+    "domain": "Healthcare",
+    "difficulty": "Advanced",
+    "required_skills": ["C", "Android", "Flutter", "HealthTech", "UI Design", "UX Design"],
+    "team_size": 4,
+    "category": "research",
+    "status": "In Progress"
+  },
+  {
+    "title": "SafeKeep: Secure Multi-Signature Wallet",
+    "description": "A multi-signature asset locker designed for collaborative startups to manage treasury operations securely.",
+    "domain": "FinTech",
+    "difficulty": "Advanced",
+    "required_skills": ["Solidity", "Blockchain", "React", "Node.js", "Cybersecurity"],
+    "team_size": 4,
+    "category": "startup",
+    "status": "Recruiting"
+  },
+  {
+    "title": "Lumina: Adaptive Smart Lighting for Homes",
+    "description": "IoT lighting controller mapping circadian rhythms to automatically transition room illumination spectrums.",
+    "domain": "IoT",
+    "difficulty": "Intermediate",
+    "required_skills": ["C++", "IoT", "Raspberry Pi", "Node.js", "Express.js"],
+    "team_size": 3,
+    "category": "college",
+    "status": "Completed"
+  },
+  {
+    "title": "FinSight: Personal Finance Dashboard",
+    "description": "Aggregate bank SMS transaction alerts locally to categorize expenditures and visualize weekly budget usage graphs.",
+    "domain": "FinTech",
+    "difficulty": "Beginner",
+    "required_skills": ["Flutter", "Firebase", "Data Science", "UX Design"],
+    "team_size": 3,
+    "category": "college",
+    "status": "Completed"
+  },
+  {
+    "title": "DocuMatch: Smart Contract Parser",
+    "description": "An NLP system that reviews legal contracts to extract deliverables, penalty terms, and renewal dates into structured tables.",
+    "domain": "AI",
+    "difficulty": "Intermediate",
+    "required_skills": ["Python", "FastAPI", "React", "MongoDB", "Figma"],
+    "team_size": 3,
+    "category": "startup",
+    "status": "Recruiting"
+  },
+  {
+    "title": "MeshNet: Offline Chat Application",
+    "description": "An offline peer-to-peer mobile messaging system allowing proximity communication during disaster response scenarios.",
+    "domain": "Mobile",
+    "difficulty": "Advanced",
+    "required_skills": ["Android", "Java", "C++", "Cybersecurity", "UI Design"],
+    "team_size": 3,
+    "category": "college",
+    "status": "Completed"
+  },
+  {
+    "title": "CloudLock: Cloud Access Policy Auditing",
+    "description": "A scanner utility evaluating IAM templates to identify overly permissive admin policies and misconfigured public S3 buckets.",
+    "domain": "Cloud",
+    "difficulty": "Intermediate",
+    "required_skills": ["Python", "AWS", "Azure", "Docker", "DevOps"],
+    "team_size": 3,
+    "category": "opensource",
+    "status": "Completed"
+  },
+  {
+    "title": "MediChain: Patient Record Exchange Protocol",
+    "description": "A blockchain network allowing patient-governed medical records sharing securely between verified clinics and hospitals.",
+    "domain": "Healthcare",
+    "difficulty": "Advanced",
+    "required_skills": ["Blockchain", "FastAPI", "React", "PostgreSQL", "Cybersecurity"],
+    "team_size": 4,
+    "category": "research",
+    "status": "In Progress"
+  },
+  {
+    "title": "EcoQuest: Carbon Footprint Gamification App",
+    "description": "A gamified app rewarding users for carbon-saving transportation, compost usage, and recycling actions.",
+    "domain": "Web",
+    "difficulty": "Beginner",
+    "required_skills": ["React", "Express.js", "MongoDB", "Graphic Design", "UX Design"],
+    "team_size": 3,
+    "category": "college",
+    "status": "Completed"
+  },
+  {
+    "title": "SwiftRoute: Realtime Delivery Route Optimizer",
+    "description": "A geospatial router directing delivery drivers using live traffic overlays and multi-point optimization algorithms.",
+    "domain": "Web",
+    "difficulty": "Advanced",
+    "required_skills": ["TypeScript", "Node.js", "PostgreSQL", "Google Maps API", "Project Management"],
+    "team_size": 4,
+    "category": "startup",
+    "status": "In Progress"
+  },
+  {
+    "title": "SoundByte: AI Voice Translation Engine",
+    "description": "Translates local dialects in real-time to standard languages using advanced transcription and fine-tuned translation models.",
+    "domain": "AI",
+    "difficulty": "Advanced",
+    "required_skills": ["Python", "Deep Learning", "Generative AI", "FastAPI", "Docker"],
+    "team_size": 4,
+    "category": "research",
+    "status": "In Progress"
+  },
+  {
+    "title": "GridShield: Intrusion Detection for SCADA Networks",
+    "description": "An intrusion detection platform sniffing RTU packets on industrial power grids, alerting operators on command injection anomalies.",
+    "domain": "Cybersecurity",
+    "difficulty": "Advanced",
+    "required_skills": ["Python", "Cybersecurity", "IoT", "Microcontrollers", "DevOps"],
+    "team_size": 4,
+    "category": "research",
+    "status": "In Progress"
+  },
+  {
+    "title": "LearnStack: Student Peer Tutoring Platform",
+    "description": "A university dashboard where students exchange credits earned by tutoring peers for homework helpers.",
+    "domain": "Web",
+    "difficulty": "Beginner",
+    "required_skills": ["React", "Node.js", "MongoDB", "Figma", "Public Speaking"],
+    "team_size": 4,
+    "category": "college",
+    "status": "Completed"
+  },
+  {
+    "title": "AirWatch: City-wide Air Quality Index Mesh",
+    "description": "Distributed atmospheric nodes tracking particulate densities, plotting real-time heatmaps on municipal dashboards.",
+    "domain": "IoT",
+    "difficulty": "Intermediate",
+    "required_skills": ["C++", "IoT", "Raspberry Pi", "React", "Python"],
+    "team_size": 3,
+    "category": "college",
+    "status": "Completed"
+  },
+  {
+    "title": "FundUp: Peer to Peer Micro lending App",
+    "description": "A micro-loan platform connecting small merchants with capital groups, scoring credit using alternative mobile telemetry.",
+    "domain": "FinTech",
+    "difficulty": "Advanced",
+    "required_skills": ["Flutter", "Node.js", "PostgreSQL", "Firebase", "Startup Strategy"],
+    "team_size": 4,
+    "category": "startup",
+    "status": "Recruiting"
+  },
+  {
+    "title": "ScanRx: Medicine Label Reader and Reminders",
+    "description": "A mobile utility that reads prescription label instructions using OCR, automatically scheduling daily dose notifications.",
+    "domain": "Healthcare",
+    "difficulty": "Beginner",
+    "required_skills": ["Flutter", "Firebase", "Computer Vision", "UI Design"],
+    "team_size": 3,
+    "category": "college",
+    "status": "Completed"
+  },
+  {
+    "title": "CodeFlow: Visual Git Branch Visualizer",
+    "description": "A browser-based graph engine that connects to Git repositories and renders beautiful interactive dependency structures.",
+    "domain": "Web",
+    "difficulty": "Intermediate",
+    "required_skills": ["TypeScript", "React", "Node.js", "Docker", "Graphic Design"],
+    "team_size": 3,
+    "category": "opensource",
+    "status": "Recruiting"
+  },
+  {
+    "title": "SafeZone: Wireless Security Auditer",
+    "description": "A utility scanning local networks to evaluate credentials and identify devices with default routing passwords.",
+    "domain": "Cybersecurity",
+    "difficulty": "Intermediate",
+    "required_skills": ["Python", "C++", "Cybersecurity", "Docker", "Technical Writing"],
+    "team_size": 3,
+    "category": "opensource",
+    "status": "Completed"
+  },
+  {
+    "title": "LogScale: High-throughput Log Streamer",
+    "description": "A lightweight log forwarding agent sending system event metrics into analytics aggregators with sub-millisecond delays.",
+    "domain": "Cloud",
+    "difficulty": "Advanced",
+    "required_skills": ["Go", "Docker", "Kubernetes", "DevOps", "AWS"],
+    "team_size": 3,
+    "category": "opensource",
+    "status": "Completed"
+  },
+  {
+    "title": "Astra Vision: Real-time Storefront Traffic Analytics",
+    "description": "Stores compute footfalls, queue wait-times, and display engagement rates locally from CCTV RTSP feeds using edge AI.",
+    "domain": "AI",
+    "difficulty": "Advanced",
+    "required_skills": ["Python", "Computer Vision", "Deep Learning", "Generative AI", "FastAPI"],
+    "team_size": 4,
+    "category": "startup",
+    "status": "In Progress"
+  },
+  {
+    "title": "WaterMark: Hydroponic System Monitor",
+    "description": "An automated system regulating pH balance, water temperature, and nutrients for vertical indoor hydroponic systems.",
+    "domain": "IoT",
+    "difficulty": "Intermediate",
+    "required_skills": ["C++", "C", "IoT", "Raspberry Pi", "Python"],
+    "team_size": 3,
+    "category": "college",
+    "status": "Completed"
+  },
+  {
+    "title": "SwiftBill: High-speed Point of Sale System",
+    "description": "An offline-capable desktop billing client optimized for barcode reading and automated inventory sync with warehouses.",
+    "domain": "Web",
+    "difficulty": "Intermediate",
+    "required_skills": ["React", "Express.js", "MongoDB", "Docker", "UI Design"],
+    "team_size": 3,
+    "category": "college",
+    "status": "Completed"
+  },
+  {
+    "title": "ThreatIntel: Automated Incident Parser",
+    "description": "Ingests CVE advisories and automates security patches, generating ready-to-merge Ansible security playbooks.",
+    "domain": "Cybersecurity",
+    "difficulty": "Advanced",
+    "required_skills": ["Python", "Cybersecurity", "DevOps", "Ansible", "Docker"],
+    "team_size": 4,
+    "category": "opensource",
+    "status": "In Progress"
+  },
+  {
+    "title": "FitGrid: Community Fitness Leaderboards",
+    "description": "Syncs activity counts from wearables to build gamified interactive running leagues for student clubs.",
+    "domain": "Mobile",
+    "difficulty": "Beginner",
+    "required_skills": ["React Native", "Firebase", "Figma", "UX Design"],
+    "team_size": 3,
+    "category": "college",
+    "status": "Completed"
+  },
+  {
+    "title": "SmartScale: Container Weight Telemetry",
+    "description": "Industrial sensors connected to cellular gateways updating warehouse supply databases on actual inventory bulk weight.",
+    "domain": "IoT",
+    "difficulty": "Advanced",
+    "required_skills": ["C++", "IoT", "Microcontrollers", "Azure", "DevOps"],
+    "team_size": 4,
+    "category": "research",
+    "status": "In Progress"
+  },
+  {
+    "title": "EcoCharge: EV Charging Stations Broker",
+    "description": "An algorithm predicting charging slot demands at stations, offering dynamic discounts during peak generation periods.",
+    "domain": "Web",
+    "difficulty": "Intermediate",
+    "required_skills": ["React", "Node.js", "PostgreSQL", "Docker", "Business Analysis"],
+    "team_size": 4,
+    "category": "startup",
+    "status": "Recruiting"
+  },
+  {
+    "title": "Vigil: Elderly Fall Detection System",
+    "description": "Utilizes millimeter-wave radar to track falls and anomalies in residential spaces, notifying emergency contacts.",
+    "domain": "Healthcare",
+    "difficulty": "Advanced",
+    "required_skills": ["Python", "IoT", "Raspberry Pi", "Android", "HealthTech"],
+    "team_size": 4,
+    "category": "startup",
+    "status": "In Progress"
+  },
+  {
+    "title": "KubeGuard: Kubernetes Network Policy Manager",
+    "description": "An operator analyzing network configurations, applying zero-trust pod firewalls dynamically based on pod labels.",
+    "domain": "Cloud",
+    "difficulty": "Advanced",
+    "required_skills": ["Go", "Kubernetes", "Docker", "DevOps", "Cybersecurity"],
+    "team_size": 3,
+    "category": "opensource",
+    "status": "In Progress"
+  },
+  {
+    "title": "SkillFlow: Student Competency Tracker",
+    "description": "Helps college advisors audit student skill acquisitions dynamically, generating customized roadmap trajectories.",
+    "domain": "Web",
+    "difficulty": "Intermediate",
+    "required_skills": ["React", "Node.js", "MongoDB", "UX Design", "Technical Writing"],
+    "team_size": 3,
+    "category": "college",
+    "status": "Completed"
+  },
+  {
+    "title": "BioVault: DNA Storage Codec",
+    "description": "A Python encoder-decoder translating binary files into DNA nucleotides, maximizing density while minimizing error rates.",
+    "domain": "AI",
+    "difficulty": "Advanced",
+    "required_skills": ["Python", "Deep Learning", "Data Science", "C++"],
+    "team_size": 4,
+    "category": "research",
+    "status": "In Progress"
+  },
+  {
+    "title": "SmartLock: Biometric Smart Door Controller",
+    "description": "Secure micro-app matching face prints locally on hardware nodes to control magnetic doors, syncing access history logs.",
+    "domain": "IoT",
+    "difficulty": "Intermediate",
+    "required_skills": ["C++", "C", "Computer Vision", "IoT", "Raspberry Pi"],
+    "team_size": 3,
+    "category": "college",
+    "status": "Completed"
+  },
+  {
+    "title": "MarketSight: Sentiment Arbitrage Engine",
+    "description": "Monitors social media feeds for financial sentiment shifts, executing quick arbitrage trading strategies.",
+    "domain": "FinTech",
+    "difficulty": "Advanced",
+    "required_skills": ["Python", "Generative AI", "FinTech", "PostgreSQL", "Startup Strategy"],
+    "team_size": 4,
+    "category": "startup",
+    "status": "Recruiting"
+  }
+]

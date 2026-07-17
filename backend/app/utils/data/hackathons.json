@@ -1,0 +1,222 @@
+[
+  {
+    "title": "Astra AI/ML Hackathon 2026",
+    "description": "Build next-generation agentic workflows, LLM applications, and computer vision models solving real-world challenges in workflow automation.",
+    "organizer": "Astra Technologies",
+    "status": "Open Registration",
+    "location": "Bengaluru, Karnataka (In-Person)",
+    "prize_pool": "₹2,50,000",
+    "max_team_size": 4,
+    "tracks": ["AI Agents", "LLMOps", "Computer Vision"],
+    "tags": ["AI/ML", "Generative AI", "Astra"]
+  },
+  {
+    "title": "Global FinTech Innovation Summit Hackathon",
+    "description": "Build decentralized financial services, payment gateways, fraud detection engines, and smart contract auditing applications.",
+    "organizer": "Apex Capital & Co.",
+    "status": "Upcoming",
+    "location": "Mumbai, Maharashtra (In-Person)",
+    "prize_pool": "₹5,00,000",
+    "max_team_size": 5,
+    "tracks": ["DeFi", "Fraud Detection", "Micro-payments"],
+    "tags": ["FinTech", "Blockchain", "Security"]
+  },
+  {
+    "title": "EcoHack: Sustainable Tech Challenge",
+    "description": "Focusing on smart grid management, carbon footprint tracking, circular economy platforms, and climate action technologies.",
+    "organizer": "GreenEarth Foundation",
+    "status": "Ongoing",
+    "location": "Online / Virtual",
+    "prize_pool": "₹1,50,000",
+    "max_team_size": 3,
+    "tracks": ["ClimateTech", "Circular Economy", "IoT"],
+    "tags": ["Sustainability", "IoT", "GreenTech"]
+  },
+  {
+    "title": "SecureSphere Cybersecurity Shield",
+    "description": "Design intrusion detection systems, Zero Trust access managers, and secure cryptography tools for the enterprise.",
+    "organizer": "CyberShield Alliance",
+    "status": "Open Registration",
+    "location": "Hyderabad, Telangana (In-Person)",
+    "prize_pool": "₹3,00,000",
+    "max_team_size": 4,
+    "tracks": ["Zero Trust", "Threat Hunting", "Cryptography"],
+    "tags": ["Cybersecurity", "Network Security"]
+  },
+  {
+    "title": "EduNext Hackathon: Shaping the Classroom",
+    "description": "Create personalized learning systems, AI grading tools, and interactive educational content for remote areas.",
+    "organizer": "EdTech India Council",
+    "status": "Upcoming",
+    "location": "Chennai, Tamil Nadu (In-Person)",
+    "prize_pool": "₹1,80,000",
+    "max_team_size": 4,
+    "tracks": ["Adaptive Learning", "Gamification", "Access Tech"],
+    "tags": ["EdTech", "Web Development", "AI/ML"]
+  },
+  {
+    "title": "CareFlow HealthTech Challenge",
+    "description": "Build remote patient monitoring platforms, medical imaging diagnostic tools, and hospital management software.",
+    "organizer": "HealthFirst Hospitals",
+    "status": "Ongoing",
+    "location": "Online / Virtual",
+    "prize_pool": "₹4,00,000",
+    "max_team_size": 5,
+    "tracks": ["Diagnostics", "Patient Portals", "Wearables"],
+    "tags": ["HealthTech", "AI/ML", "Healthcare"]
+  },
+  {
+    "title": "HyperScale Web Development Sprint",
+    "description": "Demonstrate the absolute limits of serverless architectures, reactive UI libraries, and fast edge computation frameworks.",
+    "organizer": "Vercel India User Group",
+    "status": "Open Registration",
+    "location": "Pune, Maharashtra (In-Person)",
+    "prize_pool": "₹2,00,000",
+    "max_team_size": 4,
+    "tracks": ["Edge Computing", "Serverless Architecture", "WebAssembly"],
+    "tags": ["Web Development", "NextJS", "Cloud"]
+  },
+  {
+    "title": "Pinnacle Open Innovation Sprint",
+    "description": "An open canvas challenge to design software or hardware addressing critical local infrastructure or community needs.",
+    "organizer": "Pinnacle Inc.",
+    "status": "Upcoming",
+    "location": "Online / Virtual",
+    "prize_pool": "₹3,50,000",
+    "max_team_size": 5,
+    "tracks": ["Social Impact", "Public Infrastructure", "Hardware Integration"],
+    "tags": ["Open Innovation", "Problem Solving"]
+  },
+  {
+    "title": "NeuroSight AI Hackathon",
+    "description": "Focused exclusively on brain-computer interfaces, neural signal processing, and medical diagnosis from EEG/MRI feeds.",
+    "organizer": "NeuroScience Lab India",
+    "status": "Open Registration",
+    "location": "Kochi, Kerala (In-Person)",
+    "prize_pool": "₹2,20,000",
+    "max_team_size": 3,
+    "tracks": ["BCI", "Signal Processing", "NeuroAI"],
+    "tags": ["AI/ML", "HealthTech", "Deep Learning"]
+  },
+  {
+    "title": "AgriTech India: Farm to Table hackathon",
+    "description": "Build supply chain visibility apps, IoT soil moisture detectors, crop yield prediction systems, and market matching engines.",
+    "organizer": "National Agricultural Board",
+    "status": "Upcoming",
+    "location": "Coimbatore, Tamil Nadu (In-Person)",
+    "prize_pool": "₹1,50,000",
+    "max_team_size": 4,
+    "tracks": ["IoT Precision Farming", "Logistics Optimization", "Marketplaces"],
+    "tags": ["Sustainability", "IoT", "AI/ML"]
+  },
+  {
+    "title": "DefiLabs Cryptographic Hackfest",
+    "description": "Focus on zero-knowledge proofs, layer-2 scalability frameworks, and MEV prevention tools for block creators.",
+    "organizer": "DefiLabs Foundation",
+    "status": "Ongoing",
+    "location": "Online / Virtual",
+    "prize_pool": "₹6,00,000",
+    "max_team_size": 5,
+    "tracks": ["ZKP", "L2 Solutions", "MEV Prevention"],
+    "tags": ["FinTech", "Blockchain", "Cybersecurity"]
+  },
+  {
+    "title": "SwiftShip Mobile Developers Hackathon",
+    "description": "Create fluid, native, and cross-platform mobile apps targeting offline-first capabilities, and localized micro-apps.",
+    "organizer": "SwiftShip Logistics",
+    "status": "Open Registration",
+    "location": "Bengaluru, Karnataka (In-Person)",
+    "prize_pool": "₹2,00,000",
+    "max_team_size": 3,
+    "tracks": ["Cross-Platform Mobile", "Offline-First Sync", "Interactive Widgets"],
+    "tags": ["Web Development", "Mobile", "React Native"]
+  },
+  {
+    "title": "DefenseSec National Cyber-Warfare Challenge",
+    "description": "An intensive red-vs-blue simulation hackathon where participants build network mapping and patch automation platforms.",
+    "organizer": "National Security Academics",
+    "status": "Upcoming",
+    "location": "New Delhi (In-Person)",
+    "prize_pool": "₹5,00,000",
+    "max_team_size": 4,
+    "tracks": ["Cyber Warfare", "Intrusion Detection", "Incident Response"],
+    "tags": ["Cybersecurity", "Defense"]
+  },
+  {
+    "title": "CleanGrid Smart City Initiative",
+    "description": "Develop energy consumption planners, EV charging station allocators, and waste management routers for municipal boards.",
+    "organizer": "CleanGrid Technologies",
+    "status": "Ongoing",
+    "location": "Virtual / Online",
+    "prize_pool": "₹3,00,000",
+    "max_team_size": 4,
+    "tracks": ["Smart Cities", "EV Management", "Waste Tracking"],
+    "tags": ["Sustainability", "Open Innovation", "IoT"]
+  },
+  {
+    "title": "MicroPay Payments Summit Hackathon",
+    "description": "Build high-throughput payment rails, API wrapper layers, and developer tools for the Unified Payments Interface (UPI).",
+    "organizer": "MicroPay Systems",
+    "status": "Open Registration",
+    "location": "Bengaluru, Karnataka (In-Person)",
+    "prize_pool": "₹3,00,000",
+    "max_team_size": 4,
+    "tracks": ["Payment Integrations", "Sub-second Ledger", "Developer SDKs"],
+    "tags": ["FinTech", "Web Development"]
+  },
+  {
+    "title": "LearnAI Literacy Challenge",
+    "description": "Leverage generative voice bots, real-time speech translation, and low-bandwidth UI systems for adult literacy in rural India.",
+    "organizer": "EduTech Foundations Group",
+    "status": "Upcoming",
+    "location": "Virtual / Online",
+    "prize_pool": "₹2,50,000",
+    "max_team_size": 3,
+    "tracks": ["AI Voice Agents", "Speech Recognition", "Low-Bandwidth UX"],
+    "tags": ["EdTech", "AI/ML", "Open Innovation"]
+  },
+  {
+    "title": "Vigilant: Emergency Care Tech",
+    "description": "Create instant-trigger SOS networks, real-time ambulance routing systems, and automatic cardiac arrest sensors.",
+    "organizer": "Emergency Medical Alliance",
+    "status": "Ongoing",
+    "location": "Virtual / Online",
+    "prize_pool": "₹4,00,000",
+    "max_team_size": 5,
+    "tracks": ["Ambulance Routing", "Cardiac Sensors", "SOS Mesh Networks"],
+    "tags": ["HealthTech", "IoT"]
+  },
+  {
+    "title": "Nirvana Open Source Builders Festival",
+    "description": "Contribute to or build new libraries that directly simplify dev workflows, state management, or micro-service routing.",
+    "organizer": "Nirvana OS Foundation",
+    "status": "Open Registration",
+    "location": "Mumbai, Maharashtra (In-Person)",
+    "prize_pool": "₹1,50,000",
+    "max_team_size": 4,
+    "tracks": ["DevTools", "ORM Plugins", "State Management"],
+    "tags": ["Open Innovation", "Web Development"]
+  },
+  {
+    "title": "SecureVault Enterprise Cryptography",
+    "description": "Deploy key management architectures, end-to-end encrypted databases, and decentralized key rotation protocols.",
+    "organizer": "SecureVault Inc.",
+    "status": "Upcoming",
+    "location": "Bengaluru, Karnataka (In-Person)",
+    "prize_pool": "₹3,50,000",
+    "max_team_size": 4,
+    "tracks": ["Key Rotation", "Encrypted Querying", "Vaulting Systems"],
+    "tags": ["Cybersecurity", "FinTech"]
+  },
+  {
+    "title": "EcoLogistics Supply Chain Challenge",
+    "description": "Create transport routing solutions, carbon emissions estimators, and freight consolidation systems to minimize empty runs.",
+    "organizer": "EcoLogistics India Group",
+    "status": "Open Registration",
+    "location": "Virtual / Online",
+    "prize_pool": "₹2,00,000",
+    "max_team_size": 4,
+    "tracks": ["Routing Algorithms", "Emissions Tracking", "Fleet Management"],
+    "tags": ["Sustainability", "Open Innovation"]
+  }
+]
