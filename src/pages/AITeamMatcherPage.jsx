@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { Sparkles, UserCheck, MapPin, Trophy, Check, ArrowRight, RefreshCw, AlertCircle } from 'lucide-react'
-import { generateTeamMatches } from '../services/api.js'
+import { generateTeamMatches, getAIUsage, explainTeamMatch } from '../services/api.js'
 import { useAuth } from '../context/AuthContext.jsx'
 import PulseAvatar from '../components/PulseAvatar.jsx'
 import InviteModal from '../components/InviteModal.jsx'
@@ -13,6 +13,8 @@ export default function AITeamMatcherPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [inviteUser, setInviteUser] = useState(null)
+  const [usage, setUsage] = useState(null)
+  const [explainingId, setExplainingId] = useState(null)
 
   if (user && user.onboarding_completed === false) {
     return (
@@ -37,7 +39,18 @@ export default function AITeamMatcherPage() {
 
   useEffect(() => {
     fetchMatches()
+    fetchUsage()
   }, [user])
+
+  const fetchUsage = async () => {
+    if (!user) return
+    try {
+      const res = await getAIUsage()
+      setUsage(res)
+    } catch (e) {
+      console.error("Failed to fetch AI usage stats:", e)
+    }
+  }
 
   const fetchMatches = async () => {
     if (!user) return
@@ -48,9 +61,60 @@ export default function AITeamMatcherPage() {
       setMatches(response.matches || [])
     } catch (err) {
       console.error(err)
-      setError('Failed to load team matches. Please verify your server connection and try again.')
+      let errMsg = 'Failed to load team matches. Please verify your server connection and try again.'
+      if (err.body && err.body.detail) {
+        errMsg = err.body.detail
+      }
+      setError(errMsg)
     } finally {
       setLoading(false)
+    }
+  }
+
+  const handleRequestExplanation = async (targetUserId) => {
+    setExplainingId(targetUserId)
+    try {
+      const res = await explainTeamMatch(targetUserId)
+      setMatches(prev =>
+        prev.map(m =>
+          m.user_id === targetUserId ? { ...m, ai_explanation: res.ai_explanation } : m
+        )
+      )
+    } catch (err) {
+      console.error(err)
+      let errMsg = "Failed to load explanation."
+      if (err.body && err.body.detail) {
+        errMsg = err.body.detail
+      } else if (err.message) {
+        errMsg = err.message
+      }
+
+      if (
+        errMsg.toLowerCase().includes("quota") ||
+        errMsg.toLowerCase().includes("unavailable") ||
+        errMsg.toLowerCase().includes("limit reached")
+      ) {
+        setMatches(prev =>
+          prev.map(m =>
+            m.user_id === targetUserId
+              ? {
+                  ...m,
+                  ai_explanation:
+                    "⚠️ AI service temporarily unavailable.\n\nThe AI quota has been reached.\nPlease try again later."
+                }
+              : m
+          )
+        )
+      } else {
+        setMatches(prev =>
+          prev.map(m =>
+            m.user_id === targetUserId ? { ...m, ai_explanation: `Error: ${errMsg}` } : m
+          )
+        )
+      }
+    } finally {
+      setExplainingId(null)
+      fetchUsage()
     }
   }
 
@@ -78,6 +142,11 @@ export default function AITeamMatcherPage() {
           <p className="theme-muted text-sm max-w-xl">
             Recommends the best teammates based on skill compatibility (similarity & complementarity), academic year, branch, and status.
           </p>
+          {usage && usage.team_matcher && (
+            <div className="mt-2 text-xs font-semibold px-3 py-1.5 rounded-lg bg-violet-100 dark:bg-violet-900/30 border border-violet-400/40 dark:border-violet-800/40 text-violet-800 dark:text-violet-300 inline-block">
+              <Sparkles size={11} className="inline mr-1" /> {usage.team_matcher.remaining} / {usage.team_matcher.limit} remaining today
+            </div>
+          )}
         </div>
         <button
           onClick={fetchMatches}
@@ -103,7 +172,7 @@ export default function AITeamMatcherPage() {
           </p>
         </div>
       </div>
- 
+  
       {/* Loading Skeleton */}
       {loading && (
         <div className="space-y-6">
@@ -137,7 +206,15 @@ export default function AITeamMatcherPage() {
         <div className="text-center py-16 rounded-2xl border border-red-500/20 bg-red-950/10 p-6">
           <AlertCircle size={40} className="text-red-400 mx-auto mb-3" />
           <h3 className="font-semibold text-base theme-text mb-1">Matching Error</h3>
-          <p className="text-sm theme-muted max-w-sm mx-auto mb-4">{error}</p>
+          {error.includes("quota") || error.includes("exhausted") || error.includes("limit reached") ? (
+            <div className="text-sm text-amber-500 font-medium max-w-sm mx-auto mb-4 whitespace-pre-line">
+              ⚠️ AI service temporarily unavailable.
+              {"\n"}The AI quota has been reached.
+              {"\n"}Please try again later.
+            </div>
+          ) : (
+            <p className="text-sm theme-muted max-w-sm mx-auto mb-4">{error}</p>
+          )}
           <button
             onClick={fetchMatches}
             className="px-5 py-2.5 bg-violet-600 hover:bg-violet-500 text-white rounded-xl text-sm font-semibold transition-colors"
@@ -231,9 +308,32 @@ export default function AITeamMatcherPage() {
                   </h4>
                 </div>
                 <hr className="theme-divider border-t my-2" style={{ borderColor: 'var(--border-subtle)' }} />
-                <p className="text-sm theme-text-secondary leading-relaxed whitespace-pre-line">
-                  {candidate.ai_explanation || "AI insights unavailable for this match."}
-                </p>
+                
+                {candidate.ai_explanation ? (
+                  <p className="text-sm theme-text-secondary leading-relaxed whitespace-pre-line">
+                    {candidate.ai_explanation}
+                  </p>
+                ) : (
+                  <div className="text-center py-2">
+                    <button
+                      onClick={() => handleRequestExplanation(candidate.user_id)}
+                      disabled={explainingId !== null}
+                      className="px-4 py-2 bg-violet-600/80 hover:bg-violet-600 text-white rounded-xl text-xs font-semibold transition-all disabled:opacity-50 inline-flex items-center gap-1.5"
+                    >
+                      {explainingId === candidate.user_id ? (
+                        <>
+                          <span className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                          Analyzing Match...
+                        </>
+                      ) : (
+                        <>
+                          <Sparkles size={12} />
+                          Request AI Insight
+                        </>
+                      )}
+                    </button>
+                  </div>
+                )}
               </div>
 
               {/* Match reasons check list */}

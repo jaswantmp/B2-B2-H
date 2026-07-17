@@ -235,24 +235,7 @@ class TeamMatchService:
         # Sort descending by compatibility score
         matches.sort(key=lambda x: x.compatibility_score, reverse=True)
 
-        # Generate Gemini explanations ONLY for the top 5 matches
-        from app.services.gemini_service import generate_match_explanation
-
-        user_name = user.name
-        user_skills = [us.skill.name for us in user.user_skills if us.skill]
-
-        for match in matches[:5]:
-            c = candidate_map.get(match.id)
-            if c:
-                cand_skills = [us.skill.name for us in c.user_skills if us.skill]
-                match.ai_explanation = generate_match_explanation(
-                    user_name=user_name,
-                    user_skills=user_skills,
-                    candidate_name=c.name,
-                    candidate_skills=cand_skills,
-                    compatibility_score=match.compatibility_score
-                )
-
         # Return top 10
         return matches[:10]
+
 

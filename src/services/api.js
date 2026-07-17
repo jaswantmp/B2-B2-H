@@ -887,4 +887,33 @@ export async function applyProject(projectId) {
   return { success: true, message: 'Application submitted successfully' }
 }
 
+// ─── AI Quota, Limits, and Explanations ──────────────────────────────────────
+export async function getAIUsage() {
+  if (BASE) {
+    return request('/api/v1/ai/usage')
+  }
+  await delay(200)
+  return {
+    team_matcher: { used: 3, limit: 20, remaining: 17 },
+    project_generator: { used: 1, limit: 5, remaining: 4 },
+    hackathon_recommender: { used: 0, limit: 20, remaining: 20 }
+  }
+}
+
+export async function explainTeamMatch(targetUserId) {
+  if (BASE) {
+    return request('/api/v1/ai/team-match/explain', {
+      method: 'POST',
+      body: JSON.stringify({ target_user_id: targetUserId })
+    })
+  }
+  await delay(800)
+  return {
+    user_id: 'mock-current-user',
+    target_user_id: targetUserId,
+    ai_explanation: "This is a simulated match explanation indicating high collaboration compatibility. The candidate has complementary skills in Frontend and UI Design that balance your Backend expertise."
+  }
+}
+
+
 

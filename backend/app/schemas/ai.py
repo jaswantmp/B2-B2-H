@@ -1,5 +1,6 @@
 # app/schemas/ai.py
 from pydantic import BaseModel, Field, model_validator
+from typing import List, Optional
 
 class ProjectIdeaRequest(BaseModel):
     domain: str = Field(..., min_length=1, description="The focus area/domain of the project, e.g. Education, Health")
@@ -27,3 +28,24 @@ class ProjectIdeaResponse(BaseModel):
             self.team_roles = ["Frontend Developer", "Backend Developer", "AI Engineer"]
         return self
 
+
+class TeamMatchExplainRequest(BaseModel):
+    target_user_id: str
+
+
+class TeamMatchExplainResponse(BaseModel):
+    user_id: str
+    target_user_id: str
+    ai_explanation: str
+
+
+class FeatureUsage(BaseModel):
+    used: int
+    limit: int
+    remaining: int
+
+
+class AIUsageResponse(BaseModel):
+    team_matcher: FeatureUsage
+    project_generator: FeatureUsage
+    hackathon_recommender: FeatureUsage

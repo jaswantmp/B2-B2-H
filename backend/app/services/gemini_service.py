@@ -6,6 +6,7 @@ from google.genai.errors import ClientError
 from dotenv import load_dotenv
 import os
 import logging
+from datetime import datetime
 from app.schemas.ai import ProjectIdeaResponse
 
 load_dotenv()
@@ -36,10 +37,17 @@ def generate_project_idea(domain: str, difficulty: str) -> ProjectIdeaResponse:
                 response_schema=ProjectIdeaResponse,
             )
         )
+        logger.info(
+            f"[GEMINI CALL SUCCESS] feature_name=project_generator "
+            f"timestamp={datetime.utcnow().isoformat()}"
+        )
         return ProjectIdeaResponse.model_validate_json(response.text)
     except ClientError as e:
         if e.code == 429:
-            logger.error(f"Gemini API quota exceeded (HTTP 429): {str(e)}")
+            logger.error(
+                f"[GEMINI QUOTA EXHAUSTED] feature_name=project_generator "
+                f"timestamp={datetime.utcnow().isoformat()} error={str(e)}"
+            )
             raise GeminiQuotaExceededException("Gemini API quota exceeded.") from e
         logger.error(f"Gemini API client error: {str(e)}")
         raise e
@@ -48,19 +56,13 @@ def generate_project_idea(domain: str, difficulty: str) -> ProjectIdeaResponse:
         raise e
 
 
-
-import logging
-from typing import Optional
-
-logger = logging.getLogger(__name__)
-
 def generate_match_explanation(
     user_name: str,
     user_skills: list[str],
     candidate_name: str,
     candidate_skills: list[str],
     compatibility_score: int
-) -> Optional[str]:
+) -> str:
     """
     Use Gemini to generate a concise team matching explanation.
     """
@@ -89,9 +91,20 @@ def generate_match_explanation(
             contents=prompt
         )
         explanation = response.text.strip()
-        logger.info(f"Successfully generated match explanation for user {user_name} and candidate {candidate_name}")
+        logger.info(
+            f"[GEMINI CALL SUCCESS] feature_name=team_matcher "
+            f"timestamp={datetime.utcnow().isoformat()}"
+        )
         return explanation
+    except ClientError as e:
+        if e.code == 429:
+            logger.error(
+                f"[GEMINI QUOTA EXHAUSTED] feature_name=team_matcher "
+                f"timestamp={datetime.utcnow().isoformat()} error={str(e)}"
+            )
+            raise GeminiQuotaExceededException("Gemini API quota exceeded.") from e
+        logger.error(f"Gemini API client error: {str(e)}")
+        raise e
     except Exception as e:
         logger.error(f"Failed to generate match explanation for user {user_name} and candidate {candidate_name}: {str(e)}", exc_info=True)
-        return None
-
+        raise e

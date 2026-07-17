@@ -4,8 +4,10 @@ import { Link } from 'react-router-dom'
 import {
   Brain, Sparkles, Code2, Users, Lightbulb, Plus, X, AlertCircle, RefreshCw, Cpu, ArrowRight
 } from 'lucide-react'
-import { generateProjectIdea } from '../services/api.js'
+import { generateProjectIdea, getAIUsage } from '../services/api.js'
 import { useAuth } from '../context/AuthContext.jsx'
+import { useEffect } from 'react'
+
 
 const SUGGESTED_DOMAINS = [
   'Education',
@@ -27,6 +29,22 @@ export default function AIProjectIdeaPage() {
   const [loading, setLoading] = useState(false)
   const [result, setResult] = useState(null)
   const [error, setError] = useState('')
+  const [usage, setUsage] = useState(null)
+
+  useEffect(() => {
+    fetchUsage()
+  }, [user])
+
+  const fetchUsage = async () => {
+    if (!user) return
+    try {
+      const res = await getAIUsage()
+      setUsage(res)
+    } catch (e) {
+      console.error("Failed to fetch AI usage:", e)
+    }
+  }
+
 
   if (user && user.onboarding_completed === false) {
     return (
@@ -95,18 +113,27 @@ export default function AIProjectIdeaPage() {
     try {
       const data = await generateProjectIdea(domain.trim(), skills)
       setResult(data)
+      fetchUsage()
     } catch (err) {
       const status = err.response?.status || err.status
-      if (status === 429) {
+      let errMsg = ""
+      if (err.body && err.body.detail) {
+        errMsg = err.body.detail
+      } else if (err.message) {
+        errMsg = err.message
+      }
+
+      if (status === 429 || errMsg.toLowerCase().includes("quota") || errMsg.toLowerCase().includes("limit reached") || errMsg.toLowerCase().includes("exhausted")) {
         setError(
-          "⚠️ AI service temporarily unavailable.\n\nThe Gemini API quota has been reached.\nPlease try again later."
+          "⚠️ AI service temporarily unavailable.\n\nThe AI quota has been reached.\nPlease try again later."
         )
       } else {
-        setError('Failed to generate project idea. Please check your connection and try again.')
+        setError(errMsg || 'Failed to generate project idea. Please check your connection and try again.')
       }
     } finally {
       setLoading(false)
     }
+
   }
 
   const handleReset = () => {
@@ -128,7 +155,13 @@ export default function AIProjectIdeaPage() {
         <p className="theme-muted text-sm">
           Select a domain and add skills to generate a comprehensive project blueprint with recommended tech stacks and team roles.
         </p>
+        {usage && usage.project_generator && (
+          <div className="mt-2 text-xs font-semibold px-3 py-1.5 rounded-lg bg-violet-100 dark:bg-violet-900/30 border border-violet-400/40 dark:border-violet-800/40 text-violet-800 dark:text-violet-300 inline-block">
+            <Sparkles size={11} className="inline mr-1" /> {usage.project_generator.remaining} / {usage.project_generator.limit} remaining today
+          </div>
+        )}
       </div>
+
 
       <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
         {/* Left Side: Generator Configuration Form */}
