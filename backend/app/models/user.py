@@ -4,7 +4,7 @@ import uuid
 from datetime import datetime
 from sqlalchemy import (
     String, Boolean, Text, Integer, Float,
-    DateTime, ForeignKey, UniqueConstraint, Enum as SAEnum,
+    DateTime, ForeignKey, UniqueConstraint, Enum as SAEnum, JSON,
 )
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.dialects.postgresql import UUID
@@ -46,6 +46,7 @@ class User(Base):
     linkedin: Mapped[str | None] = mapped_column(String(200))
     twitter: Mapped[str | None] = mapped_column(String(200))
     website: Mapped[str | None] = mapped_column(String(300))
+    domains: Mapped[list[str] | None] = mapped_column(JSON, default=list, nullable=True)
 
     # Status
     status: Mapped[AvailabilityStatus] = mapped_column(

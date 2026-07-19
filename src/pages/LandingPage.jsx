@@ -86,12 +86,21 @@ const STATS = [
   { value: '2,800+',  label: 'Teams Formed' },
   { value: '94%',     label: 'Find a Team in < 24h' },
 ]
-
 export default function LandingPage() {
   const [usersList, setUsersList] = useState([])
 
   useEffect(() => {
-    getBuilders().then(setUsersList).catch(console.error)
+    const controller = new AbortController()
+    getBuilders({ limit: 5, signal: controller.signal })
+      .then(setUsersList)
+      .catch(err => {
+        if (err.name !== 'AbortError') {
+          console.error(err)
+        }
+      })
+    return () => {
+      controller.abort()
+    }
   }, [])
 
   const testimonials = TESTIMONIALS_RAW.map(t => ({
@@ -225,7 +234,7 @@ export default function LandingPage() {
                 </div>
                 <p className="text-xs text-slate-400 line-clamp-2 mb-3 leading-relaxed">{user.bio}</p>
                 <div className="flex flex-wrap gap-1.5">
-                  {(user.skills || []).slice(0, 3).map(skill => (
+                  {[...new Set(user.skills || [])].slice(0, 3).map(skill => (
                     <SkillBadge key={skill} skill={skill} verified={user.verifiedSkills?.includes(skill)} />
                   ))}
                 </div>

@@ -246,7 +246,7 @@ export default function AIProjectIdeaPage() {
               {/* Skills selected list */}
               {skills.length > 0 && (
                 <div className="flex flex-wrap gap-1.5">
-                  {skills.map(s => (
+                  {[...new Set(skills)].map(s => (
                     <span
                       key={s}
                       className="inline-flex items-center gap-1 text-xs px-2.5 py-1 rounded-md border font-semibold bg-violet-100 dark:bg-violet-900/30 border-violet-400 dark:border-violet-800/40 text-violet-800 dark:text-violet-400"
@@ -271,7 +271,7 @@ export default function AIProjectIdeaPage() {
                   Popular Skills Suggestions
                 </p>
                 <div className="flex flex-wrap gap-1.5">
-                  {POPULAR_SKILLS.map(skill => {
+                  {[...new Set(POPULAR_SKILLS)].map(skill => {
                     const active = skills.includes(skill)
                     return (
                       <button
@@ -431,7 +431,7 @@ export default function AIProjectIdeaPage() {
                   Recommended Tech Stack
                 </h3>
                 <div className="flex flex-wrap gap-2">
-                  {result.tech_stack.map(tech => (
+                  {[...new Set(result.tech_stack)].map(tech => (
                     <span
                       key={tech}
                       className="text-xs px-3 py-1.5 rounded-lg border font-semibold bg-cyan-100 dark:bg-cyan-950/30 border-cyan-400 dark:border-cyan-800/40 text-cyan-800 dark:text-cyan-300 flex items-center gap-1.5"

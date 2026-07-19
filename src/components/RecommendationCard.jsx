@@ -22,7 +22,7 @@ export default function RecommendationCard({ rec, onInvite }) {
             <AvailabilityIndicator status={builder.status} showLabel={false} />
           </div>
           <div className="flex flex-wrap gap-1 mt-2">
-            {builder.skills.slice(0, 3).map(skill => (
+            {[...new Set(builder.skills)].slice(0, 3).map(skill => (
               <SkillBadge key={skill} skill={skill} verified={builder.verifiedSkills?.includes(skill)} />
             ))}
           </div>
@@ -41,7 +41,7 @@ export default function RecommendationCard({ rec, onInvite }) {
       {/* Fit areas */}
       <div className="flex items-center gap-2 mb-4">
         <span className="text-xs text-slate-500">Covers:</span>
-        {fitAreas.map(area => (
+        {[...new Set(fitAreas)].map(area => (
           <span key={area} className="text-xs px-2 py-0.5 rounded-full bg-cyan-950 border border-cyan-800/50 text-cyan-400">
             {area}
           </span>

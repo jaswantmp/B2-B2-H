@@ -267,6 +267,14 @@ export default function SkillsSection() {
 
           if (skillsInCategory.length === 0) return null
 
+          const seenSkills = new Set()
+          const uniqueSkillsInCategory = skillsInCategory.filter(us => {
+            const nameLower = us.skill?.name?.toLowerCase()
+            if (!nameLower || seenSkills.has(nameLower)) return false
+            seenSkills.add(nameLower)
+            return true
+          })
+
           return (
             <div key={category} className="space-y-3">
               <h3 className="text-xs font-bold text-violet-800 dark:text-violet-400 font-semibold uppercase tracking-widest flex items-center gap-1.5">
@@ -275,7 +283,7 @@ export default function SkillsSection() {
               </h3>
               
               <div className="flex flex-wrap gap-2.5">
-                {skillsInCategory.map(us => (
+                {uniqueSkillsInCategory.map(us => (
                   <div
                     key={us.id}
                     className="flex items-center gap-1.5 pl-3 pr-2 py-1.5 rounded-xl border transition-all hover:border-violet-500/40 select-none group"

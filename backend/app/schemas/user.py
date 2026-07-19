@@ -73,6 +73,7 @@ class UserBase(BaseModel):
     linkedin: str | None = Field(None, max_length=200)
     twitter: str | None = Field(None, max_length=200)
     website: str | None = Field(None, max_length=300)
+    domains: list[str] | None = None
     status: AvailabilityStatus = AvailabilityStatus.LOOKING_FOR_TEAM
     hackathons_won: int = 0
 
@@ -99,6 +100,7 @@ class UserUpdate(BaseModel):
     linkedin: str | None = Field(None, max_length=200)
     twitter: str | None = Field(None, max_length=200)
     website: str | None = Field(None, max_length=300)
+    domains: list[str] | None = None
     status: AvailabilityStatus | None = None
     hackathons_won: int | None = None
     onboarding_completed: bool | None = None
@@ -129,6 +131,7 @@ class OnboardingRequest(BaseModel):
     year: str | None = None
     branch: str | None = None
     skills: list[str] = []
+    domains: list[str] = []
     status: AvailabilityStatus | None = None
     github: str | None = None
     linkedin: str | None = None

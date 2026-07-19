@@ -153,12 +153,15 @@ export async function getBuilders({
   status = '',   // legacy single-value support
   colleges = [],
   cities = [],
+  limit = null,
+  signal = null,
 } = {}) {
   if (BASE) {
     try {
       const params = new URLSearchParams()
       if (search) params.append('search', search)
       if (status) params.append('status', status)
+      if (limit) params.append('limit', String(limit))
       if (Array.isArray(skills)) {
         skills.forEach(s => params.append('skills', s))
       }
@@ -172,10 +175,13 @@ export async function getBuilders({
         cities.forEach(c => params.append('cities', c))
       }
       const queryStr = params.toString()
-      const data = await request(`/api/v1/builders/${queryStr ? `?${queryStr}` : ''}`)
+      const data = await request(`/api/v1/builders/${queryStr ? `?${queryStr}` : ''}`, { signal })
       console.log("Builders API response sample:", data ? data[0] : null)
       return (data || []).map(normalizeBuilder)
     } catch (e) {
+      if (e.name === 'AbortError') {
+        throw e
+      }
       console.warn('Backend builders error, returning empty list:', e)
       return []
     }
@@ -223,7 +229,11 @@ export async function getBuilders({
     )
   }
 
-  return result.map(({ u }) => u)
+  let resultList = result.map(({ u }) => u)
+  if (limit) {
+    resultList = resultList.slice(0, limit)
+  }
+  return resultList
 }
 
 // GET /api/v1/builders/{id}
@@ -575,6 +585,53 @@ export async function generateProjectIdea(domain, skills) {
     ]
   }
 }
+
+// GET /api/v1/ai/hackathon-recommendations
+export async function getHackathonRecommendations() {
+  if (BASE) {
+    return request('/api/v1/ai/hackathon-recommendations')
+  }
+  await delay(800)
+  return {
+    total_hackathons: 3,
+    recommended_count: 1,
+    recommendations: [
+      {
+        hackathon: {
+          id: 1,
+          title: "Astra AI/ML Hackathon 2026",
+          organizer: "Astra Technologies",
+          date: "2026-08-10T09:00:00",
+          end_date: "2026-08-12T18:00:00",
+          location: "Bengaluru, Karnataka",
+          prize: "₹2,50,000",
+          team_size: "2-4",
+          description: "Build next-generation agentic workflows, LLM applications, and computer vision models solving real-world challenges in workflow automation.",
+          tracks: ["AI Agents", "LLMOps", "Computer Vision"],
+          tags: ["AI/ML", "Generative AI", "Astra"]
+        },
+        score: 95,
+        label: "Excellent Match",
+        breakdown: {
+          skills: 40,
+          domains: 35,
+          branch: 15,
+          year: 5
+        },
+        matched_skills: ["Python", "FastAPI"],
+        matched_domains: ["AI/ML"],
+        missing_skills: ["Docker"],
+        explanation: [
+          "Matched Skills: Python, FastAPI",
+          "Matched Interests: AI/ML",
+          "Branch Alignment: Computer Science",
+          "Suitable for your academic year."
+        ]
+      }
+    ]
+  }
+}
+
 
 // ─── Skills Management ────────────────────────────────────────────────────────
 export const SUGGESTED_SKILLS = [

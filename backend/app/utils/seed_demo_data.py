@@ -381,8 +381,11 @@ def seed_projects(db: Session, users: list[User]):
         if len(full_description) > 1000:
             full_description = full_description[:997] + "..."
 
-        # Combine domain and required skills in tech stack list
-        tech_stack = [p_data["domain"]] + p_data["required_skills"]
+        tech_stack = list(
+            dict.fromkeys(
+                [p_data["domain"]] + p_data["required_skills"]
+            )
+        )
 
         # Formulate open roles based on required skills
         open_roles = []

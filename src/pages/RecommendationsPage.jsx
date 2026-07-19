@@ -93,7 +93,7 @@ function RecCard({ rec, onInvite }) {
 
       {/* Skills */}
       <div className="flex flex-wrap gap-1.5 mb-4">
-        {builder.skills.slice(0, 5).map(skill => (
+        {[...new Set(builder.skills)].slice(0, 5).map(skill => (
           <SkillBadge key={skill} skill={skill} verified={builder.verifiedSkills?.includes(skill)} />
         ))}
         {builder.skills.length > 5 && (

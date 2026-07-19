@@ -91,6 +91,7 @@ export default function OnboardingPage() {
         year,
         branch: branch.trim(),
         skills,
+        domains,
         status,
         github: github.trim(),
         linkedin: linkedin.trim(),
@@ -214,7 +215,7 @@ export default function OnboardingPage() {
             </div>
 
             <div className="flex flex-wrap gap-2 pt-2">
-              {SKILL_OPTIONS.map(skill => {
+              {[...new Set(SKILL_OPTIONS)].map(skill => {
                 const active = skills.includes(skill)
                 return (
                   <button

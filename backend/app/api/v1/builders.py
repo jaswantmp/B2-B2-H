@@ -18,6 +18,7 @@ def list_builders(
     status_legacy: str = Query(default=None, alias="status"),
     colleges: list[str] = Query(default=None),
     cities: list[str] = Query(default=None),
+    limit: int | None = None,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
@@ -53,11 +54,12 @@ def list_builders(
     if status_filters:
         query = query.filter(User.status.in_(status_filters))
 
-    # 3. Skills Filter (Intersecting skill lists)
+    # 3. Skills Filter (Intersecting skill lists) using EXISTS/any
     if skills:
-        # Join user skills and target skills tables, match where any skill name matches the list
-        query = query.join(User.user_skills).join(UserSkill.skill).filter(
-            Skill.name.in_(skills)
+        query = query.filter(
+            User.user_skills.any(
+                UserSkill.skill.has(Skill.name.in_(skills))
+            )
         )
 
     # 4. College Filter
@@ -73,8 +75,10 @@ def list_builders(
         ]
         query = query.filter(or_(*city_filters))
 
-    # Avoid duplicate rows from skills joins
-    return query.distinct().all()
+    if limit:
+        query = query.limit(limit)
+
+    return query.all()
 
 
 @router.get("/{id}", response_model=UserDetailResponse)
@@ -227,6 +231,8 @@ def complete_onboarding(
         current_user.linkedin = data.linkedin
     if data.website is not None:
         current_user.website = data.website
+    if data.domains is not None:
+        current_user.domains = data.domains
         
     current_user.onboarding_completed = data.onboarding_completed
 
@@ -260,4 +266,3 @@ def complete_onboarding(
     db.commit()
     db.refresh(current_user)
     return current_user
-

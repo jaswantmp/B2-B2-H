@@ -50,10 +50,12 @@ function getGroupedSkills(builder) {
 
   // 1. Try to use backend-provided user_skills relation first
   if (Array.isArray(builder.user_skills) && builder.user_skills.length > 0) {
+    const seen = new Set()
     builder.user_skills.forEach(us => {
       const cat = us.skill?.category || 'Technical'
       const skillName = us.skill?.name
-      if (skillName) {
+      if (skillName && !seen.has(skillName.toLowerCase())) {
+        seen.add(skillName.toLowerCase())
         if (!groups[cat]) groups[cat] = []
         groups[cat].push({
           name: skillName,
@@ -63,7 +65,7 @@ function getGroupedSkills(builder) {
     })
   } else {
     // 2. Fallback to builder.skills
-    const skills = builder.skills || []
+    const skills = [...new Set(builder.skills || [])]
     const verified = builder.verifiedSkills || []
     skills.forEach(name => {
       const lowerName = name.toLowerCase()
@@ -322,7 +324,7 @@ export default function BuilderProfilePage() {
                   </div>
                   <p className="text-xs theme-text-secondary mb-3 leading-relaxed">{proj.desc}</p>
                   <div className="flex flex-wrap gap-1.5">
-                    {(proj.tech || []).map(t => (
+                    {[...new Set(proj.tech || [])].map(t => (
                       <span key={t} className="text-xs px-2 py-0.5 bg-[var(--bg-surface)] border theme-divider rounded theme-text-secondary">{t}</span>
                     ))}
                   </div>

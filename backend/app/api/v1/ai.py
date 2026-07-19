@@ -149,3 +149,51 @@ def get_ai_usage(
         )
 
     return AIUsageResponse(**response_data)
+
+
+@router.get("/hackathon-recommendations", status_code=status.HTTP_200_OK)
+def get_hackathon_recommendations(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Get user-specific hackathon recommendations based on skills, domains, branch, and academic year.
+    Does not use Gemini or external APIs. Fully deterministic and rule-based.
+    """
+    # Fetch user eagerly with their skills loaded
+    user = db.query(User).options(
+        joinedload(User.user_skills).joinedload(UserSkill.skill)
+    ).filter(User.id == current_user.id).first()
+
+    from app.services.hackathon_recommendation_service import HackathonRecommendationService
+    res = HackathonRecommendationService.get_recommendations(db, user)
+
+    # Query user's hackathon registrations
+    from app.models.hackathon import HackathonRegistration
+    registrations = (
+        db.query(HackathonRegistration.hackathon_id)
+        .filter(HackathonRegistration.user_id == current_user.id)
+        .all()
+    )
+    registered_ids = {r[0] for r in registrations}
+
+    # Format the SQLAlchemy hackathon object to dict and inject user_registered
+    for rec in res["recommendations"]:
+        hk = rec["hackathon"]
+        rec["hackathon"] = {
+            "id": hk.id,
+            "title": hk.title,
+            "organizer": hk.organizer,
+            "date": hk.date.isoformat() if hk.date else None,
+            "end_date": hk.end_date.isoformat() if hk.end_date else None,
+            "location": hk.location,
+            "prize": hk.prize,
+            "team_size": hk.team_size,
+            "description": hk.description,
+            "tracks": hk.tracks,
+            "tags": hk.tags,
+            "user_registered": hk.id in registered_ids
+        }
+
+    return res
+

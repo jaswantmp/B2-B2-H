@@ -73,7 +73,7 @@ function ProjectCard({ project }) {
 
       {/* Tech stack */}
       <div className="flex flex-wrap gap-1.5">
-        {project.tech.map(t => (
+        {[...new Set(project.tech)].map(t => (
           <span
             key={t}
             className="text-xs px-2.5 py-0.5 rounded-md border font-medium theme-muted"
@@ -88,7 +88,7 @@ function ProjectCard({ project }) {
       <div>
         <p className="text-xs font-semibold theme-muted uppercase tracking-wider mb-1.5">Open Roles</p>
         <div className="flex flex-wrap gap-1.5">
-          {project.openRoles.map(role => (
+          {[...new Set(project.openRoles)].map(role => (
             <span key={role} className="text-xs px-2.5 py-0.5 rounded-full bg-violet-100 dark:bg-violet-900/30 border border-violet-400 dark:border-violet-800/40 text-violet-800 dark:text-violet-400 font-semibold">
               {role}
             </span>

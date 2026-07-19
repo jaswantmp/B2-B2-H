@@ -64,7 +64,7 @@ function RoleCard({ role, index }) {
           <div>
             <p className="text-xs font-semibold theme-muted uppercase tracking-wider mb-2">Key Skills</p>
             <div className="flex flex-wrap gap-1.5">
-              {role.skills.map(s => (
+              {[...new Set(role.skills)].map(s => (
                 <span
                   key={s}
                   className="text-xs px-2.5 py-1 rounded-md border font-medium"
@@ -104,7 +104,7 @@ function BuilderMatchCard({ builder, score, onInvite }) {
           </div>
 
           <div className="flex flex-wrap gap-1 mb-3">
-            {builder.skills.slice(0, 3).map(s => (
+            {[...new Set(builder.skills)].slice(0, 3).map(s => (
               <SkillBadge key={s} skill={s} verified={builder.verifiedSkills?.includes(s)} size="xs" />
             ))}
             {builder.skills.length > 3 && (
@@ -255,7 +255,7 @@ export default function GeneratorPage() {
               Must-Have Skills (optional)
             </label>
             <div className="flex flex-wrap gap-1.5">
-              {SKILL_OPTIONS.map(skill => {
+              {[...new Set(SKILL_OPTIONS)].map(skill => {
                 const active = selectedSkills.includes(skill)
                 return (
                   <button

@@ -18,7 +18,7 @@ class Settings(BaseSettings):
     github_api_url: str = "https://api.github.com"
     github_token: str = ""
 
-    allowed_origins: str = "http://localhost:5173,http://localhost:3000"
+    allowed_origins: str = "http://localhost:5173,http://127.0.0.1:5173,http://localhost:3000"
     app_name: str = "B2B2H"
     debug: bool = False
 
