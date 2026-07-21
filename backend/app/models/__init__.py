@@ -5,6 +5,7 @@ from app.models.team import Team, TeamMember, TeamInvite
 from app.models.project import Project, ProjectMember, ProjectApplication
 from app.models.hackathon import Hackathon, HackathonRegistration
 from app.models.ai import AIUsage, AICache
+from app.models.chat import ChatMessage
 
 __all__ = [
     "User",
@@ -22,6 +23,8 @@ __all__ = [
     "HackathonRegistration",
     "AIUsage",
     "AICache",
+    "ChatMessage",
 ]
+
 
 

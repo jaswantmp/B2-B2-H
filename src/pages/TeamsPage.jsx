@@ -10,6 +10,7 @@ import TeamHealthRadar from '../components/TeamHealthRadar.jsx'
 import InviteModal from '../components/InviteModal.jsx'
 import { getMyTeam, getBuilders, createTeam } from '../services/api.js'
 import { useToast } from '../context/ToastContext.jsx'
+import ChatPanel from '../components/ChatPanel.jsx'
 
 
 const COVER_SEVERITY = score => {
@@ -303,6 +304,9 @@ export default function TeamsPage() {
               </div>
             </div>
           </section>
+
+          {/* Chat Panel */}
+          <ChatPanel teamId={team.id} />
         </div>
 
         {/* Right: Radar + coverage */}
