@@ -20,9 +20,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
 
 from app.config import settings
 from app.database import Base
-from app.models.user import User, Skill, UserSkill
-from app.models.team import Team, TeamMember, TeamInvite
-from app.models.notification import Notification
+import app.models  # noqa: F401 - Register all models for Alembic metadata
 
 target_metadata = Base.metadata
 

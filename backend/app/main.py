@@ -2,7 +2,7 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
-from sqlalchemy import text
+from sqlalchemy import text, inspect
 
 from app.config import settings
 from app.database import engine
@@ -20,31 +20,27 @@ from app.api.v1.endpoints.chat import router as chat_router
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Lifespan manager handling app startup and shutdown tasks."""
-    # Startup: Verify Database Connectivity
     print(f"Starting up {settings.app_name} API service...")
     try:
         with engine.connect() as conn:
             conn.execute(text("SELECT 1"))
-            # Auto-align enum labels for postgres database
-            try:
-                conn.execution_options(isolation_level="AUTOCOMMIT").execute(
-                    text("ALTER TYPE notificationtype ADD VALUE IF NOT EXISTS 'INVITE_DECLINED'")
-                )
-            except Exception as enum_err:
-                print(f"Notice: Could not auto-align enum labels (it might not exist yet): {enum_err}")
         print("Database connection verified successfully.")
-        
-        # Seed default skills
-        from app.database import SessionLocal
-        from app.utils.seed_skills import seed_default_skills
-        db = SessionLocal()
-        try:
-            seed_default_skills(db)
-        finally:
-            db.close()
-            
+
+        # Check table existence before seeding
+        inspector = inspect(engine)
+        if inspector.has_table("skills"):
+            from app.database import SessionLocal
+            from app.utils.seed_skills import seed_default_skills
+            db = SessionLocal()
+            try:
+                seed_default_skills(db)
+            finally:
+                db.close()
+        else:
+            print("Warning: Database table 'skills' does not exist yet. Please run 'alembic upgrade head' to apply database migrations.")
+
     except Exception as e:
-        print(f"Warning: Database connection verification failed during startup: {e}")
+        print(f"Warning: Database connectivity or startup check failed: {e}")
     yield
     # Shutdown
     print(f"Shutting down {settings.app_name} API service...")
