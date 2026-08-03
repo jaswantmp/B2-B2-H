@@ -2,10 +2,11 @@
 import { useState, useEffect } from 'react'
 import {
   Settings, User, Bell, Palette, Shield, Save,
-  CheckCircle, Eye, EyeOff, Sun, Moon, Monitor, Award
+  CheckCircle, Eye, EyeOff, Sun, Moon, Monitor, Award, Camera, X
 } from 'lucide-react'
 import { useSearchParams } from 'react-router-dom'
 import PulseAvatar from '../components/PulseAvatar.jsx'
+import AvatarPicker from '../components/AvatarPicker.jsx'
 import { useTheme } from '../context/ThemeContext.jsx'
 import { useAuth } from '../context/AuthContext.jsx'
 import { updateProfile } from '../services/api.js'
@@ -65,7 +66,8 @@ function SectionNav({ active, onChange }) {
 function SaveButton({ saving, saved, onClick }) {
   return (
     <button
-      onClick={onClick}
+      type="button"
+      onClick={() => onClick && onClick()}
       disabled={saving}
       className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-violet-600 hover:bg-violet-500 disabled:opacity-50 text-white font-semibold text-sm transition-all"
     >
@@ -86,6 +88,7 @@ function ProfileSection() {
   const { user, refreshUser } = useAuth()
   const [form, setForm] = useState({
     name:       user?.name       ?? '',
+    avatar:     user?.avatar     ?? '',
     bio:        user?.bio        ?? '',
     location:   user?.location   ?? '',
     university: user?.university ?? '',
@@ -100,11 +103,14 @@ function ProfileSection() {
   const [saving, setSaving] = useState(false)
   const [saved, setSaved]   = useState(false)
   const [showGithub, setShowGithub] = useState(false)
+  const [isAvatarModalOpen, setIsAvatarModalOpen] = useState(false)
+  const [tempAvatar, setTempAvatar] = useState(user?.avatar || '/avatars/avatar1.png')
 
   useEffect(() => {
     if (user) {
       setForm({
         name:       user.name       ?? '',
+        avatar:     user.avatar     ?? '',
         bio:        user.bio        ?? '',
         location:   user.location   ?? '',
         university: user.university ?? '',
@@ -116,6 +122,7 @@ function ProfileSection() {
         linkedin:   user.linkedin   ?? '',
         website:    user.website    ?? '',
       })
+      if (user.avatar) setTempAvatar(user.avatar)
     }
   }, [user])
 
@@ -124,15 +131,29 @@ function ProfileSection() {
     onChange: e => { setForm(f => ({ ...f, [key]: e.target.value })); setSaved(false) },
   })
 
-  const handleSave = async () => {
+  const handleSave = async (overrideAvatar) => {
     try {
       setSaving(true)
-      console.log("[SaveProfile] Request Payload:", form)
-      const response = await updateProfile(form)
+      const validAvatar = (typeof overrideAvatar === 'string' && overrideAvatar) ? overrideAvatar : form.avatar
+      const payload = {
+        ...form,
+        avatar: validAvatar,
+      }
+      console.log("[SaveProfile] Request Payload:", payload)
+      const response = await updateProfile(payload)
       console.log("[SaveProfile] API Response:", response)
+
+      const rawSession = localStorage.getItem('b2b2h-auth')
+      if (rawSession) {
+        try {
+          const parsed = JSON.parse(rawSession)
+          parsed.user = { ...parsed.user, ...payload }
+          localStorage.setItem('b2b2h-auth', JSON.stringify(parsed))
+        } catch (_) {}
+      }
+
       const updatedUser = await refreshUser()
       console.log("[SaveProfile] AuthContext Updated User:", updatedUser)
-      console.log("[SaveProfile] localStorage Updated Session:", localStorage.getItem("b2b2h-auth"))
       setSaved(true)
       setTimeout(() => setSaved(false), 3000)
     } catch (err) {
@@ -142,23 +163,97 @@ function ProfileSection() {
     }
   }
 
+  const handleSaveAvatar = async () => {
+    setForm(f => ({ ...f, avatar: tempAvatar }))
+    await handleSave(tempAvatar)
+    setIsAvatarModalOpen(false)
+  }
+
   const inputClass = "theme-input w-full px-3 py-2.5 text-sm"
   const labelClass = "block text-xs font-semibold theme-muted uppercase tracking-wider mb-1.5"
 
   return (
     <div className="space-y-6">
-      {/* Avatar + name preview */}
+      {/* Avatar + name preview + Change Avatar button */}
       <div
-        className="flex items-center gap-4 p-4 rounded-xl border"
+        className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-xl border"
         style={{ backgroundColor: 'var(--bg-raised)', borderColor: 'var(--border-subtle)' }}
       >
-        <PulseAvatar user={{ ...user, status: form.status }} size="xl" />
-        <div>
-          <p className="font-bold theme-text text-lg">{form.name || user.name}</p>
-          <p className="theme-muted text-sm">{form.branch} · {form.university}</p>
-          <p className="theme-muted text-xs mt-0.5">{form.location}</p>
+        <div className="flex items-center gap-4">
+          <PulseAvatar user={{ ...user, status: form.status, avatar: form.avatar || user?.avatar }} size="xl" />
+          <div>
+            <p className="font-bold theme-text text-lg">{form.name || user?.name}</p>
+            <p className="theme-muted text-sm">{form.branch} · {form.university}</p>
+            <p className="theme-muted text-xs mt-0.5">{form.location}</p>
+          </div>
         </div>
+        <button
+          type="button"
+          onClick={() => {
+            setTempAvatar(form.avatar || user?.avatar || '/avatars/avatar1.png')
+            setIsAvatarModalOpen(true)
+          }}
+          className="flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-violet-600 hover:bg-violet-500 text-white font-semibold text-sm transition-all flex-shrink-0"
+        >
+          <Camera size={16} />
+          Change Avatar
+        </button>
       </div>
+
+      {/* Avatar Selection Modal */}
+      {isAvatarModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-toast-in">
+          <div
+            className="w-full max-w-4xl rounded-2xl border p-6 shadow-2xl space-y-4"
+            style={{ backgroundColor: 'var(--bg-surface)', borderColor: 'var(--border-strong)' }}
+          >
+            <div className="flex items-center justify-between pb-3 border-b theme-divider">
+              <div>
+                <h3 className="text-xl font-bold theme-text flex items-center gap-2">
+                  Choose Your Avatar
+                </h3>
+                <p className="theme-muted text-xs mt-0.5">Select from 50 custom avatars for your B2B2H profile</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsAvatarModalOpen(false)}
+                className="p-2 theme-muted hover:theme-text rounded-xl transition-colors"
+                aria-label="Close"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            <AvatarPicker
+              selectedAvatar={tempAvatar}
+              onSelect={(path) => setTempAvatar(path)}
+            />
+
+            <div className="flex items-center justify-end gap-3 pt-3 border-t theme-divider">
+              <button
+                type="button"
+                onClick={() => setIsAvatarModalOpen(false)}
+                className="px-4 py-2.5 rounded-xl border theme-border theme-text-secondary hover:theme-text text-sm font-medium transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleSaveAvatar}
+                disabled={saving}
+                className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-violet-600 hover:bg-violet-500 disabled:opacity-50 text-white text-sm font-semibold transition-all"
+              >
+                {saving ? (
+                  <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                ) : (
+                  <CheckCircle size={16} />
+                )}
+                {saving ? 'Saving...' : 'Save Avatar'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Name + Bio */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

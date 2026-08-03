@@ -5,6 +5,7 @@ import {
   Code2, Sparkles, ShieldCheck, Users, Zap, ArrowRight,
   Github, Star, Trophy, ChevronRight, Circle,
 } from 'lucide-react'
+import logo from '../assets/logo.png'
 import PulseAvatar from '../components/PulseAvatar.jsx'
 import SkillBadge from '../components/SkillBadge.jsx'
 import { getBuilders } from '../services/api.js'
@@ -114,13 +115,13 @@ export default function LandingPage() {
       {/* ── Top nav ─────────────────────────────────────────────────────── */}
       <header className="fixed top-0 left-0 right-0 z-40 border-b border-slate-800/60 bg-slate-950/80 backdrop-blur-md">
         <div className="max-w-6xl mx-auto px-5 h-14 flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-violet-600 flex items-center justify-center">
-              <Code2 size={17} className="text-white" aria-hidden="true" />
+          <Link to="/" className="flex items-center gap-3">
+            <img src={logo} alt="B2B2H Logo" className="w-[40px] h-[40px] object-contain flex-shrink-0" />
+            <div>
+              <span className="font-bold text-white tracking-tight text-base block leading-none">B2B2H</span>
+              <span className="hidden sm:block text-xs text-slate-500 mt-0.5">Born 2 Build. Built 2 Hack.</span>
             </div>
-            <span className="font-bold text-white tracking-tight">B2B2H</span>
-            <span className="hidden sm:block text-xs text-slate-500">Born 2 Build. Built 2 Hack.</span>
-          </div>
+          </Link>
           <nav className="hidden md:flex items-center gap-6 text-sm text-slate-400" aria-label="Landing navigation">
             <a href="#features" className="hover:text-slate-200 transition-colors">Features</a>
             <a href="#how-it-works" className="hover:text-slate-200 transition-colors">How It Works</a>

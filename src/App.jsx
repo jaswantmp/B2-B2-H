@@ -4,11 +4,11 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { ThemeProvider } from './context/ThemeContext.jsx'
 import { ToastProvider } from './context/ToastContext.jsx'
 import { AuthProvider } from './context/AuthContext.jsx'
-import ProtectedRoute from './components/ProtectedRoute.jsx'
-import MainLayout from './layouts/MainLayout.jsx'
-
 // Keep LandingPage synchronous for fast initial load
 import LandingPage from './pages/LandingPage.jsx'
+
+const ProtectedRoute = lazy(() => import('./components/ProtectedRoute.jsx'))
+const MainLayout = lazy(() => import('./layouts/MainLayout.jsx'))
 
 const LoginPage = lazy(() => import('./pages/auth/LoginPage.jsx'))
 const SignUpPage = lazy(() => import('./pages/auth/SignUpPage.jsx'))

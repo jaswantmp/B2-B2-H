@@ -100,6 +100,7 @@ class UserTeamInviteResponse(BaseModel):
     sender_id: str
     sender_name: str
     role: str
+    message: str | None = None
     status: str
     created_at: datetime
 

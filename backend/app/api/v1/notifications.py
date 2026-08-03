@@ -1,11 +1,11 @@
 # app/api/v1/notifications.py
 from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy.orm import Session, joinedload
+from sqlalchemy.orm import Session, joinedload, selectinload
 from app.database import get_db
 from app.models.notification import Notification
 from app.schemas.notification import NotificationDetailResponse, NotificationResponse
 from app.dependencies import get_current_user
-from app.models.user import User
+from app.models.user import User, UserSkill
 
 router = APIRouter(prefix="/notifications", tags=["notifications"])
 
@@ -18,7 +18,10 @@ def list_notifications(
     """Retrieve all notifications for the currently authenticated user."""
     notifications = (
         db.query(Notification)
-        .options(joinedload(Notification.sender))
+        .options(
+            joinedload(Notification.sender).selectinload(User.user_skills).joinedload(UserSkill.skill),
+            joinedload(Notification.invite),
+        )
         .filter(Notification.recipient_id == current_user.id)
         .order_by(Notification.created_at.desc())
         .all()

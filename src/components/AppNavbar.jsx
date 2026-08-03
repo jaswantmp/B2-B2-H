@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react'
 import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { Code2, Menu, X, Bell, LogOut, Settings } from 'lucide-react'
+import logo from '../assets/logo.png'
 import PulseAvatar from './PulseAvatar.jsx'
 import ThemeToggle from './ThemeToggle.jsx'
 import { getNotifications } from '../services/api.js'
@@ -50,11 +51,9 @@ export default function AppNavbar() {
       style={{ backgroundColor: 'var(--bg-surface)' }}
     >
       <div className="flex items-center justify-between px-4 h-14 gap-3">
-        <Link to="/" className="flex items-center gap-2 flex-shrink-0" aria-label="B2B2H Home">
-          <div className="w-7 h-7 rounded-lg bg-violet-600 flex items-center justify-center">
-            <Code2 size={15} className="text-white" aria-hidden="true" />
-          </div>
-          <span className="font-bold text-sm theme-text">B2B2H</span>
+        <Link to="/" className="flex items-center gap-3 flex-shrink-0" aria-label="B2B2H Home">
+          <img src={logo} alt="B2B2H Logo" className="w-[40px] h-[40px] object-contain flex-shrink-0" />
+          <span className="font-bold text-base theme-text">B2B2H</span>
         </Link>
 
         <div className="flex items-center gap-2 ml-auto">

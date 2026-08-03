@@ -48,13 +48,10 @@ export default function InviteModal({ user, onClose }) {
       await sendInvite({ userId: user.id || user.user_id, role, message })
       setSent(true)
     } catch (err) {
-      if (err.status === 400) {
-        const detail = err.body?.detail || "You are not part of a team."
-        push(`${detail} Create a team first.`, 'error')
-      } else {
-        console.error("Invite API error:", err)
-        push(err.message || "Failed to send invitation. Please try again.", 'error')
-      }
+      console.error("Invite API error:", err)
+      const detail = err.body?.detail
+      const errorMessage = typeof detail === 'string' ? detail : (err.message || 'Failed to send invitation. Please try again.')
+      push(errorMessage, 'error')
     } finally {
       setLoading(false)
     }

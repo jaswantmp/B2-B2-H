@@ -56,40 +56,92 @@ export function normalizeProject(p) {
 }
 
 
+const inflightGetRequests = new Map()
+
 // Generic fetch wrapper (used when BASE is set to a real API)
 async function request(path, options = {}) {
-  const url = `${BASE}${path}`
-  const headers = { 'Content-Type': 'application/json', ...options.headers }
+  const method = (options.method || 'GET').toUpperCase()
+  const isGet = method === 'GET'
 
-  try {
-    const rawAuth = localStorage.getItem('b2b2h-auth')
-    if (rawAuth) {
-      const auth = JSON.parse(rawAuth)
-      if (auth && auth.token) {
-        headers['Authorization'] = `Bearer ${auth.token}`
+  if (isGet && inflightGetRequests.has(path)) {
+    return inflightGetRequests.get(path)
+  }
+
+  const executeRequest = async () => {
+    const url = `${BASE}${path}`
+    const headers = { 'Content-Type': 'application/json', ...options.headers }
+
+    try {
+      const rawAuth = localStorage.getItem('b2b2h-auth')
+      if (rawAuth) {
+        const auth = JSON.parse(rawAuth)
+        if (auth && auth.token) {
+          headers['Authorization'] = `Bearer ${auth.token}`
+        }
+      }
+    } catch (e) {
+      console.error('Error reading auth token for API request:', e)
+    }
+
+    const timeoutMs = options.timeout ?? 3500
+    const controller = new AbortController()
+    const timer = setTimeout(() => controller.abort(), timeoutMs)
+
+    const abortHandler = () => controller.abort()
+    if (options.signal) {
+      if (options.signal.aborted) {
+        controller.abort()
+      } else {
+        options.signal.addEventListener('abort', abortHandler, { once: true })
       }
     }
-  } catch (e) {
-    console.error('Error reading auth token for API request:', e)
-  }
 
-
-
-  const res = await fetch(url, {
-    ...options,
-    headers,
-  })
-  if (!res.ok) {
-    let body = null
     try {
-      body = await res.json()
-    } catch (_) {}
-    const err = new Error(`API error: ${res.status} ${res.statusText}`)
-    err.status = res.status
-    err.body = body
-    throw err
+      const res = await fetch(url, {
+        ...options,
+        headers,
+        signal: controller.signal,
+      })
+
+      if (!res.ok) {
+        let body = null
+        try {
+          body = await res.json()
+        } catch (_) {}
+        const err = new Error(`API error: ${res.status} ${res.statusText}`)
+        err.status = res.status
+        err.body = body
+        throw err
+      }
+      return await res.json()
+    } catch (err) {
+      if (err.name === 'AbortError') {
+        const isTimeout = !options.signal?.aborted
+        const timeoutErr = new Error(isTimeout ? `Request timeout after ${timeoutMs}ms` : 'Request aborted')
+        timeoutErr.name = 'AbortError'
+        throw timeoutErr
+      }
+      throw err
+    } finally {
+      clearTimeout(timer)
+      if (options.signal) {
+        options.signal.removeEventListener('abort', abortHandler)
+      }
+    }
   }
-  return res.json()
+
+  const promise = executeRequest()
+
+  if (isGet) {
+    inflightGetRequests.set(path, promise)
+    promise.finally(() => {
+      if (inflightGetRequests.get(path) === promise) {
+        inflightGetRequests.delete(path)
+      }
+    })
+  }
+
+  return promise
 }
 
 // ─── Mock helpers (simulate async API) ───────────────────────────────────────
@@ -970,6 +1022,33 @@ export async function explainTeamMatch(targetUserId) {
     target_user_id: targetUserId,
     ai_explanation: "This is a simulated match explanation indicating high collaboration compatibility. The candidate has complementary skills in Frontend and UI Design that balance your Backend expertise."
   }
+}
+
+/**
+ * Resets the official demo account (demo@b2b2h.com) to its initial seeded state.
+ * Safe failover: Returns graceful response on failure without throwing uncaught exceptions.
+ */
+export async function resetDemoAccount(email = 'demo@b2b2h.com') {
+  console.info('[DemoReset] Reset started')
+  if (BASE) {
+    try {
+      console.info('[DemoReset] Cleaning demo data & restoring default profile')
+      const result = await request('/api/v1/demo/reset', {
+        method: 'POST',
+        body: JSON.stringify({ email }),
+        timeout: 5000,
+      })
+      console.info('[DemoReset] Reset completed')
+      return result
+    } catch (err) {
+      console.warn('[DemoReset] Reset failed:', err)
+      console.warn('[DemoReset] Using existing session because reset endpoint is unavailable')
+      return { status: 'warning', message: 'Demo reset endpoint unavailable', error: err.message }
+    }
+  }
+  await delay(200)
+  console.info('[DemoReset] Reset completed (mock mode)')
+  return { status: 'success', message: 'Mock demo account reset.' }
 }
 
 

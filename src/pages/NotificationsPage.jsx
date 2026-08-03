@@ -54,6 +54,21 @@ function NotifCard({ notif, linkedInvite, onRead, onDelete, onAccept, onDecline 
             </span>
             <p className="text-sm theme-text leading-relaxed mt-0.5">{notif.message}</p>
             
+            {/* Display separate personal note / invite message if present */}
+            {(notif.invite_message || linkedInvite?.message) && (
+              <div
+                className="mt-2.5 p-3 rounded-xl border text-xs leading-relaxed"
+                style={{ backgroundColor: 'var(--bg-surface)', borderColor: 'var(--border-subtle)' }}
+              >
+                <p className="text-[10px] font-bold uppercase tracking-wider theme-muted mb-1">
+                  Personal Note
+                </p>
+                <p className="italic theme-text">
+                  "{notif.invite_message || linkedInvite.message}"
+                </p>
+              </div>
+            )}
+
             {/* Accept / Decline buttons if pending invite is linked */}
             {notif.type === 'invite' && linkedInvite && (
               <div className="flex items-center gap-2 mt-3">

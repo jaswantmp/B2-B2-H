@@ -66,13 +66,13 @@ export default function LoginPage() {
       title="Welcome back"
       subtitle="Log in to continue finding your team."
     >
-      {/* ── One-click Demo Login button ── */}
+      {/* ── Single Refined Demo Login Card ── */}
       <div className="mb-5">
         <button
           type="button"
           onClick={handleDemoLogin}
           disabled={anyLoading}
-          className="w-full flex items-center gap-3 px-4 py-3 rounded-xl border transition-all disabled:opacity-60 disabled:cursor-not-allowed group"
+          className="w-full text-left p-4 rounded-xl border transition-all disabled:opacity-60 disabled:cursor-not-allowed group space-y-2.5"
           style={{
             backgroundColor: 'var(--bg-raised)',
             borderColor: 'rgba(139,92,246,0.4)',
@@ -80,28 +80,46 @@ export default function LoginPage() {
           onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(139,92,246,0.8)'; e.currentTarget.style.backgroundColor = 'rgba(139,92,246,0.08)' }}
           onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(139,92,246,0.4)'; e.currentTarget.style.backgroundColor = 'var(--bg-raised)' }}
         >
-          {/* Avatar */}
-          <div className="w-9 h-9 rounded-xl bg-violet-700/30 border border-violet-600/50 flex items-center justify-center flex-shrink-0">
-            {demoLoading
-              ? <span className="w-4 h-4 border-2 border-violet-400/30 border-t-violet-400 rounded-full animate-spin" />
-              : <Zap size={16} className="text-violet-400" aria-hidden="true" />
-            }
+          {/* Header Row */}
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-xl bg-violet-700/30 border border-violet-600/50 flex items-center justify-center flex-shrink-0">
+                {demoLoading
+                  ? <span className="w-4 h-4 border-2 border-violet-400/30 border-t-violet-400 rounded-full animate-spin" />
+                  : <Zap size={16} className="text-violet-400" aria-hidden="true" />
+                }
+              </div>
+              <div>
+                <p className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>
+                  Continue as Demo
+                </p>
+                <p className="text-xs text-violet-400 font-medium">
+                  Explore the complete platform instantly.
+                </p>
+              </div>
+            </div>
+            <span className="text-violet-400 text-xs font-medium flex-shrink-0 group-hover:translate-x-0.5 transition-transform">
+              →
+            </span>
           </div>
 
-          {/* Labels */}
-          <div className="flex-1 text-left">
-            <p className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>
-              Continue as Demo
-            </p>
-            <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
-              demo@b2b2h.com · instant access
-            </p>
-          </div>
+          {/* Subtext */}
+          <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
+            Changes reset automatically after logout.
+          </p>
 
-          {/* Arrow */}
-          <span className="text-violet-400 text-xs font-medium flex-shrink-0 group-hover:translate-x-0.5 transition-transform">
-            →
-          </span>
+          {/* Credentials badge */}
+          <div
+            className="flex items-center justify-between text-xs font-mono px-3 py-1.5 rounded-lg border"
+            style={{
+              backgroundColor: 'var(--bg-card)',
+              borderColor: 'var(--border-subtle)',
+            }}
+          >
+            <span className="text-violet-300 font-medium">demo@b2b2h.com</span>
+            <span className="theme-muted">·</span>
+            <span className="text-violet-300 font-medium">password123</span>
+          </div>
         </button>
 
         {/* Divider between demo and form */}

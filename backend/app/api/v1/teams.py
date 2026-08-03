@@ -97,17 +97,21 @@ def invite_member(
     current_user: User = Depends(get_current_user),
 ):
     """Invite a builder to join the current user's team."""
-    # Find user's led team
-    team = db.query(Team).filter(Team.leader_id == current_user.id).first()
-    if not team:
-        # Fallback: check if user is a member of any team and allow invites
-        membership = db.query(TeamMember).filter(TeamMember.user_id == current_user.id).first()
-        if not membership:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="You must be part of a team to send invitations.",
-            )
-        team = db.query(Team).filter(Team.id == membership.team_id).first()
+    # 1. Check if inviter belongs to any team
+    membership = db.query(TeamMember).filter(TeamMember.user_id == current_user.id).first()
+    if not membership:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="You must be part of a team to send invitations. Create a team first.",
+        )
+
+    # 2. Check if inviter is the team leader
+    team = db.query(Team).filter(Team.id == membership.team_id).first()
+    if not team or team.leader_id != current_user.id:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Only the team leader can invite members.",
+        )
 
     # A. Inviter cannot invite themselves
     if invite_in.user_id == current_user.id:
@@ -210,6 +214,7 @@ def list_user_invites(
             "sender_id": invite.team.leader_id,
             "sender_name": invite.team.leader.name,
             "role": invite.role,
+            "message": invite.message,
             "status": invite.status,
             "created_at": invite.created_at,
         }

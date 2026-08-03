@@ -1,5 +1,6 @@
 // src/context/AuthContext.jsx
-import { createContext, useContext, useEffect, useState, useCallback } from 'react'
+import { createContext, useContext, useEffect, useState, useCallback, useRef, useMemo } from 'react'
+import { resetDemoAccount } from '../services/api.js'
 
 const AuthContext = createContext(null)
 
@@ -9,6 +10,11 @@ const BASE = import.meta.env.VITE_API_BASE || ''
 // ── Demo credentials ────────────────────────────────────────────────────────
 const DEMO_EMAIL    = 'demo@b2b2h.com'
 const DEMO_PASSWORD = 'password123'
+
+function isDemoEmail(emailStr) {
+  if (!emailStr) return false
+  return emailStr.trim().toLowerCase() === DEMO_EMAIL
+}
 
 // Intentionally does NOT spread `currentUser` from data.js so the demo user
 // has a clean, clearly-labelled identity instead of inheriting a seed profile.
@@ -85,7 +91,7 @@ function readStoredSession() {
     const raw = localStorage.getItem(STORAGE_KEY)
     if (!raw) return null
     const parsed = JSON.parse(raw)
-    if (!parsed?.user || !parsed?.token) return null
+    if (!parsed?.user || typeof parsed?.token !== 'string') return null
     return {
       token: parsed.token,
       user: decorateUser(parsed.user),
@@ -108,19 +114,150 @@ function persistSession(userObj, token) {
 export function AuthProvider({ children }) {
   const [user, setUser]       = useState(null)
   const [loading, setLoading] = useState(true)
+  const initCalledRef         = useRef(false)
 
-  // Restore persisted session on mount
-  useEffect(() => {
+  // ── Logout ──────────────────────────────────────────────────────────────
+  const logout = useCallback(() => {
     const stored = readStoredSession()
-    if (stored) setUser(stored.user)
-    setLoading(false)
+    const currentEmail = user?.email || stored?.user?.email || ''
+
+    localStorage.removeItem(STORAGE_KEY)
+    setUser(null)
+    console.info('[Auth] User logged out')
+
+    if (isDemoEmail(currentEmail)) {
+      console.info('[DemoReset] Triggering post-logout demo account reset...')
+      resetDemoAccount(currentEmail).catch(err => {
+        console.warn('[DemoReset] Non-fatal demo reset error on logout:', err)
+      })
+    }
+  }, [user])
+
+  // ── Refresh User ───────────────────────────────────────────────────────
+  const refreshUser = useCallback(async () => {
+    const stored = readStoredSession()
+    const token = stored?.token || ''
+    
+    if (BASE) {
+      const response = await fetch(`${BASE}/api/v1/auth/me`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
+        },
+      })
+      if (!response.ok) {
+        throw new Error('Failed to refresh user profile.')
+      }
+      const data = await response.json()
+      const decorated = decorateUser(data)
+      setUser(decorated)
+      persistSession(decorated, token)
+      return decorated
+    } else {
+      // Mock mode
+      const currentStored = stored?.user || {}
+      const updatedUserObj = { ...DEMO_USER, ...currentStored, onboarding_completed: true }
+      const decorated = decorateUser(updatedUserObj)
+      setUser(decorated)
+      persistSession(decorated, token)
+      return decorated
+    }
   }, [])
+
+  // Synchronized session restoration on mount with 3000ms timeout
+  useEffect(() => {
+    if (initCalledRef.current) return
+    initCalledRef.current = true
+
+    let isMounted = true
+    let activeController = null
+
+    const initAuth = async () => {
+      console.info('[Auth] Session restore started')
+      const stored = readStoredSession()
+      if (stored) {
+        console.info('[Auth] Cached session found for:', stored.user?.email || stored.user?.name || 'User')
+        if (BASE && stored.token) {
+          console.info('[Auth] Token validation started')
+          activeController = new AbortController()
+          const timer = setTimeout(() => activeController.abort(), 3000)
+
+          try {
+            const response = await fetch(`${BASE}/api/v1/auth/me`, {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${stored.token}`,
+              },
+              signal: activeController.signal,
+            })
+
+            if (response.ok) {
+              const data = await response.json()
+              const decorated = decorateUser(data)
+              if (isMounted) setUser(decorated)
+              persistSession(decorated, stored.token)
+              console.info('[Auth] Token validation succeeded')
+            } else if (response.status === 401 || response.status === 403) {
+              console.warn(`[Auth] Session expired (${response.status})`)
+              if (isMounted) logout()
+            } else {
+              console.warn(`[Auth] Backend status ${response.status} during session restore, using cached profile`)
+              if (isMounted) {
+                setUser(decorateUser(stored.user))
+                console.info('[Auth] Using cached profile')
+              }
+            }
+          } catch (err) {
+            if (err.name === 'AbortError') {
+              console.warn('[Auth] Backend timeout after 3000ms')
+            } else {
+              console.warn('[Auth] Backend unreachable:', err)
+            }
+            if (isMounted) {
+              setUser(decorateUser(stored.user))
+              console.info('[Auth] Using cached profile')
+            }
+          } finally {
+            clearTimeout(timer)
+          }
+        } else {
+          if (isMounted) {
+            setUser(decorateUser(stored.user))
+            console.info('[Auth] Using cached profile')
+          }
+        }
+      }
+      if (isMounted) {
+        setLoading(false)
+        console.info('[Auth] Session restore completed')
+      }
+    }
+
+    initAuth()
+    return () => {
+      isMounted = false
+    }
+  }, [logout])
 
   // ── Login ──────────────────────────────────────────────────────────────
   const login = useCallback(async ({ email, password }) => {
     const normalizedEmail = email.trim().toLowerCase()
 
     if (BASE) {
+      // 1. If official demo account, reset FIRST before attempting authentication
+      if (isDemoEmail(normalizedEmail)) {
+        try {
+          console.info('[DemoReset] Resetting demo account state BEFORE authentication...')
+          await resetDemoAccount(normalizedEmail)
+          console.info('[DemoReset] Pre-authentication reset completed successfully')
+        } catch (resetErr) {
+          console.warn('[DemoReset] Non-fatal demo account reset error before login:', resetErr)
+        }
+      }
+
+      // 2. Authenticate user
       const response = await fetch(`${BASE}/api/v1/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -132,12 +269,14 @@ export function AuthProvider({ children }) {
       }
       const data = await response.json()
       const decorated = decorateUser(data.user)
+
+      // 3. Set React state & persist session
       setUser(decorated)
       persistSession(decorated, data.access_token)
       return decorated
     } else {
       await delay()
-      if (normalizedEmail !== DEMO_EMAIL || password !== DEMO_PASSWORD) {
+      if (!isDemoEmail(normalizedEmail) || password !== DEMO_PASSWORD) {
         throw new Error(
           'Invalid email or password. Use the demo credentials shown on the form.'
         )
@@ -150,8 +289,6 @@ export function AuthProvider({ children }) {
   }, [])
 
   // ── Sign up ─────────────────────────────────────────────────────────────
-  // Builds a clean new user from the submitted form — does NOT inherit
-  // any fields from the seed data or the demo user.
   const signup = useCallback(async ({ name, email, college, branch, password }) => {
     const trimmedName = name.trim()
     const rawUserObj = {
@@ -228,57 +365,21 @@ export function AuthProvider({ children }) {
     return { success: true, email: email.trim().toLowerCase() }
   }, [])
 
-  // ── Refresh User ───────────────────────────────────────────────────────
-  const refreshUser = useCallback(async () => {
-    const stored = readStoredSession()
-    const token = stored?.token || ''
-    
-    if (BASE) {
-      const response = await fetch(`${BASE}/api/v1/auth/me`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          ...(token ? { 'Authorization': `Bearer ${token}` } : {}),
-        },
-      })
-      if (!response.ok) {
-        throw new Error('Failed to refresh user profile.')
-      }
-      const data = await response.json()
-      const decorated = decorateUser(data)
-      setUser(decorated)
-      persistSession(decorated, token)
-      return decorated
-    } else {
-      // Mock mode
-      const decorated = decorateUser({ ...DEMO_USER, onboarding_completed: true })
-      setUser(decorated)
-      persistSession(decorated, token)
-      return decorated
-    }
-  }, [])
-
-  // ── Logout ──────────────────────────────────────────────────────────────
-  const logout = useCallback(() => {
-    localStorage.removeItem(STORAGE_KEY)
-    setUser(null)
-  }, [])
+  const value = useMemo(() => ({
+    user,
+    isAuthenticated: !!user,
+    loading,
+    login,
+    signup,
+    logout,
+    refreshUser,
+    requestPasswordReset,
+    DEMO_EMAIL,
+    DEMO_PASSWORD,
+  }), [user, loading, login, signup, logout, refreshUser, requestPasswordReset])
 
   return (
-    <AuthContext.Provider
-      value={{
-        user,
-        isAuthenticated: !!user,
-        loading,
-        login,
-        signup,
-        logout,
-        refreshUser,
-        requestPasswordReset,
-        DEMO_EMAIL,
-        DEMO_PASSWORD,
-      }}
-    >
+    <AuthContext.Provider value={value}>
       {children}
     </AuthContext.Provider>
   )

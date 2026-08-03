@@ -1,5 +1,5 @@
 // src/context/ToastContext.jsx
-import { createContext, useCallback, useContext, useState } from 'react'
+import { createContext, useCallback, useContext, useState, useMemo } from 'react'
 import { CheckCircle, XCircle, Info, X } from 'lucide-react'
 
 const ToastContext = createContext(null)
@@ -24,8 +24,10 @@ export function ToastProvider({ children }) {
     return id
   }, [dismiss])
 
+  const value = useMemo(() => ({ push, dismiss }), [push, dismiss])
+
   return (
-    <ToastContext.Provider value={{ push, dismiss }}>
+    <ToastContext.Provider value={value}>
       {children}
 
       {/* Toast stack */}

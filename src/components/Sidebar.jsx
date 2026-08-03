@@ -6,6 +6,7 @@ import {
   Calendar, Bell, Settings, Code2, ChevronRight, ChevronUp, Zap, Hammer, LogOut,
   Lightbulb, UserCheck,
 } from 'lucide-react'
+import logo from '../assets/logo.png'
 import { getNotifications } from '../services/api.js'
 import { useAuth } from '../context/AuthContext.jsx'
 import { useToast } from '../context/ToastContext.jsx'
@@ -67,13 +68,11 @@ export default function Sidebar() {
     >
       {/* Logo + theme toggle */}
       <div className="px-4 py-4 border-b theme-divider flex items-center justify-between">
-        <Link to="/" className="flex items-center gap-2.5 group" aria-label="B2B2H Home">
-          <div className="w-8 h-8 rounded-lg bg-violet-600 flex items-center justify-center group-hover:bg-violet-500 transition-colors">
-            <Code2 size={17} className="text-white" aria-hidden="true" />
-          </div>
+        <Link to="/" className="flex items-center gap-3 group" aria-label="B2B2H Home">
+          <img src={logo} alt="B2B2H Logo" className="w-[40px] h-[40px] object-contain flex-shrink-0" />
           <div>
-            <span className="font-bold text-sm tracking-tight theme-text block leading-none">B2B2H</span>
-            <span className="text-xs theme-muted leading-none">Born 2 Build</span>
+            <span className="font-bold text-base tracking-tight theme-text block leading-none">B2B2H</span>
+            <span className="text-xs theme-muted leading-none mt-1 block">Born 2 Build</span>
           </div>
         </Link>
         <ThemeToggle />

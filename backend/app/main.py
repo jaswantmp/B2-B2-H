@@ -15,6 +15,7 @@ from app.api.v1.hackathons import router as hackathons_router
 from app.api.v1.ai import router as ai_router
 from app.api.v1.team_match import router as team_match_router
 from app.api.v1.endpoints.chat import router as chat_router
+from app.api.v1.demo import router as demo_router
 
 
 @asynccontextmanager
@@ -74,6 +75,7 @@ app.include_router(hackathons_router, prefix=settings.api_v1_str if hasattr(sett
 app.include_router(ai_router, prefix=settings.api_v1_str if hasattr(settings, 'api_v1_str') else "/api/v1")
 app.include_router(team_match_router, prefix=settings.api_v1_str if hasattr(settings, 'api_v1_str') else "/api/v1")
 app.include_router(chat_router, prefix=settings.api_v1_str if hasattr(settings, 'api_v1_str') else "/api/v1")
+app.include_router(demo_router, prefix=settings.api_v1_str if hasattr(settings, 'api_v1_str') else "/api/v1")
 
 
 

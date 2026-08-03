@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from app.models.user import User
+    from app.models.team import TeamInvite
 import uuid
 import enum
 from datetime import datetime
@@ -39,7 +40,7 @@ class Notification(Base):
         nullable=True,
     )
     type: Mapped[NotificationType] = mapped_column(
-        SAEnum(NotificationType, name="notificationtype"),
+        SAEnum(NotificationType, name="notificationtype", values_callable=lambda x: [e.value for e in x]),
         nullable=False,
     )
     message: Mapped[str] = mapped_column(String(500), nullable=False)
@@ -61,6 +62,7 @@ class Notification(Base):
         "User", back_populates="notifications", foreign_keys=[recipient_id]
     )
     sender: Mapped["User | None"] = relationship("User", foreign_keys=[sender_id])
+    invite: Mapped["TeamInvite | None"] = relationship("TeamInvite", foreign_keys=[invite_id])
 
     def __repr__(self) -> str:
         return f"<Notification {self.type} to {self.recipient_id}>"

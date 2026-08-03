@@ -2,6 +2,7 @@
 import { useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
 import { Code2, Menu, X, Bell } from 'lucide-react'
+import logo from '../assets/logo.png'
 import PulseAvatar from './PulseAvatar.jsx'
 import { useAuth } from '../context/AuthContext.jsx'
 
@@ -20,11 +21,9 @@ export default function Navbar() {
   return (
     <header className="lg:hidden bg-slate-900 border-b border-slate-800 sticky top-0 z-40">
       <div className="flex items-center justify-between px-4 h-14">
-        <Link to="/" className="flex items-center gap-2" aria-label="B2B2H Home">
-          <div className="w-7 h-7 rounded-lg bg-violet-600 flex items-center justify-center">
-            <Code2 size={15} className="text-white" aria-hidden="true" />
-          </div>
-          <span className="font-bold text-white text-sm">B2B2H</span>
+        <Link to="/" className="flex items-center gap-3" aria-label="B2B2H Home">
+          <img src={logo} alt="B2B2H Logo" className="w-[40px] h-[40px] object-contain flex-shrink-0" />
+          <span className="font-bold text-white text-base">B2B2H</span>
         </Link>
 
         <div className="flex items-center gap-2">

@@ -1,6 +1,6 @@
 // src/layouts/AuthLayout.jsx
 import { Link } from 'react-router-dom'
-import { Code2 } from 'lucide-react'
+import logo from '../assets/logo.png'
 import ThemeToggle from '../components/ThemeToggle.jsx'
 
 // Shared shell for Login / Sign Up / Forgot Password.
@@ -27,13 +27,11 @@ export default function AuthLayout({ children, title, subtitle }) {
           aria-hidden="true"
         />
 
-        <Link to="/" className="flex items-center gap-2.5 relative z-10" aria-label="B2B2H Home">
-          <div className="w-9 h-9 rounded-lg bg-violet-600 flex items-center justify-center">
-            <Code2 size={18} className="text-white" aria-hidden="true" />
-          </div>
+        <Link to="/" className="flex items-center gap-3 relative z-10" aria-label="B2B2H Home">
+          <img src={logo} alt="B2B2H Logo" className="w-[40px] h-[40px] object-contain flex-shrink-0" />
           <div>
             <span className="font-bold text-white text-base tracking-tight block leading-none">B2B2H</span>
-            <span className="text-xs text-slate-400 leading-none">Born 2 Build. Built 2 Hack.</span>
+            <span className="text-xs text-slate-400 leading-none mt-1 block">Born 2 Build. Built 2 Hack.</span>
           </div>
         </Link>
 
@@ -71,11 +69,9 @@ export default function AuthLayout({ children, title, subtitle }) {
       <div className="flex-1 flex flex-col">
         {/* Mobile top bar */}
         <div className="flex lg:hidden items-center justify-between p-5">
-          <Link to="/" className="flex items-center gap-2" aria-label="B2B2H Home">
-            <div className="w-8 h-8 rounded-lg bg-violet-600 flex items-center justify-center">
-              <Code2 size={16} className="text-white" aria-hidden="true" />
-            </div>
-            <span className="font-bold text-sm theme-text">B2B2H</span>
+          <Link to="/" className="flex items-center gap-3" aria-label="B2B2H Home">
+            <img src={logo} alt="B2B2H Logo" className="w-[40px] h-[40px] object-contain flex-shrink-0" />
+            <span className="font-bold text-base theme-text">B2B2H</span>
           </Link>
           <ThemeToggle />
         </div>
@@ -88,6 +84,7 @@ export default function AuthLayout({ children, title, subtitle }) {
         <div className="flex-1 flex items-center justify-center px-5 pb-10 lg:px-10">
           <div className="w-full max-w-sm">
             <div className="mb-7">
+              <img src={logo} alt="B2B2H Logo" className="w-[40px] h-[40px] object-contain mb-4" />
               <h1 className="text-2xl font-bold theme-text mb-1.5">{title}</h1>
               {subtitle && <p className="text-sm theme-muted leading-relaxed">{subtitle}</p>}
             </div>
