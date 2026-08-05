@@ -44,15 +44,15 @@ export default function DashboardPage() {
       try {
         const [hList, rList, nList] = await Promise.all([
           getHackathons().catch(err => {
-            console.error('Failed to load hackathons:', err)
+            console.warn('Failed to load hackathons:', err)
             return []
           }),
           getRecommendations().catch(err => {
-            console.error('Failed to load recommendations:', err)
+            console.warn('Failed to load recommendations:', err)
             return []
           }),
           getNotifications().catch(err => {
-            console.error('Failed to load notifications:', err)
+            console.warn('Failed to load notifications:', err)
             return []
           })
         ])

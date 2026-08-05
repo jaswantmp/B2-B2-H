@@ -1,6 +1,6 @@
 # app/api/v1/hackathons.py
 from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, selectinload
 from app.database import get_db
 from app.models.hackathon import Hackathon, HackathonRegistration
 from app.schemas.hackathon import HackathonDetailResponse, HackathonRegistrationResponse
@@ -16,21 +16,13 @@ def list_hackathons(
     current_user: User = Depends(get_current_user),
 ):
     """Retrieve all hackathons, flagging which ones the current user has registered for."""
-    hackathons = db.query(Hackathon).all()
-
-    # Query all hackathon IDs the current user is registered for
-    registrations = (
-        db.query(HackathonRegistration.hackathon_id)
-        .filter(HackathonRegistration.user_id == current_user.id)
-        .all()
-    )
-    registered_ids = {r[0] for r in registrations}
+    hackathons = db.query(Hackathon).options(selectinload(Hackathon.registrations)).all()
 
     result = []
     for h in hackathons:
         # Map values to model attributes to build dynamic response schema
         h_detail = HackathonDetailResponse.model_validate(h)
-        h_detail.user_registered = h.id in registered_ids
+        h_detail.user_registered = any(r.user_id == current_user.id for r in h.registrations)
         result.append(h_detail)
 
     return result

@@ -32,7 +32,7 @@ export default function AppNavbar() {
     if (!user?.id) return
     getNotifications()
       .then(ns => setUnread(ns.filter(n => !n.read).length))
-      .catch(console.error)
+      .catch(err => console.warn('AppNavbar notifications error:', err))
   }, [user])
 
 

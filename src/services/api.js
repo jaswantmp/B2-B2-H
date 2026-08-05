@@ -62,9 +62,9 @@ const inflightGetRequests = new Map()
 async function request(path, options = {}) {
   const method = (options.method || 'GET').toUpperCase()
   const isGet = method === 'GET'
-
-  if (isGet && inflightGetRequests.has(path)) {
-    return inflightGetRequests.get(path)
+  const requestKey = `${method}:${BASE}${path}`
+  if (isGet && inflightGetRequests.has(requestKey)) {
+    return inflightGetRequests.get(requestKey)
   }
 
   const executeRequest = async () => {
@@ -83,7 +83,7 @@ async function request(path, options = {}) {
       console.error('Error reading auth token for API request:', e)
     }
 
-    const timeoutMs = options.timeout ?? 3500
+    const timeoutMs = options.timeout ?? 10000
     const controller = new AbortController()
     const timer = setTimeout(() => controller.abort(), timeoutMs)
 
@@ -133,10 +133,10 @@ async function request(path, options = {}) {
   const promise = executeRequest()
 
   if (isGet) {
-    inflightGetRequests.set(path, promise)
+    inflightGetRequests.set(requestKey, promise)
     promise.finally(() => {
-      if (inflightGetRequests.get(path) === promise) {
-        inflightGetRequests.delete(path)
+      if (inflightGetRequests.get(requestKey) === promise) {
+        inflightGetRequests.delete(requestKey)
       }
     })
   }
@@ -436,9 +436,11 @@ export async function createTeam(data) {
 export async function getRecommendations() {
   if (BASE) {
     try {
-      const me = await getMe()
-      const matchesData = await generateTeamMatches(me.id)
-      const builders = await getBuilders()
+      const [me, builders] = await Promise.all([
+    getMe(),
+    getBuilders()
+    ])
+    const matchesData = await generateTeamMatches(me.id)
       
       const buildersMap = {}
       if (Array.isArray(builders)) {

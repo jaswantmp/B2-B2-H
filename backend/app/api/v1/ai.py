@@ -168,18 +168,10 @@ def get_hackathon_recommendations(
     from app.services.hackathon_recommendation_service import HackathonRecommendationService
     res = HackathonRecommendationService.get_recommendations(db, user)
 
-    # Query user's hackathon registrations
-    from app.models.hackathon import HackathonRegistration
-    registrations = (
-        db.query(HackathonRegistration.hackathon_id)
-        .filter(HackathonRegistration.user_id == current_user.id)
-        .all()
-    )
-    registered_ids = {r[0] for r in registrations}
-
     # Format the SQLAlchemy hackathon object to dict and inject user_registered
     for rec in res["recommendations"]:
         hk = rec["hackathon"]
+        user_registered = any(r.user_id == current_user.id for r in getattr(hk, 'registrations', []))
         rec["hackathon"] = {
             "id": hk.id,
             "title": hk.title,
@@ -192,7 +184,7 @@ def get_hackathon_recommendations(
             "description": hk.description,
             "tracks": hk.tracks,
             "tags": hk.tags,
-            "user_registered": hk.id in registered_ids
+            "user_registered": user_registered
         }
 
     return res

@@ -455,11 +455,11 @@ export default function HackathonsPage() {
   useEffect(() => {
     Promise.all([
       getHackathons().catch(err => {
-        console.error("Failed to load hackathons list:", err)
+        console.warn("Failed to load hackathons list:", err)
         return []
       }),
       getHackathonRecommendations().catch(err => {
-        console.error("Failed to load recommendations list:", err)
+        console.warn("Failed to load recommendations list:", err)
         return null
       })
     ]).then(([hData, rData]) => {

@@ -181,7 +181,7 @@ export function AuthProvider({ children }) {
         if (BASE && stored.token) {
           console.info('[Auth] Token validation started')
           activeController = new AbortController()
-          const timer = setTimeout(() => activeController.abort(), 3000)
+          const timer = setTimeout(() => activeController.abort(), 15000)
 
           try {
             const response = await fetch(`${BASE}/api/v1/auth/me`, {
@@ -211,7 +211,7 @@ export function AuthProvider({ children }) {
             }
           } catch (err) {
             if (err.name === 'AbortError') {
-              console.warn('[Auth] Backend timeout after 3000ms')
+              console.warn('[Auth] Backend timeout after 15000ms')
             } else {
               console.warn('[Auth] Backend unreachable:', err)
             }

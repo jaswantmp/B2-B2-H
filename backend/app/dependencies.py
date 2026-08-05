@@ -4,9 +4,10 @@ from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from jose import JWTError, jwt
 from sqlalchemy.orm import Session
+from sqlalchemy.orm import joinedload
 from app.config import settings
 from app.database import get_db
-from app.models.user import User
+from app.models.user import User, UserSkill
 
 # Replace OAuth2PasswordBearer with HTTPBearer for Swagger compatibility
 oauth2_scheme = HTTPBearer()

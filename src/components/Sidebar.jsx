@@ -46,7 +46,7 @@ export default function Sidebar() {
     if (!user?.id) return
     getNotifications()
       .then(ns => setUnread(ns.filter(n => !n.read).length))
-      .catch(console.error)
+      .catch(err => console.warn('Sidebar notifications error:', err))
   }, [user])
 
 

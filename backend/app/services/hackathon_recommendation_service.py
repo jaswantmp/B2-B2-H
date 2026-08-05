@@ -1,7 +1,7 @@
 # app/services/hackathon_recommendation_service.py
 import re
 from datetime import datetime
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, selectinload
 from app.models.hackathon import Hackathon
 from app.models.user import User
 from app.constants.recommendation_constants import (
@@ -27,8 +27,13 @@ class HackathonRecommendationService:
     def get_recommendations(cls, db: Session, user: User) -> dict:
         # 1. Fetch and filter eligible hackathons (end_date >= current time)
         current_time = datetime.utcnow()
-        all_hackathons = db.query(Hackathon).filter(Hackathon.end_date >= current_time).all()
-        total_hackathons_count = db.query(Hackathon).count()
+        all_hackathons = (
+            db.query(Hackathon)
+            .options(selectinload(Hackathon.registrations))
+            .filter(Hackathon.end_date >= current_time)
+            .all()
+        )
+        total_hackathons_count = len(all_hackathons)
 
         # 2. Normalize User Data
         user_skills = set()
