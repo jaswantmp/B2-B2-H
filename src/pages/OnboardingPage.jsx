@@ -10,14 +10,16 @@ import { completeOnboarding } from '../services/api.js'
 import { useToast } from '../context/ToastContext.jsx'
 
 const DOMAIN_OPTIONS = [
-  'AI/ML', 'Web3', 'Blockchain', 'Mobile', 'Frontend',
-  'Backend', 'UI/UX', 'Cybersecurity', 'Cloud/DevOps', 'IoT'
+  'AI/ML', 'Agentic Systems', 'Robotics & Automation', 'Embedded Systems & IoT',
+  'Mechanical & CAD', 'Civil & Structural', 'Biotechnology & Health', 'Aerospace & Defence',
+  'EV & CleanTech', 'Cybersecurity', 'Cloud & DevOps', 'Web & App Dev',
+  'UI/UX & Product', 'FinTech & E-Commerce', 'Smart Cities & Agritech'
 ]
 
 const SKILL_OPTIONS = [
-  'React', 'Node.js', 'Python', 'TypeScript', 'Tailwind CSS',
-  'Next.js', 'FastAPI', 'PostgreSQL', 'MongoDB', 'Docker',
-  'Figma', 'Solidity', 'Web3.js', 'Kotlin', 'Swift', 'PyTorch'
+  'Python', 'React', 'Node.js', 'PyTorch', 'FastAPI', 'SolidWorks', 'ROS2', 'MATLAB',
+  'Embedded C', 'STAAD Pro', 'ETABS', 'Revit', 'Figma', 'PLC', 'FPGA', 'Docker',
+  'Kubernetes', 'Cybersecurity', 'Product Management', 'Verilog', 'ANSYS', 'Agentic AI'
 ]
 
 export default function OnboardingPage() {

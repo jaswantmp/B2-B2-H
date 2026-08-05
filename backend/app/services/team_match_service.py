@@ -9,73 +9,46 @@ logger = logging.getLogger(__name__)
 # Map skill names (lowercase) to five core roles
 SKILL_TO_ROLE = {
     # Frontend
-    "react": "Frontend",
-    "angular": "Frontend",
-    "vue.js": "Frontend",
-    "vue": "Frontend",
-    "flutter": "Frontend",
-    "android": "Frontend",
-    "ios": "Frontend",
-    "javascript": "Frontend",
-    "typescript": "Frontend",
-    "tailwind css": "Frontend",
-    "tailwind": "Frontend",
+    "react": "Frontend", "angular": "Frontend", "vue.js": "Frontend", "vue": "Frontend",
+    "flutter": "Frontend", "android": "Frontend", "ios": "Frontend", "javascript": "Frontend",
+    "typescript": "Frontend", "tailwind css": "Frontend", "tailwind": "Frontend",
+    "next.js": "Frontend", "svelte": "Frontend", "html5": "Frontend", "css3": "Frontend",
     # Backend
-    "node.js": "Backend",
-    "node": "Backend",
-    "express.js": "Backend",
-    "express": "Backend",
-    "fastapi": "Backend",
-    "django": "Backend",
-    "spring boot": "Backend",
-    "spring": "Backend",
-    "java": "Backend",
-    "c++": "Backend",
-    "c": "Backend",
-    "python": "Backend",
-    "postgresql": "Backend",
-    "mysql": "Backend",
-    "mongodb": "Backend",
-    "firebase": "Backend",
-    "aws": "Backend",
-    "azure": "Backend",
-    "docker": "Backend",
-    "kubernetes": "Backend",
-    "devops": "Backend",
-    # AI/ML
-    "machine learning": "AI/ML",
-    "deep learning": "AI/ML",
-    "artificial intelligence": "AI/ML",
-    "generative ai": "AI/ML",
-    "ai": "AI/ML",
-    "data science": "AI/ML",
+    "node.js": "Backend", "node": "Backend", "express.js": "Backend", "express": "Backend",
+    "fastapi": "Backend", "django": "Backend", "spring boot": "Backend", "spring": "Backend",
+    "java": "Backend", "c++": "Backend", "c": "Backend", "python": "Backend", "go": "Backend", "rust": "Backend",
+    "postgresql": "Backend", "mysql": "Backend", "mongodb": "Backend", "firebase": "Backend",
+    "aws": "Backend", "azure": "Backend", "docker": "Backend", "kubernetes": "Backend", "devops": "Backend",
+    # AI/ML & Agentic
+    "machine learning": "AI/ML", "deep learning": "AI/ML", "artificial intelligence": "AI/ML",
+    "generative ai": "AI/ML", "ai": "AI/ML", "data science": "AI/ML", "prompt engineering": "AI/ML",
+    "agentic ai": "AI/ML", "langchain": "AI/ML", "huggingface": "AI/ML", "rag": "AI/ML", "langgraph": "AI/ML", "crewai": "AI/ML",
+    # Mechanical & CAD
+    "solidworks": "Mechanical", "fusion 360": "Mechanical", "catia": "Mechanical", "creo": "Mechanical",
+    "nx cad": "Mechanical", "ansys": "Mechanical", "abaqus": "Mechanical", "autocad": "Mechanical",
+    "cnc programming": "Mechanical", "3d printing": "Mechanical", "fea": "Mechanical", "cfd": "Mechanical",
+    # Civil & Structural
+    "staad pro": "Civil", "etabs": "Civil", "sap2000": "Civil", "revit": "Civil", "autocad civil 3d": "Civil",
+    "surveying": "Civil", "structural analysis": "Civil", "bim": "Civil",
+    # Electrical & Embedded
+    "matlab": "Electrical", "simulink": "Electrical", "plc": "Electrical", "scada": "Electrical",
+    "siemens tia portal": "Electrical", "labview": "Electrical", "embedded c": "Electrical",
+    "pcb design": "Electrical", "stm32": "Electrical", "esp32": "Electrical", "arduino": "Electrical",
+    "raspberry pi": "Electrical", "fpga": "Electrical", "verilog": "Electrical", "vhdl": "Electrical",
+    # Robotics
+    "ros": "Robotics", "ros2": "Robotics", "gazebo": "Robotics", "robotics kinematics": "Robotics",
     # Design
-    "ui design": "Design",
-    "ux design": "Design",
-    "ui/ux": "Design",
-    "figma": "Design",
-    "canva": "Design",
-    "graphic design": "Design",
-    "wireframing": "Design",
-    "prototyping": "Design",
-    # Product / Pitch / Soft Skills
-    "product management": "Product/Pitch",
-    "business analysis": "Product/Pitch",
-    "market research": "Product/Pitch",
-    "startup strategy": "Product/Pitch",
-    "public speaking": "Product/Pitch",
-    "presentation": "Product/Pitch",
-    "pitching": "Product/Pitch",
-    "technical writing": "Product/Pitch",
-    "documentation": "Product/Pitch",
-    "team leadership": "Product/Pitch",
-    "project management": "Product/Pitch",
-    "problem solving": "Product/Pitch",
-    "innovation": "Product/Pitch",
-    "ideation": "Product/Pitch",
-    "pitch deck creation": "Product/Pitch",
-    "demo building": "Product/Pitch",
-    "research": "Product/Pitch",
+    "ui design": "Design", "ux design": "Design", "ui/ux": "Design", "figma": "Design",
+    "canva": "Design", "graphic design": "Design", "wireframing": "Design", "prototyping": "Design",
+    "unreal engine": "Design", "unity": "Design", "blender": "Design",
+    # Product / Business
+    "product management": "Product/Pitch", "business analysis": "Product/Pitch", "market research": "Product/Pitch",
+    "startup strategy": "Product/Pitch", "salesforce": "Product/Pitch", "sap": "Product/Pitch", "oracle": "Product/Pitch",
+    "power bi": "Product/Pitch", "tableau": "Product/Pitch", "public speaking": "Product/Pitch",
+    "presentation": "Product/Pitch", "pitching": "Product/Pitch", "technical writing": "Product/Pitch",
+    "documentation": "Product/Pitch", "team leadership": "Product/Pitch", "project management": "Product/Pitch",
+    "problem solving": "Product/Pitch", "innovation": "Product/Pitch", "ideation": "Product/Pitch",
+    "pitch deck creation": "Product/Pitch", "demo building": "Product/Pitch", "research": "Product/Pitch",
     "rapid prototyping": "Product/Pitch"
 }
 
@@ -83,11 +56,15 @@ ROLE_LABELS = {
     "Frontend": "Frontend Developer",
     "Backend": "Backend Developer",
     "AI/ML": "AI Engineer",
+    "Mechanical": "CAD Engineer",
+    "Civil": "Structural Engineer",
+    "Electrical": "Embedded Engineer",
+    "Robotics": "Robotics Engineer",
     "Design": "UI/UX Designer",
     "Product/Pitch": "Product Lead"
 }
 
-ALL_ROLES = {"Frontend", "Backend", "AI/ML", "Design", "Product/Pitch"}
+ALL_ROLES = {"Frontend", "Backend", "AI/ML", "Mechanical", "Civil", "Electrical", "Robotics", "Design", "Product/Pitch"}
 
 
 class TeamMatchService:

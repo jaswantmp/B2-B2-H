@@ -2,10 +2,10 @@
 import { useState, useEffect } from 'react'
 import { getBuilders } from '../services/api.js'
 
-const SKILLS = [
-  'React', 'Node.js', 'Python', 'Go', 'Flutter', 'Figma',
-  'TensorFlow', 'Blockchain', 'AWS', 'TypeScript', 'Rust',
-  'Docker', 'Kubernetes', 'Next.js', 'FastAPI', 'LangChain',
+const FEATURED_SKILLS = [
+  'React', 'Node.js', 'Python', 'FastAPI', 'PyTorch', 'Agentic AI', 'Prompt Engineering',
+  'SolidWorks', 'ROS2', 'MATLAB', 'Embedded C', 'STAAD Pro', 'ETABS', 'Revit',
+  'Figma', 'Product Management', 'Cybersecurity', 'AWS', 'Docker', 'PLC', 'FPGA'
 ]
 
 
@@ -127,15 +127,15 @@ export default function FilterPanel({ filters, onChange }) {
       </Section>
 
       {/* Skills */}
-      <Section title="Skills">
+      <Section title="Popular Skills">
         <ChipGroup
-          items={SKILLS}
+          items={FEATURED_SKILLS}
           active={filters.skills || []}
           onToggle={v => toggle('skills', v)}
         />
       </Section>
 
-      {/* College — dropdown (too many for chips) */}
+      {/* College — dropdown */}
       <Section title="College">
         <SelectFilter
           id="filter-college"
@@ -181,3 +181,4 @@ export default function FilterPanel({ filters, onChange }) {
     </aside>
   )
 }
+
