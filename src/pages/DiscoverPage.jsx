@@ -1,6 +1,6 @@
 // src/pages/DiscoverPage.jsx
 import { useState, useEffect, useCallback } from 'react'
-import { SlidersHorizontal, X, Users, Search as SearchIcon } from 'lucide-react'
+import { SlidersHorizontal, X, Users, Search as SearchIcon, AlertTriangle, RefreshCw } from 'lucide-react'
 import BuilderCard from '../components/BuilderCard.jsx'
 import SearchBar from '../components/SearchBar.jsx'
 import FilterPanel from '../components/FilterPanel.jsx'
@@ -52,25 +52,47 @@ function ActiveFilterChips({ filters, onRemove }) {
 }
 
 export default function DiscoverPage() {
-  const [builders, setBuilders]     = useState([])
-  const [loading, setLoading]       = useState(true)
-  const [search, setSearch]         = useState('')
-  const [filters, setFilters]       = useState(EMPTY_FILTERS)
+  const [builders, setBuilders]       = useState([])
+  const [loading, setLoading]         = useState(true)
+  const [error, setError]             = useState(null)
+  const [retryTrigger, setRetryTrigger] = useState(0)
+  const [search, setSearch]           = useState('')
+  const [filters, setFilters]         = useState(EMPTY_FILTERS)
   const [filtersOpen, setFiltersOpen] = useState(false)
-  const [inviteUser, setInviteUser] = useState(null)
+  const [inviteUser, setInviteUser]   = useState(null)
 
   const totalFilters = countFilters(filters)
 
-  // Reload whenever search or any filter changes (debounced 280ms)
+  const handleRetry = useCallback(() => {
+    setRetryTrigger(prev => prev + 1)
+  }, [])
+
+  // Reload whenever search, filters, or retryTrigger changes (debounced 280ms)
   useEffect(() => {
     let cancelled = false
     setLoading(true)
+    setError(null)
     const timer = setTimeout(async () => {
-      const data = await getBuilders({ search, ...filters })
-      if (!cancelled) { setBuilders(data); setLoading(false) }
+      try {
+        const data = await getBuilders({ search, ...filters })
+        if (!cancelled) {
+          setBuilders(data || [])
+          setError(null)
+        }
+      } catch (err) {
+        if (!cancelled && err.name !== 'AbortError') {
+          console.warn('[DiscoverPage] Failed to fetch builders:', err)
+          setError(err)
+          setBuilders([])
+        }
+      } finally {
+        if (!cancelled) {
+          setLoading(false)
+        }
+      }
     }, 280)
     return () => { cancelled = true; clearTimeout(timer) }
-  }, [search, filters])
+  }, [search, filters, retryTrigger])
 
   const removeChip = useCallback((key, val) => {
     setFilters(f => ({ ...f, [key]: (f[key] || []).filter(v => v !== val) }))
@@ -155,9 +177,11 @@ export default function DiscoverPage() {
               <Users size={14} aria-hidden="true" />
               {loading
                 ? 'Searching…'
+                : error
+                ? 'Connection Error'
                 : `${builders.length} builder${builders.length !== 1 ? 's' : ''} found`
               }
-              {search && !loading && (
+              {search && !loading && !error && (
                 <span>
                   for{' '}
                   <span className="theme-text font-medium">"{search}"</span>
@@ -171,6 +195,23 @@ export default function DiscoverPage() {
               {[...Array(6)].map((_, i) => (
                 <div key={i} className="theme-skeleton h-52 animate-pulse" aria-hidden="true" />
               ))}
+            </div>
+          ) : error ? (
+            <div className="text-center py-24 rounded-2xl border theme-divider" style={{ backgroundColor: 'var(--bg-surface)' }}>
+              <div className="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4 bg-amber-500/10 border border-amber-500/20">
+                <AlertTriangle size={24} className="text-amber-500" />
+              </div>
+              <h2 className="text-lg font-bold theme-text mb-1">Backend Unavailable</h2>
+              <p className="theme-muted text-sm max-w-md mx-auto mb-6">
+                The server might be starting up or offline.
+              </p>
+              <button
+                onClick={handleRetry}
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-violet-600 hover:bg-violet-500 text-white font-semibold text-sm transition-all shadow-lg shadow-violet-600/20"
+              >
+                <RefreshCw size={15} />
+                Retry
+              </button>
             </div>
           ) : builders.length === 0 ? (
             <div className="text-center py-24">

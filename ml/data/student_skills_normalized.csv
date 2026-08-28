@@ -1,0 +1,501 @@
+student_id,skills,skill_count
+b4c077d2-148e-42f9-bc80-1515091459a8,"[""C++"", ""Git"", ""Java"", ""JavaScript"", ""Kubernetes"", ""PostgreSQL"", ""Problem Solving"", ""TypeScript""]",8
+389062fe-a5c8-4f8d-ab5a-72f522fa00fa,"[""Communication"", ""Docker"", ""FastAPI"", ""Git"", ""Ideation"", ""Java"", ""JavaScript"", ""Kubernetes"", ""Python"", ""TypeScript""]",10
+8d64530c-b109-44d6-898f-58a15a3429d0,"[""C++"", ""Docker"", ""Git"", ""Java"", ""JavaScript"", ""Node.js"", ""Python"", ""Rapid Prototyping"", ""React"", ""Team Leadership""]",10
+dd0434a4-56fe-447b-b4a9-5d07504606b3,"[""Angular"", ""Communication"", ""Java"", ""MongoDB"", ""MySQL"", ""Python"", ""React"", ""Tailwind CSS"", ""Vue.js""]",9
+075a80d5-043a-4b43-bdea-b48fad26e8ff,"[""AWS"", ""Angular"", ""Express.js"", ""MySQL"", ""Presentation"", ""Python"", ""REST API"", ""Rapid Prototyping"", ""Vue.js""]",9
+2434dd7a-db32-4b60-8025-8a694d181b79,"[""AWS"", ""Angular"", ""MongoDB"", ""MySQL"", ""Problem Solving"", ""React"", ""Tailwind CSS"", ""Team Leadership""]",8
+c2340382-6c27-4270-9883-0b8b961fe8c0,"[""Prompt Engineering"", ""Python"", ""R"", ""Tableau"", ""Team Leadership""]",5
+a9e6c11c-3ef9-49c5-89a2-63fe46ab235c,"[""NLP"", ""Problem Solving"", ""Python"", ""SQL""]",4
+e74cd5e6-4aad-460f-9ec1-a6eac48a4a58,"[""NLP"", ""OpenCV"", ""Pandas"", ""Presentation"", ""Prompt Engineering"", ""PyTorch"", ""Python"", ""R"", ""Scikit-Learn"", ""Tableau"", ""Team Leadership"", ""TensorFlow""]",12
+88b163f6-0154-462a-85b1-8dccb2071ff2,"[""Communication"", ""CrewAI"", ""Deep Learning"", ""HuggingFace"", ""LangChain"", ""LlamaIndex"", ""Problem Solving"", ""Python"", ""RAG""]",9
+f65e9bc5-57b3-4f96-ab99-5e425d46456e,"[""Agentic AI"", ""LlamaIndex"", ""RAG"", ""Team Leadership"", ""TensorFlow""]",5
+68850a10-ff2d-4844-b456-e19c970488a0,"[""Agentic AI"", ""Communication"", ""Ideation"", ""LangChain"", ""PyTorch"", ""RAG"", ""TensorFlow"", ""Vector Embeddings""]",8
+8b45903d-f859-457f-8517-b7b0cb85a48a,"[""Arduino"", ""C++"", ""Communication"", ""ESP32"", ""STM32"", ""Signal Processing"", ""Verilog""]",7
+f1371c2b-d4f4-49e6-af42-977e4a370bf5,"[""Arduino"", ""C++"", ""Communication"", ""ESP32"", ""FPGA"", ""STM32"", ""Team Leadership"", ""VHDL"", ""Verilog""]",9
+26223b4e-f7fb-44af-b779-ee91d39509a7,"[""Arduino"", ""ESP32"", ""FPGA"", ""MATLAB"", ""PCB Design"", ""Rapid Prototyping"", ""STM32"", ""Signal Processing"", ""Simulink"", ""Team Leadership"", ""VHDL"", ""Verilog""]",12
+3aa9e83f-9407-49dd-bb68-44e046573db9,"[""Control Systems"", ""Power Electronics"", ""Presentation"", ""Proteus""]",4
+e649d778-4f86-4007-9cb7-ebe51f531c66,"[""Control Systems"", ""LabVIEW"", ""MATLAB"", ""PLC"", ""Rapid Prototyping"", ""Siemens TIA Portal"", ""Team Leadership""]",7
+7f3eecd2-0620-4f87-83c0-3604e8bbeb96,"[""Ideation"", ""MATLAB"", ""PLC"", ""Rapid Prototyping"", ""SCADA"", ""Siemens TIA Portal""]",6
+2b9a90d7-2e2e-4096-b75d-70225b6167e0,"[""3D Printing"", ""ANSYS"", ""Communication"", ""Creo"", ""FEA"", ""Ideation"", ""Thermodynamics""]",7
+04988768-5f3f-4001-b1e2-cccf6434f729,"[""3D Printing"", ""CATIA"", ""CFD"", ""FEA"", ""Rapid Prototyping"", ""SolidWorks"", ""Thermodynamics""]",7
+44011eff-1033-4636-b423-249db19d35c4,"[""3D Printing"", ""ANSYS"", ""CATIA"", ""CFD"", ""CNC Programming"", ""FEA"", ""Fusion 360"", ""Presentation""]",8
+0e5fe7e2-af95-46e2-bf8f-a08bcb198d14,"[""ETABS"", ""Hydrology"", ""Problem Solving"", ""SAP2000"", ""STAAD Pro"", ""Team Leadership""]",6
+8e6faa10-2480-4c61-97e1-c320efa565fd,"[""BIM (Building Information Modeling)"", ""GIS"", ""Problem Solving"", ""Structural Analysis"", ""Team Leadership""]",5
+261a2b64-84c8-4f62-aab8-f89183729d9f,"[""AutoCAD Civil 3D"", ""BIM (Building Information Modeling)"", ""Problem Solving"", ""Rapid Prototyping"", ""SAP2000"", ""Structural Analysis""]",6
+31af78ed-9dda-4632-a904-96cb721a1963,"[""Automation"", ""Embedded C"", ""Ideation"", ""MATLAB"", ""PLC"", ""Problem Solving"", ""SolidWorks""]",7
+d0813615-73e8-428e-a989-f63bf8f97a8d,"[""Automation"", ""Presentation"", ""Raspberry Pi"", ""Sensors""]",4
+ce5c719e-0eba-4ee2-9b14-0345a49fc6d3,"[""Arduino"", ""Automation"", ""Embedded C"", ""MATLAB"", ""PLC"", ""ROS"", ""ROS2"", ""Rapid Prototyping"", ""Raspberry Pi"", ""Sensors"", ""Simulink"", ""SolidWorks""]",12
+c04f993f-4455-4dc5-80f8-c549868d0354,"[""Autonomous Navigation"", ""Gazebo"", ""Motion Planning"", ""OpenCV"", ""Python"", ""ROS"", ""ROS2"", ""Robotics Kinematics"", ""SLAM"", ""Team Leadership""]",10
+cd66922d-c11d-445c-8359-6d83c64885f1,"[""Autonomous Navigation"", ""Gazebo"", ""Motion Planning"", ""OpenCV"", ""Python"", ""ROS2"", ""Rapid Prototyping"", ""Robotics Kinematics"", ""SLAM"", ""Sensor Fusion""]",10
+8adc503c-cbb2-41a7-bd6f-2bcec950aea0,"[""Autonomous Navigation"", ""C++"", ""Communication"", ""Gazebo"", ""Motion Planning"", ""OpenCV"", ""Python"", ""ROS"", ""ROS2"", ""Robotics Kinematics"", ""Sensor Fusion""]",11
+d3ced1b7-92b3-466b-92fa-4d0f7d7ebdfa,"[""ANSYS"", ""AutoCAD"", ""Battery Management"", ""CATIA"", ""CFD"", ""Electric Drive Systems"", ""Ideation"", ""MATLAB"", ""Rapid Prototyping"", ""SolidWorks""]",10
+c4b5cf54-8f46-49df-b8f1-81ee738e55e4,"[""ANSYS"", ""Battery Management"", ""CFD"", ""Electric Drive Systems"", ""MATLAB"", ""Presentation"", ""Problem Solving""]",7
+5b3a219d-f774-40a3-8e53-cefbbd95c1b7,"[""ANSYS"", ""AutoCAD"", ""CATIA"", ""Electric Drive Systems"", ""MATLAB"", ""Presentation"", ""Vehicle Dynamics""]",7
+7e41e4a1-e1f5-4811-b5ee-7d004b7f594a,"[""ASPEN Plus"", ""Chemical Reaction Engineering"", ""Fluid Mechanics"", ""Ideation"", ""MATLAB"", ""Polymer Chemistry"", ""Thermodynamics""]",7
+42564104-e8ad-4e44-b9ff-89862dfd35d2,"[""ASPEN Plus"", ""Chemical Reaction Engineering"", ""Communication"", ""Fluid Mechanics"", ""Heat Transfer"", ""MATLAB"", ""Polymer Chemistry"", ""Process Engineering"", ""Thermodynamics""]",9
+78ae885f-c435-4649-9c08-d501a77bc648,"[""ASPEN Plus"", ""Chemical Reaction Engineering"", ""Fluid Mechanics"", ""Heat Transfer"", ""MATLAB"", ""Presentation"", ""Process Engineering"", ""Thermodynamics""]",8
+277d73e1-a781-4bdf-a6f2-d6c53560bc03,"[""Bioinformatics"", ""Bioprocess Engineering"", ""CRISPR"", ""Genomics"", ""Microbiology"", ""Molecular Biology"", ""Python"", ""R"", ""Team Leadership""]",9
+6ccd1f6a-9887-4159-94ae-a8daf672d1a8,"[""Bioinformatics"", ""Bioprocess Engineering"", ""Genomics"", ""Microbiology"", ""Molecular Biology"", ""Presentation"", ""Problem Solving"", ""Python""]",8
+fcccb7c6-a8a4-4e69-9db9-8f40d2b5cea2,"[""Bioprocess Engineering"", ""CRISPR"", ""Data Analysis"", ""Genomics"", ""Molecular Biology"", ""Presentation"", ""Problem Solving"", ""R""]",8
+40627c66-b187-405d-94af-8fafe9314606,"[""Biomedical Instrumentation"", ""Ideation"", ""LabVIEW"", ""Sensor Design"", ""Signal Processing""]",5
+77a759a7-7170-48ba-bd51-11b2aced5eeb,"[""Biomedical Instrumentation"", ""Communication"", ""Signal Processing"", ""SolidWorks""]",4
+affb040c-0796-49f8-b3db-6780d0e12bad,"[""Biomedical Instrumentation"", ""Communication"", ""Ideation"", ""LabVIEW"", ""Medical Image Processing"", ""Sensor Design"", ""Signal Processing"", ""SolidWorks""]",8
+347dcda4-cc34-4117-be02-c3eeaaf8878f,"[""GIS"", ""Hydrology"", ""IOT Sensors"", ""Ideation"", ""Soil Mechanics"", ""Team Leadership""]",6
+85821370-f883-484e-94ee-f6ae8dc26c65,"[""AgriTech"", ""Hydrology"", ""Precision Agriculture"", ""Python"", ""Rapid Prototyping""]",5
+b92bae36-b338-429c-af78-0cbf3fb8795f,"[""AgriTech"", ""AutoCAD"", ""Drone Surveying"", ""GIS"", ""IOT Sensors"", ""Precision Agriculture"", ""Problem Solving"", ""Python"", ""Soil Mechanics"", ""Team Leadership""]",10
+9965fb9a-60f0-4faa-a4c2-69d5bf9b8f86,"[""ANSYS"", ""Aerodynamics"", ""CATIA"", ""CFD"", ""Flight Mechanics"", ""MATLAB"", ""Problem Solving"", ""Propulsion Systems"", ""Simulink"", ""SolidWorks""]",10
+6c7ba5ab-e76c-4823-86d3-ecd291bf2b8e,"[""Aerodynamics"", ""CFD"", ""Communication"", ""SolidWorks""]",4
+99d675f5-481c-4a42-ab83-626ee52dd60c,"[""ANSYS"", ""Aerodynamics"", ""CATIA"", ""CFD"", ""Communication"", ""Flight Mechanics"", ""MATLAB"", ""Propulsion Systems"", ""Rapid Prototyping"", ""Simulink"", ""SolidWorks"", ""Structural Analysis""]",12
+0af9507d-81b9-4cf1-b44b-0dacf503dc2d,"[""Arena Simulation"", ""Problem Solving"", ""Python"", ""SQL""]",4
+ce2ebc11-9397-4333-846e-1b97cad19e01,"[""Ideation"", ""Operations Research"", ""Process Optimization"", ""Python"", ""Rapid Prototyping"", ""Supply Chain Analytics""]",6
+aae2087b-48ce-441f-8985-02e8fb5169ec,"[""Arena Simulation"", ""Ideation"", ""Lean Manufacturing"", ""Operations Research"", ""Process Optimization"", ""Python"", ""Rapid Prototyping"", ""SQL"", ""Six Sigma"", ""Supply Chain Analytics"", ""Tableau""]",11
+ed82829b-d814-4e03-b750-a41974852d40,"[""Communication"", ""Control Systems"", ""Instrumentation Design"", ""LabVIEW"", ""MATLAB"", ""PLC"", ""SCADA"", ""Signal Processing"", ""Team Leadership""]",9
+0614b282-09f3-41f4-8c80-cd26922cefb7,"[""Embedded C"", ""Instrumentation Design"", ""LabVIEW"", ""MATLAB"", ""PLC"", ""Rapid Prototyping"", ""SCADA"", ""Sensors & Transducers"", ""Signal Processing"", ""Team Leadership""]",10
+fc2e2e44-67a1-49c0-8deb-aae8b7fd05ce,"[""Embedded C"", ""MATLAB"", ""PLC"", ""SCADA"", ""Sensors & Transducers"", ""Signal Processing"", ""Team Leadership""]",7
+6c480048-b597-421a-a03f-d31dcc86dde0,"[""Ideation"", ""Lumion"", ""Presentation"", ""Revit"", ""Rhino 3D""]",5
+62896dac-f806-44b9-bcb9-4a4df88ecc09,"[""3D Visualization"", ""Architectural Design"", ""AutoCAD"", ""BIM (Building Information Modeling)"", ""Communication"", ""Ideation"", ""Lumion"", ""Photoshop"", ""Revit"", ""Rhino 3D"", ""SketchUp"", ""Urban Planning""]",12
+1458b5a8-ec14-4f63-b9f8-f205cef99d3a,"[""3D Visualization"", ""Architectural Design"", ""AutoCAD"", ""BIM (Building Information Modeling)"", ""Communication"", ""Lumion"", ""Photoshop"", ""Rapid Prototyping"", ""Revit"", ""Rhino 3D"", ""SketchUp""]",11
+1c013e76-8dd1-4835-929d-4d17b3cca983,"[""Adobe Illustrator"", ""Communication"", ""Fashion CAD"", ""Fashion Merchandising"", ""Garment Manufacturing"", ""Pattern Making"", ""Photoshop"", ""Styling"", ""Team Leadership"", ""Textile Design"", ""UI Design""]",11
+cab37fc0-5983-4910-a593-6b513146db25,"[""Adobe Illustrator"", ""Fashion CAD"", ""Fashion Merchandising"", ""Garment Manufacturing"", ""Pattern Making"", ""Photoshop"", ""Problem Solving"", ""Styling"", ""UI Design""]",9
+bb0f642d-1096-4c1e-a583-70dcd1d200f4,"[""Fashion Merchandising"", ""Garment Manufacturing"", ""Rapid Prototyping"", ""Textile Design"", ""UI Design""]",5
+c4e69c9e-4472-40aa-ae9e-e98402e48d1b,"[""Apache Spark"", ""Data Visualization"", ""Deep Learning"", ""NumPy"", ""Pandas"", ""Power BI"", ""Python"", ""SQL"", ""Scikit-Learn"", ""Tableau"", ""Team Leadership""]",11
+e019c590-05ca-4dd0-8414-3264362d7ab3,"[""Apache Spark"", ""Ideation"", ""Pandas"", ""Problem Solving"", ""R"", ""Scikit-Learn"", ""Tableau""]",7
+fb92583d-11ab-4cec-a9fd-c5fd932c1193,"[""Apache Spark"", ""Big Data"", ""Communication"", ""Deep Learning"", ""Pandas"", ""Power BI"", ""Python"", ""SQL"", ""Scikit-Learn"", ""Tableau""]",10
+732dbfe7-1acd-4dd9-8572-92ca7923a567,"[""Ethical Hacking"", ""Network Security"", ""Penetration Testing"", ""Python"", ""Team Leadership""]",5
+e88fb49b-4d38-4e00-98f7-81c1486d5d6c,"[""Burp Suite"", ""Communication"", ""Cryptography"", ""Ethical Hacking"", ""Kali Linux"", ""Metasploit"", ""Rapid Prototyping"", ""Reverse Engineering"", ""Wireshark""]",9
+38eb7628-e648-4935-b757-eff8326a187d,"[""Ethical Hacking"", ""Kali Linux"", ""Network Security"", ""Nmap"", ""Penetration Testing"", ""Python"", ""Rapid Prototyping"", ""Wireshark""]",8
+bccfcb8d-4fb3-47d4-b57d-a04e3af3b2df,"[""Agile/Scrum"", ""Business Analysis"", ""Marketing"", ""Power BI"", ""Presentation"", ""Product Management"", ""Salesforce"", ""Strategic Planning"", ""Team Leadership""]",9
+6c6070fe-5590-4bd5-bd37-c804f1141ede,"[""Agile/Scrum"", ""Business Analysis"", ""Financial Modeling"", ""Ideation"", ""Market Research"", ""Marketing"", ""Power BI"", ""Presentation"", ""Problem Solving"", ""Product Management"", ""Strategic Planning""]",11
+a4a433e6-4d7c-4b9e-a42e-488e76adf7e7,"[""Agile/Scrum"", ""Business Analysis"", ""Market Research"", ""Power BI"", ""Product Management"", ""Rapid Prototyping"", ""Salesforce""]",7
+bf5c6dbf-7b36-4028-b03b-7b4abbf3532f,"[""AWS"", ""Communication"", ""Docker"", ""Full Stack Development"", ""Git"", ""Node.js"", ""PostgreSQL"", ""Python"", ""React"", ""Software Engineering""]",10
+b94ac878-a11a-4440-8721-86ece96b9784,"[""Communication"", ""Docker"", ""Full Stack Development"", ""Git"", ""Node.js"", ""PostgreSQL"", ""Presentation"", ""Python"", ""Software Engineering""]",9
+132eafd1-24b7-4dd8-b703-0907cb2db46e,"[""AWS"", ""Communication"", ""Docker"", ""Full Stack Development"", ""Git"", ""Java"", ""PostgreSQL"", ""Python"", ""React"", ""Software Engineering""]",10
+e5da3070-4f31-4f4e-97b7-7ce6e1450cb2,"[""Burp Suite"", ""Ethical Hacking"", ""Linux"", ""Presentation"", ""Python"", ""Wireshark""]",6
+7ebfb18c-673f-4555-840f-7ad53c8cdea0,"[""ASPEN Plus"", ""CHEMCAD"", ""Fluid Mechanics"", ""Mass Transfer"", ""Polymer Chemistry"", ""Problem Solving"", ""Reaction Engineering""]",7
+3769dc5c-4e8b-4b24-9e2d-9e4e2179c613,"[""Android"", ""Communication"", ""Database Administration"", ""Java"", ""Python"", ""Rapid Prototyping"", ""React"", ""Spring Boot"", ""Web Development""]",9
+3f5bccd6-69b7-4942-b990-1a8d254bb653,"[""AutoCAD"", ""BIM"", ""Hydrology"", ""Rapid Prototyping"", ""Revit"", ""STAAD Pro""]",6
+bfa1f0df-056e-4c7d-8e36-bd69a0ff8ce2,"[""Geotechnical Engineering"", ""Git"", ""Hydrology"", ""Primavera"", ""Rapid Prototyping"", ""Structural Analysis"", ""Surveying""]",7
+a18617bd-eb70-4f68-9316-aa2807609078,"[""ANSYS"", ""Communication"", ""Electric Drive Systems"", ""Powertrain Design"", ""Rapid Prototyping"", ""SolidWorks"", ""Vehicle Dynamics""]",7
+961c7e8c-d09e-4acb-ba57-63466f357076,"[""C++"", ""CI/CD"", ""Communication"", ""Git"", ""Go"", ""GraphQL"", ""JavaScript"", ""Linux"", ""Python"", ""Rapid Prototyping""]",10
+3a29330d-5c66-44fd-97fd-5e6ccd8bb730,"[""3D Printing"", ""ANSYS"", ""AutoCAD"", ""Fluid Mechanics"", ""Fusion 360"", ""Rapid Prototyping""]",6
+b737c73d-287a-42d9-bf3f-4c1e38e85199,"[""ASPEN Plus"", ""CHEMCAD"", ""Chemical Safety"", ""Fluid Mechanics"", ""Heat Transfer"", ""MATLAB"", ""Polymer Chemistry"", ""Process Control"", ""Rapid Prototyping"", ""Reaction Engineering""]",10
+7cbaf425-d5c6-49f3-8efe-1b197b36c98b,"[""ANSYS"", ""AutoCAD"", ""CATIA"", ""CFD"", ""MATLAB"", ""Powertrain Design"", ""Presentation"", ""SolidWorks"", ""Thermodynamics"", ""Vehicle Dynamics""]",10
+bcd14113-cdb3-41fa-9993-040ff343e346,"[""Agile/Scrum"", ""Data Analytics"", ""Pitching"", ""Problem Solving"", ""Strategic Planning"", ""Team Leadership""]",6
+40a86714-ebfa-4332-b7cf-a8edbbca6ef0,"[""Drone Mapping"", ""IoT Sensors"", ""Precision Agriculture"", ""Rapid Prototyping"", ""Soil Mechanics""]",5
+68c6c4f0-0f3f-4023-9e14-06c382d47efc,"[""Gazebo"", ""OpenCV"", ""Python"", ""ROS"", ""ROS2"", ""Raspberry Pi"", ""Robotics Kinematics"", ""SLAM"", ""Team Leadership""]",9
+d4493a6b-3b00-4377-8d43-e9b67ed0c6a5,"[""Control Systems"", ""IoT Sensors"", ""LabVIEW"", ""Microcontrollers"", ""PLC"", ""Power Systems"", ""Problem Solving"", ""Proteus"", ""Rapid Prototyping"", ""SCADA"", ""Simulink""]",11
+0eb20fb6-a17a-41e6-846a-933aef316c3a,"[""Arduino"", ""Bioinstrumentation"", ""Biomedical Signal Processing"", ""DICOM"", ""MATLAB"", ""Medical AI"", ""Medical Imaging"", ""Presentation"", ""Rapid Prototyping""]",9
+d49250fd-6f04-4007-bcb0-968ddd8ba6d6,"[""Hadoop"", ""Pandas"", ""Presentation"", ""R"", ""Rapid Prototyping"", ""Scikit-Learn""]",6
+d4fe8a65-f434-413c-8323-087d73800e64,"[""ESP32"", ""FPGA"", ""IoT"", ""KiCAD"", ""LabVIEW"", ""PCB Design"", ""RF Design"", ""RTOS"", ""Rapid Prototyping""]",9
+afc7e477-3249-4772-95fd-e07a29179270,"[""AutoCAD"", ""CFD"", ""Communication"", ""Electric Drive Systems"", ""MATLAB"", ""Powertrain Design"", ""Vehicle Dynamics""]",7
+b4ccab6a-fe7a-4a76-bbea-150c9cbd5d3e,"[""3ds Max"", ""AutoCAD"", ""BIM"", ""Grasshopper"", ""Lumion"", ""Problem Solving"", ""Revit"", ""Rhino"", ""Sustainable Design"", ""Urban Planning""]",10
+17fba54a-7d3e-423b-8ec7-f07480195e32,"[""Adobe Illustrator"", ""CLO 3D"", ""Fashion Analytics"", ""Garment Manufacturing"", ""Merchandising"", ""Pattern Making"", ""Rapid Prototyping"", ""Textile Science""]",8
+a4110e45-2926-4e7f-8678-ab3a4210a5f1,"[""AutoCAD"", ""AutoCAD Civil 3D"", ""BIM"", ""ETABS"", ""Hydrology"", ""Presentation"", ""Primavera"", ""Revit"", ""STAAD Pro"", ""Structural Analysis"", ""Team Leadership""]",11
+69b350c6-2a8f-4317-b816-1b51a6cddd3d,"[""AutoCAD"", ""AutoCAD Civil 3D"", ""Communication"", ""ETABS"", ""Presentation"", ""Primavera"", ""SAP2000"", ""Surveying""]",8
+ae1edce1-d966-42e3-8c89-aef9b00864d3,"[""GIS"", ""Geotechnical Engineering"", ""Primavera"", ""Rapid Prototyping"", ""SAP2000"", ""STAAD Pro"", ""Structural Analysis"", ""Surveying""]",8
+0066a921-913f-4f9c-94f3-fc50ab1a7418,"[""Burp Suite"", ""Ethical Hacking"", ""Metasploit"", ""OWASP"", ""Penetration Testing"", ""Presentation"", ""Python"", ""SOC Analysis"", ""Team Leadership"", ""Wireshark""]",10
+af4ec097-6ced-4f57-8f0d-7e1ff5ee4a98,"[""Android"", ""Database Administration"", ""Java"", ""MySQL"", ""Problem Solving"", ""Python"", ""Rapid Prototyping"", ""React"", ""Web Development""]",9
+762d9ef6-91f9-45a9-b70e-026d55968fd6,"[""Bioprocess Engineering"", ""Biostatistics"", ""CRISPR Design"", ""Data Analysis"", ""Microbiology"", ""Molecular Biology"", ""PyMOL"", ""R"", ""Rapid Prototyping"", ""Team Leadership""]",10
+028835cb-f2be-4cf3-833d-5016c814a61b,"[""Burp Suite"", ""Cryptography"", ""Ethical Hacking"", ""Git"", ""Linux"", ""Network Security"", ""Python"", ""Wireshark""]",8
+a8b3e1b2-de65-49e5-9789-63217c28db6d,"[""Arduino"", ""FPGA"", ""Git"", ""IoT"", ""KiCAD"", ""MATLAB"", ""Presentation"", ""RF Design"", ""STM32"", ""VHDL"", ""Verilog""]",11
+4732886f-ea61-4283-92e8-e4dd176e752e,"[""Communication"", ""Computer Vision"", ""Generative AI"", ""LangChain"", ""Prompt Engineering"", ""Python"", ""Scikit-Learn"", ""Transformer Models""]",8
+b76e52b5-01dd-4187-b21f-d60808acc325,"[""Data Analysis"", ""Feature Engineering"", ""Git"", ""NumPy"", ""OpenCV"", ""PyTorch"", ""Python"", ""SQL""]",8
+5c0da250-6f41-4e9f-b813-7948724a918a,"[""CHEMCAD"", ""Chemical Safety"", ""Fluid Mechanics"", ""MATLAB"", ""Mass Transfer"", ""Presentation""]",6
+c8a6c705-5710-4a9c-b506-593a8b372fba,"[""AutoCAD"", ""Git"", ""Precision Agriculture"", ""Remote Sensing"", ""Soil Mechanics""]",5
+221c46a1-750f-4420-91f2-226350f81809,"[""ASPEN Plus"", ""Chemical Safety"", ""Communication"", ""Fluid Mechanics"", ""Git"", ""Heat Transfer"", ""MATLAB"", ""Process Control"", ""Reaction Engineering""]",9
+62c257a4-beb9-4e46-acfc-043c4c84b377,"[""ANSYS"", ""CATIA"", ""Electric Drive Systems"", ""Git"", ""Powertrain Design"", ""Thermodynamics""]",6
+087481f9-5507-4faf-9389-4e4246f98b69,"[""Android"", ""Cloud Computing"", ""Git"", ""MySQL"", ""Python"", ""Rapid Prototyping"", ""React"", ""Software Engineering"", ""Spring Boot"", ""Web Development""]",10
+7b26de21-f416-4540-b996-0ac71302b1d1,"[""CHEMCAD"", ""Communication"", ""MATLAB"", ""Problem Solving"", ""Process Control"", ""Reaction Engineering""]",6
+fdc30964-24b1-415d-88e7-290336637cf5,"[""Pandas"", ""Presentation"", ""Problem Solving"", ""Python"", ""SQL"", ""Scikit-Learn"", ""Spark"", ""Statistical Modeling""]",8
+ce46641a-724d-478c-b961-285394659b37,"[""Arduino"", ""Control Theory"", ""Git"", ""Kinematics"", ""Python""]",5
+9b22ca8a-655c-43ad-b685-8e52f2b8b6c5,"[""Arena Simulation"", ""Communication"", ""Ergonomics"", ""Lean Manufacturing"", ""Operations Research"", ""Problem Solving"", ""Process Optimization"", ""SQL"", ""Six Sigma""]",9
+e79850c2-c17a-4aac-b2b3-52194b911c0a,"[""Adobe Illustrator"", ""CAD Fashion"", ""CLO 3D"", ""Fashion Analytics"", ""Git"", ""Merchandising"", ""Pattern Making"", ""Rapid Prototyping"", ""Textile Science""]",9
+0811fe08-051a-4441-9608-0c17358c8abe,"[""AWS"", ""Cloud Computing"", ""Communication"", ""Firebase"", ""Networking"", ""Rapid Prototyping"", ""React"", ""Tailwind CSS""]",8
+1ee97fc8-a9e6-4a93-9b13-b736356a4c9a,"[""NLP"", ""NumPy"", ""Power BI"", ""PyTorch"", ""Scikit-Learn"", ""Team Leadership""]",6
+e4c102b8-80bb-4fe3-9020-55e2e1c77522,"[""Arduino"", ""Biomedical Signal Processing"", ""Git"", ""LabVIEW"", ""MATLAB"", ""Medical Imaging"", ""SolidWorks""]",7
+d9758c73-1f57-4d15-a893-49b5f90df6b1,"[""C++"", ""Embedded C"", ""Git"", ""IoT"", ""KiCAD"", ""LabVIEW"", ""RTOS"", ""STM32"", ""Signal Processing"", ""VLSI""]",10
+e9488dc6-d1ac-430c-a5c2-850186211dc1,"[""Agile/Scrum"", ""Communication"", ""Data Analytics"", ""Financial Modeling"", ""Pitching"", ""Problem Solving"", ""Product Management"", ""Strategic Planning"", ""Team Leadership""]",9
+2b147d81-92b6-4409-aa68-a44b06e3083e,"[""Cloud Computing"", ""Communication"", ""Cybersecurity"", ""Firebase"", ""JavaScript"", ""MySQL"", ""Python"", ""Rapid Prototyping"", ""React"", ""Vue.js""]",10
+2c0d9eec-46d3-4e5d-88aa-f3fd93a302c6,"[""Arduino"", ""DCS"", ""Embedded Systems"", ""Instrumentation"", ""LabVIEW"", ""Problem Solving""]",6
+3bc2614f-c7f7-4b97-bc03-e59332e2b984,"[""Communication"", ""Data Analytics"", ""Git"", ""Product Management"", ""Strategic Planning"", ""Team Leadership""]",6
+b0473f2b-3906-4d17-835c-77d14f68153c,"[""Arduino"", ""Bioinstrumentation"", ""Biomedical Signal Processing"", ""DICOM"", ""LabVIEW"", ""MATLAB"", ""Medical AI"", ""Medical Imaging"", ""Presentation"", ""Rapid Prototyping""]",10
+9fecce85-a2ce-4a32-9236-9f7f9fae8ae8,"[""Arduino"", ""Communication"", ""DCS"", ""Embedded Systems"", ""Process Control"", ""Team Leadership""]",6
+20f0cd2f-0720-4027-a947-2e6ea888d087,"[""AutoCAD Civil 3D"", ""GIS"", ""Hydrology"", ""Problem Solving"", ""SAP2000""]",5
+6188831d-2423-4170-97be-c1ce063d2e91,"[""Burp Suite"", ""Communication"", ""Cryptography"", ""OWASP"", ""Penetration Testing"", ""Python"", ""SOC Analysis"", ""Team Leadership""]",8
+581bb5ae-aabd-47ba-8e9e-54b92e296fad,"[""AgriTech"", ""AutoCAD"", ""GIS"", ""Precision Agriculture"", ""Presentation"", ""Remote Sensing"", ""Soil Mechanics""]",7
+482ad2c1-897a-4d02-a049-2588feb555c9,"[""Adobe Illustrator"", ""CAD Fashion"", ""CLO 3D"", ""Fashion Analytics"", ""Garment Manufacturing"", ""Git"", ""Merchandising"", ""Pattern Making"", ""Textile Science""]",9
+f63bb13f-93b2-41f7-941e-269711f4d4eb,"[""Adobe Illustrator"", ""CAD Fashion"", ""CLO 3D"", ""Fashion Analytics"", ""Garment Manufacturing"", ""Merchandising"", ""Presentation"", ""Problem Solving"", ""Textile Science""]",9
+8ca7b2f9-b286-4535-ad63-ce138605bd4f,"[""Bioprocess Engineering"", ""CRISPR Design"", ""Molecular Biology"", ""Presentation"", ""Python"", ""Team Leadership""]",6
+8fddae81-3c19-442e-bb98-ee9806b04725,"[""Arduino"", ""Embedded Systems"", ""Git"", ""Instrumentation"", ""Presentation"", ""Process Control"", ""Sensors""]",7
+5650aad2-20d6-4baf-b306-cf8f848814e9,"[""Arduino"", ""Communication"", ""DCS"", ""Embedded Systems"", ""MATLAB"", ""Process Control"", ""Sensors""]",7
+202ac62b-753f-400d-902a-ec7d099233b7,"[""Big Data"", ""Communication"", ""Data Visualization"", ""Hadoop"", ""Pandas"", ""Spark""]",6
+c478ab16-73cc-4c97-a81c-03bb388a6500,"[""C++"", ""FastAPI"", ""Git"", ""Microservices"", ""Node.js"", ""PostgreSQL"", ""Rapid Prototyping"", ""Rust"", ""System Design""]",9
+ec48f2c8-387a-4ec0-b06c-7fc1298bf283,"[""AgriTech"", ""AutoCAD"", ""Drone Mapping"", ""Git"", ""Hydrology"", ""IoT Sensors"", ""Python"", ""Remote Sensing"", ""Soil Mechanics""]",9
+a7773a57-50bc-47d6-8134-aaf0c5d7ebf2,"[""Agile/Scrum"", ""Business Strategy"", ""Data Analytics"", ""Financial Modeling"", ""Market Research"", ""Pitching"", ""Presentation"", ""Product Management"", ""Strategic Planning"", ""Team Leadership""]",10
+a1b22b09-722b-4f62-beec-d3e19dbb8026,"[""ANSYS"", ""AutoCAD"", ""CATIA"", ""CFD"", ""Electric Drive Systems"", ""MATLAB"", ""Rapid Prototyping"", ""Team Leadership"", ""Thermodynamics"", ""Vehicle Dynamics""]",10
+97f73fec-5bfb-4202-afdc-2b2e1ddf4d87,"[""Bioprocess Engineering"", ""Biostatistics"", ""CRISPR Design"", ""Data Analysis"", ""Microbiology"", ""Molecular Biology"", ""PyMOL"", ""Python"", ""R"", ""Rapid Prototyping""]",10
+c9eb73ea-d077-44ec-b88c-690272b8f0e7,"[""DCS"", ""Instrumentation"", ""PLC"", ""Problem Solving"", ""Rapid Prototyping"", ""Sensors""]",6
+63d56c69-55e3-4528-b118-8b57a258f729,"[""OpenCV"", ""Problem Solving"", ""PyTorch"", ""R"", ""Rapid Prototyping"", ""TensorFlow"", ""Vector Embeddings""]",7
+1ad0e42d-8a29-459b-9e16-ebe914a2f14c,"[""Autonomous Navigation"", ""C++"", ""Gazebo"", ""Motion Planning"", ""OpenCV"", ""Problem Solving"", ""Python"", ""ROS"", ""Rapid Prototyping"", ""Robotics Kinematics"", ""SLAM""]",11
+efa39902-d69e-44f9-aad9-c9c79d10edf5,"[""Agile/Scrum"", ""Data Analytics"", ""Market Research"", ""Pitching"", ""Problem Solving"", ""Rapid Prototyping"", ""Strategic Planning"", ""Team Leadership""]",8
+29a70b35-707c-484f-8bb5-8b215d6ebcd4,"[""AgriTech"", ""Drone Mapping"", ""GIS"", ""Hydrology"", ""IoT Sensors"", ""Precision Agriculture"", ""Problem Solving"", ""Python"", ""Remote Sensing"", ""Soil Mechanics"", ""Team Leadership""]",11
+6bd9ad33-a59a-410c-b027-98aa5712fb14,"[""Bioinformatics"", ""Bioprocess Engineering"", ""Biostatistics"", ""CRISPR Design"", ""Molecular Biology"", ""Presentation"", ""PyMOL""]",7
+294e0a46-ef83-4845-864a-795ff0f17103,"[""Chemical Safety"", ""Heat Transfer"", ""MATLAB"", ""Polymer Chemistry"", ""Presentation"", ""Process Control"", ""Rapid Prototyping""]",7
+a660ca84-0849-42e6-9324-a286f016aa5b,"[""DCS"", ""Embedded Systems"", ""MATLAB"", ""Presentation"", ""Process Control""]",5
+2b6fad95-0e6a-43b5-9410-74653a40193b,"[""Burp Suite"", ""Communication"", ""Cryptography"", ""Git"", ""Linux"", ""OWASP"", ""SOC Analysis"", ""Wireshark""]",8
+2ed25303-dfc6-477c-8281-739a98dc9cd9,"[""Biomedical Signal Processing"", ""DICOM"", ""LabVIEW"", ""Medical Imaging"", ""Presentation"", ""Rapid Prototyping""]",6
+0decaf73-52c9-42b3-86a1-ab4cceda8b82,"[""ANSYS"", ""CATIA"", ""Flight Mechanics"", ""MATLAB"", ""Rapid Prototyping""]",5
+08d4043d-ffc3-492c-bacb-0a1005e4a1de,"[""Agile/Scrum"", ""Market Research"", ""Pitching"", ""Presentation"", ""Problem Solving"", ""Strategic Planning"", ""Team Leadership""]",7
+6c330b26-96e7-4e06-adf2-825da3cf559f,"[""AgriTech"", ""Communication"", ""Drone Mapping"", ""GIS"", ""Hydrology"", ""IoT Sensors"", ""Precision Agriculture"", ""Python"", ""Rapid Prototyping"", ""Remote Sensing"", ""Soil Mechanics""]",11
+47989dab-8699-407f-953a-0ee7d288cd51,"[""Geotechnical Engineering"", ""Git"", ""Hydrology"", ""Revit"", ""Structural Analysis""]",5
+4c7158f5-0178-4764-91e9-206adc1abe4b,"[""Arduino"", ""Git"", ""Instrumentation"", ""PLC"", ""Process Control""]",5
+0e6862eb-7450-4e86-a8fb-ac8b06fd7d2b,"[""Arduino"", ""IoT"", ""MATLAB"", ""PCB Design"", ""Problem Solving"", ""RF Design"", ""STM32"", ""Verilog""]",8
+fef4172a-9569-4d0a-b190-34fb043e7c40,"[""Burp Suite"", ""Cryptography"", ""Ethical Hacking"", ""Metasploit"", ""Network Security"", ""OWASP"", ""Penetration Testing"", ""SOC Analysis"", ""Team Leadership"", ""Wireshark""]",10
+ce451e53-7a3e-478e-827e-ca40c205a0e3,"[""Drone Mapping"", ""GIS"", ""Git"", ""Hydrology"", ""Remote Sensing"", ""Soil Mechanics"", ""Team Leadership""]",7
+0c20e0a5-30d5-4525-a0ae-81b220872998,"[""Arena Simulation"", ""Ergonomics"", ""Lean Manufacturing"", ""Operations Research"", ""Presentation"", ""Python"", ""Six Sigma"", ""Supply Chain"", ""Team Leadership""]",9
+7eae055b-58e7-4ccf-b97e-b3d17f153640,"[""Arduino"", ""Communication"", ""Control Systems"", ""Power Electronics"", ""Proteus"", ""Rapid Prototyping"", ""SCADA"", ""Simulink""]",8
+ea4753a7-445e-4faa-88bd-cf82789bca37,"[""Firebase"", ""Networking"", ""Presentation"", ""Problem Solving"", ""REST API"", ""React"", ""Tailwind CSS""]",7
+fe911f5a-e48a-4d6e-b234-3da83a349930,"[""Cloud Computing"", ""Software Engineering"", ""Spring Boot"", ""Team Leadership"", ""Web Development""]",5
+7465b2ff-ad02-4e92-a603-cc3d842cfced,"[""Arena Simulation"", ""Communication"", ""Ergonomics"", ""Git"", ""SQL"", ""Tableau""]",6
+4ab5a38a-79d5-4b12-8437-9bfe42044454,"[""Biostatistics"", ""Data Analysis"", ""Genomics"", ""Microbiology"", ""Molecular Biology"", ""Presentation""]",6
+03e9d033-81a7-4e41-826e-0f695e2ea75b,"[""Arduino"", ""C++"", ""Communication"", ""MATLAB"", ""Presentation"", ""RF Design"", ""Signal Processing"", ""VHDL"", ""VLSI"", ""Verilog""]",10
+4cf65dd2-ee7a-4220-9174-7b844f8fcf41,"[""Communication"", ""Cryptography"", ""Ethical Hacking"", ""Linux"", ""Metasploit"", ""OWASP"", ""Penetration Testing"", ""SOC Analysis"", ""Wireshark""]",9
+6af6d70b-45e8-410c-89cf-1c8fa4574c85,"[""ASPEN Plus"", ""Chemical Safety"", ""Communication"", ""Fluid Mechanics"", ""Heat Transfer"", ""Polymer Chemistry"", ""Process Control"", ""Reaction Engineering""]",8
+c025d911-ca47-4671-903f-1caffc764350,"[""Motion Planning"", ""Problem Solving"", ""Robotics Kinematics"", ""SLAM"", ""Sensor Fusion""]",5
+72848f00-32d0-4c87-a52e-9346570c5189,"[""Microcontrollers"", ""PCB Design"", ""PLC"", ""Presentation"", ""Python"", ""ROS"", ""Rapid Prototyping"", ""Sensors"", ""SolidWorks""]",9
+96ebb060-cb7a-48bc-b2e3-6af9fc20d345,"[""CAD Fashion"", ""CLO 3D"", ""Fashion Analytics"", ""Merchandising"", ""Pattern Making"", ""Problem Solving""]",6
+cf1e539f-ead8-4a9f-9648-f90c9abbaa41,"[""C++"", ""Control Theory"", ""Hydraulics"", ""Microcontrollers"", ""PCB Design"", ""PLC"", ""Pneumatics"", ""Problem Solving"", ""ROS2"", ""SolidWorks""]",10
+4840528d-44a9-4c59-b980-d62a7738dead,"[""Aerodynamics"", ""CFD"", ""Flight Mechanics"", ""Orbital Mechanics"", ""Presentation"", ""Problem Solving""]",6
+7920e9ba-5787-4e49-814d-3a6830d89f66,"[""Feature Engineering"", ""Pandas"", ""Problem Solving"", ""Prompt Engineering"", ""Python"", ""R"", ""Scikit-Learn"", ""TensorFlow""]",8
+f20141f3-3ec6-4d75-aab3-43d409ef72d5,"[""Docker"", ""Git"", ""HTML/CSS"", ""MongoDB"", ""MySQL"", ""Problem Solving"", ""Vue.js""]",7
+fb226637-2562-4854-b14a-c221fc1c16f5,"[""Arena Simulation"", ""Communication"", ""Ergonomics"", ""Lean Manufacturing"", ""Operations Research"", ""Presentation"", ""Process Optimization"", ""Python"", ""SQL"", ""Six Sigma"", ""Supply Chain""]",11
+f7b70b73-2af4-4692-a81e-e6701cc777f8,"[""Bioinformatics"", ""Bioprocess Engineering"", ""Biostatistics"", ""Data Analysis"", ""Genomics"", ""Git"", ""Microbiology"", ""Molecular Biology"", ""PyMOL"", ""Team Leadership""]",10
+58789ed6-e1bc-4d0d-b96e-2f56072b273f,"[""ASPEN Plus"", ""CHEMCAD"", ""Chemical Safety"", ""Mass Transfer"", ""Polymer Chemistry"", ""Process Control"", ""Rapid Prototyping""]",7
+2051f1b1-c94b-48cd-b22b-3b109fa0bc9a,"[""3D Printing"", ""AutoCAD"", ""Fusion 360"", ""Presentation"", ""Rapid Prototyping"", ""Thermodynamics""]",6
+ab16a8ed-a23b-48a9-a4f1-6dbf237e9f9b,"[""Bioprocess Engineering"", ""Biostatistics"", ""Molecular Biology"", ""Python"", ""Rapid Prototyping"", ""Team Leadership""]",6
+5fac1111-acb9-4ca4-aef3-3570b9713ec1,"[""Cybersecurity"", ""DevOps"", ""Docker"", ""HTML/CSS"", ""JavaScript"", ""Node.js"", ""Presentation"", ""Python"", ""REST API"", ""Rapid Prototyping""]",10
+382513f3-1f6e-46a2-bd96-deed53e75a83,"[""AutoCAD"", ""CATIA"", ""CFD"", ""FEA"", ""GD&T"", ""Git""]",6
+bd1afdfb-8481-4dec-afac-ef902e110152,"[""ASPEN Plus"", ""CHEMCAD"", ""Chemical Safety"", ""Fluid Mechanics"", ""Heat Transfer"", ""Mass Transfer"", ""Polymer Chemistry"", ""Presentation"", ""Problem Solving"", ""Process Control"", ""Reaction Engineering""]",11
+b39b7e89-5127-4811-914d-ab307bcb6379,"[""ANSYS"", ""CATIA"", ""CFD"", ""Flight Mechanics"", ""OpenFOAM"", ""Orbital Mechanics"", ""Propulsion Systems"", ""Rapid Prototyping"", ""SolidWorks""]",9
+11b8d863-7acf-442d-bcc7-a0b1f0a62bd3,"[""Arena Simulation"", ""Git"", ""Problem Solving"", ""Python"", ""Six Sigma"", ""Supply Chain"", ""Tableau""]",7
+49d37776-22f9-4efe-8ffc-2b6f76e8f19c,"[""AutoCAD"", ""Communication"", ""Drone Mapping"", ""Hydrology"", ""Presentation"", ""Soil Mechanics""]",6
+c9831642-b32a-482c-8fe5-23aa771dc05a,"[""AWS"", ""Cloud Computing"", ""DevOps"", ""Git"", ""Networking"", ""Python"", ""Rapid Prototyping"", ""Tailwind CSS"", ""Vue.js""]",9
+69079a57-0cef-4caa-8291-7f48b2a1ede0,"[""Database Administration"", ""MySQL"", ""Presentation"", ""Python"", ""React"", ""Software Engineering"", ""Spring Boot"", ""Team Leadership""]",8
+c832156b-9640-4fc0-bdab-bf9bf717d549,"[""Business Strategy"", ""Data Analytics"", ""Financial Modeling"", ""Git"", ""Market Research"", ""Pitching"", ""Product Management"", ""Strategic Planning"", ""Team Leadership""]",9
+5be666bd-5141-4449-8892-1e2a361b2e84,"[""Business Strategy"", ""Data Analytics"", ""Financial Modeling"", ""Market Research"", ""Pitching"", ""Product Management"", ""Rapid Prototyping"", ""Strategic Planning"", ""Team Leadership""]",9
+9cd942b8-00f7-495c-9c10-d6c9e2b36f57,"[""Arduino"", ""Communication"", ""Embedded Systems"", ""Instrumentation"", ""LabVIEW"", ""MATLAB"", ""PLC"", ""Process Control"", ""SCADA"", ""Sensors""]",10
+345ab973-cb26-4074-b96f-6db8f8e892c3,"[""Communication"", ""Deep Learning"", ""Generative AI"", ""HuggingFace"", ""Keras"", ""NLP"", ""Problem Solving"", ""Python"", ""RAG"", ""Transformer Models""]",10
+b2b9f627-8889-463c-82ff-a50141a94031,"[""Android"", ""Cloud Computing"", ""Communication"", ""Database Administration"", ""Java"", ""MySQL"", ""React"", ""Software Engineering"", ""Spring Boot"", ""Web Development""]",10
+25809a2e-3393-426e-a9de-de07ad084080,"[""MLOps"", ""Pandas"", ""Presentation"", ""Rapid Prototyping"", ""SQL"", ""TensorFlow""]",6
+b40d6b8e-760e-4dd4-9ba6-8fbc4b81f9ab,"[""Bioinformatics"", ""CRISPR Design"", ""Genomics"", ""Microbiology"", ""R"", ""Team Leadership""]",6
+d052c5f3-b891-454a-84df-4065759115f4,"[""Communication"", ""Cryptography"", ""Ethical Hacking"", ""Linux"", ""Metasploit"", ""Network Security"", ""Penetration Testing"", ""Team Leadership"", ""Wireshark""]",9
+753d8230-daf5-4396-9960-a7410277fe37,"[""Ergonomics"", ""Lean Manufacturing"", ""Operations Research"", ""Process Optimization"", ""Rapid Prototyping"", ""SQL"", ""Supply Chain""]",7
+4249c069-1499-4bb4-a274-9589707c4ae3,"[""ASPEN Plus"", ""Chemical Safety"", ""Fluid Mechanics"", ""Git"", ""Mass Transfer"", ""Polymer Chemistry"", ""Presentation"", ""Process Control"", ""Reaction Engineering""]",9
+2307d6c1-e503-4021-b867-985d5bdef21c,"[""Arduino"", ""Control Systems"", ""ETAP"", ""Git"", ""IoT Sensors"", ""LabVIEW"", ""Microcontrollers"", ""Power Electronics"", ""SCADA"", ""Simulink"", ""Team Leadership""]",11
+8fb8eaf8-4080-46bb-b74e-1242acd68205,"[""ETAP"", ""LabVIEW"", ""MATLAB"", ""Microcontrollers"", ""Power Systems"", ""Proteus"", ""Rapid Prototyping"", ""SCADA"", ""Simulink"", ""Team Leadership""]",10
+a483616c-ea51-4637-8408-10f68d7edbd4,"[""3D Printing"", ""AutoCAD"", ""CNC Programming"", ""Fluid Mechanics"", ""Fusion 360"", ""MATLAB"", ""Presentation"", ""SolidWorks"", ""Team Leadership"", ""Thermodynamics""]",10
+d0055477-7c39-4e7f-825f-830145a39bcf,"[""C++"", ""Hydraulics"", ""PLC"", ""Pneumatics"", ""Problem Solving"", ""Team Leadership""]",6
+6d5dbc88-26f2-437d-a615-0271948bfefd,"[""Data Visualization"", ""Git"", ""Hadoop"", ""Power BI"", ""Presentation"", ""R"", ""Spark""]",7
+375f70ab-cece-48f6-a17c-d18f2d3fca7a,"[""ANSYS"", ""CFD"", ""Orbital Mechanics"", ""Presentation"", ""Propulsion Systems""]",5
+f4ba3a88-533b-438e-8ace-e729250c8304,"[""Cybersecurity"", ""DevOps"", ""Express.js"", ""Git"", ""HTML/CSS"", ""MySQL"", ""Python"", ""REST API"", ""React"", ""Team Leadership"", ""Vue.js""]",11
+a8a41195-09bf-4827-8e15-3c311e65a5a4,"[""Deep Learning"", ""Git"", ""MLOps"", ""Power BI"", ""Prompt Engineering"", ""Rapid Prototyping""]",6
+ddd531e1-0440-48ae-800a-f20c41af69f6,"[""Aerodynamics"", ""CFD"", ""OpenFOAM"", ""Orbital Mechanics"", ""Rapid Prototyping"", ""SolidWorks""]",6
+1cff6ddb-077c-49a3-b9b1-c7cdad5c5a66,"[""C++"", ""Kinematics"", ""Microcontrollers"", ""PLC"", ""Pneumatics"", ""ROS"", ""Rapid Prototyping"", ""Sensors"", ""SolidWorks"", ""Team Leadership""]",10
+3c6e4855-a064-45ef-9ba1-692a2a1c9770,"[""Arduino"", ""Bioinstrumentation"", ""Biomedical Signal Processing"", ""DICOM"", ""LabVIEW"", ""MATLAB"", ""Medical AI"", ""Medical Imaging"", ""Presentation"", ""Sensor Design""]",10
+aea35633-2c28-4426-97f5-9cc483a2646b,"[""Ethical Hacking"", ""Metasploit"", ""Presentation"", ""Problem Solving"", ""Python"", ""Wireshark""]",6
+6dda9196-0380-414d-9235-c10e43fb414e,"[""3ds Max"", ""AutoCAD"", ""BIM"", ""Communication"", ""Grasshopper"", ""Lumion"", ""Presentation"", ""Revit"", ""Rhino"", ""Sustainable Design"", ""Urban Planning""]",11
+cccfb865-01b3-442e-b740-e0b81f505d2a,"[""Computer Vision"", ""Deep Learning"", ""Generative AI"", ""Git"", ""HuggingFace"", ""Prompt Engineering"", ""PyTorch"", ""Python"", ""Team Leadership""]",9
+03475a14-2a18-4b0b-93f5-ee3f95eb5625,"[""Arduino"", ""C++"", ""Hydraulics"", ""Kinematics"", ""Microcontrollers"", ""PLC"", ""Pneumatics"", ""Problem Solving"", ""Sensors"", ""SolidWorks""]",10
+8157aedf-3cb8-41e6-acac-ca31f4256129,"[""Biomedical Signal Processing"", ""Medical AI"", ""Medical Imaging"", ""Rapid Prototyping"", ""Sensor Design"", ""SolidWorks"", ""Team Leadership""]",7
+3379e8e7-6522-45ad-8b4b-c42d65e752d1,"[""Communication"", ""Pandas"", ""Power BI"", ""Prompt Engineering"", ""SQL"", ""Scikit-Learn"", ""Team Leadership"", ""Vector Embeddings""]",8
+9ae589e7-8191-4300-a84f-0a6aad97c42a,"[""ANSYS"", ""Aerodynamics"", ""CATIA"", ""CFD"", ""Flight Mechanics"", ""MATLAB"", ""OpenFOAM"", ""Orbital Mechanics"", ""Presentation"", ""SolidWorks"", ""Team Leadership""]",11
+1f9bd25e-d55e-432f-906d-be2832e0475f,"[""Android"", ""Cloud Computing"", ""Java"", ""Problem Solving"", ""Python"", ""React"", ""Software Engineering"", ""Spring Boot"", ""Web Development""]",9
+c3febd84-97be-4ed0-9a7b-3c274724031a,"[""AutoCAD"", ""Communication"", ""GIS"", ""Geotechnical Engineering"", ""Structural Analysis""]",5
+46a01596-9eb8-4790-9e04-ba845207e836,"[""Arduino"", ""DCS"", ""Embedded Systems"", ""Instrumentation"", ""MATLAB"", ""Problem Solving"", ""Process Control"", ""SCADA"", ""Sensors""]",9
+4255926b-5147-4f6a-8eed-9479ec273f86,"[""Biomedical Signal Processing"", ""DICOM"", ""Medical AI"", ""SolidWorks"", ""Team Leadership""]",5
+dfc2ebc8-5500-4b50-82be-d77462e965ee,"[""3ds Max"", ""AutoCAD"", ""BIM"", ""Communication"", ""Grasshopper"", ""Lumion"", ""SketchUp"", ""Sustainable Design"", ""Urban Planning""]",9
+1a936a97-805b-4cee-9aec-926daf068aae,"[""Arena Simulation"", ""Communication"", ""Ergonomics"", ""Presentation"", ""Process Optimization"", ""Python"", ""SQL"", ""Six Sigma"", ""Supply Chain"", ""Tableau""]",10
+a6cacd0c-eb5c-486a-a0d1-251027a2b59b,"[""Arduino"", ""Communication"", ""ESP32"", ""KiCAD"", ""MATLAB"", ""STM32"", ""Signal Processing"", ""Verilog""]",8
+1dcf8fd7-0579-4c7d-b867-2e6bdb73e5eb,"[""ANSYS"", ""CATIA"", ""Communication"", ""Electric Drive Systems"", ""MATLAB"", ""SolidWorks"", ""Thermodynamics"", ""Vehicle Dynamics""]",8
+9bcd80ff-d980-4c47-8d24-7aefd1f1c6d6,"[""ANSYS"", ""AutoCAD"", ""CNC Programming"", ""Communication"", ""Fluid Mechanics"", ""GD&T"", ""Git"", ""MATLAB"", ""Rapid Prototyping"", ""SolidWorks"", ""Thermodynamics""]",11
+8484aefb-b48a-4def-9957-9096f3e5b8dd,"[""AutoCAD"", ""AutoCAD Civil 3D"", ""BIM"", ""Geotechnical Engineering"", ""Git"", ""Primavera""]",6
+a35e9631-e4eb-4557-a26b-6f2609559a9e,"[""Agile/Scrum"", ""Business Strategy"", ""Communication"", ""Data Analytics"", ""Financial Modeling"", ""Market Research"", ""Product Management"", ""Strategic Planning""]",8
+6d281b14-0770-4794-8714-213a98a8e198,"[""Android"", ""Presentation"", ""Python"", ""React"", ""Software Engineering"", ""Spring Boot"", ""Web Development""]",7
+121f5340-fe3c-4efd-b588-5f2655416124,"[""ANSYS"", ""AutoCAD"", ""CNC Programming"", ""FEA"", ""Fluid Mechanics"", ""GD&T"", ""MATLAB"", ""Presentation"", ""Rapid Prototyping""]",9
+ab705e8f-b858-4065-affb-a97c46bc3581,"[""Git"", ""HuggingFace"", ""Keras"", ""Scikit-Learn"", ""Transformer Models""]",5
+3b352acc-0fa8-4b83-9f14-78ace8ade551,"[""Communication"", ""Go"", ""GraphQL"", ""Linux"", ""Presentation"", ""Python"", ""Rust""]",7
+df380874-aadc-4db9-bf1b-e42b838fb0f6,"[""Android"", ""Cloud Computing"", ""Database Administration"", ""Java"", ""MySQL"", ""Rapid Prototyping"", ""Spring Boot"", ""Team Leadership"", ""Web Development""]",9
+ed3f2794-a992-4ce0-bd83-2a067fc1022e,"[""Agile/Scrum"", ""Data Analytics"", ""Pitching"", ""Rapid Prototyping"", ""Strategic Planning""]",5
+98819017-823e-4fb9-8740-a987af1920e0,"[""Git"", ""GraphQL"", ""Linux"", ""Microservices"", ""Problem Solving"", ""Redis""]",6
+65fb74d3-9211-4e75-a64c-e76a89893ccc,"[""DCS"", ""Embedded Systems"", ""Git"", ""Instrumentation"", ""MATLAB"", ""PLC"", ""Process Control"", ""SCADA""]",8
+4740cd5d-ac02-4515-ac53-2040e26b69ba,"[""Cybersecurity"", ""Docker"", ""Git"", ""JavaScript"", ""MySQL"", ""Presentation"", ""Python"", ""REST API"", ""Tailwind CSS"", ""Vue.js""]",10
+4f42d475-c776-472f-a67f-3721710ad8fa,"[""Android"", ""Cloud Computing"", ""Communication"", ""Database Administration"", ""Java"", ""MySQL"", ""Python"", ""Software Engineering"", ""Spring Boot""]",9
+e431f3da-f600-4d0f-ba76-86bf19ae9a0d,"[""HuggingFace"", ""NLP"", ""Python"", ""Scikit-Learn"", ""Team Leadership"", ""TensorFlow""]",6
+360fc955-3175-4c3d-9b68-b9c3dc856b80,"[""C++"", ""Hydraulics"", ""Kinematics"", ""Microcontrollers"", ""PCB Design"", ""PLC"", ""ROS"", ""ROS2"", ""SolidWorks"", ""Team Leadership""]",10
+d959640c-36fa-40d3-9f9a-7f94c52bddb7,"[""Feature Engineering"", ""NumPy"", ""Power BI"", ""Presentation"", ""SQL"", ""Vector Embeddings""]",6
+c3b38c11-0bcb-49fb-91ff-75f472399a74,"[""Communication"", ""Docker"", ""Git"", ""Go"", ""GraphQL"", ""Redis""]",6
+7ca1631a-6a33-4d50-b7c4-1812a5884003,"[""Agile/Scrum"", ""Business Strategy"", ""Data Analytics"", ""Git"", ""Market Research"", ""Pitching"", ""Problem Solving"", ""Product Management"", ""Strategic Planning"", ""Team Leadership""]",10
+3c7d4f2c-e091-420f-812c-b1f63fa6cc28,"[""Communication"", ""ESP32"", ""FPGA"", ""Git"", ""IoT"", ""LabVIEW"", ""MATLAB"", ""RF Design"", ""Signal Processing"", ""Verilog""]",10
+11cb9f36-3aa0-45ce-b350-da69f16b4894,"[""Heat Transfer"", ""MATLAB"", ""Presentation"", ""Process Control"", ""Rapid Prototyping"", ""Reaction Engineering""]",6
+10736425-57d9-44fa-9944-ecb1440f16cc,"[""Adobe Illustrator"", ""CLO 3D"", ""Git"", ""Merchandising"", ""Pattern Making"", ""Team Leadership""]",6
+a79e2fc6-d588-48d8-aacc-30ae69842200,"[""Deep Learning"", ""Prompt Engineering"", ""PyTorch"", ""Rapid Prototyping"", ""SQL"", ""TensorFlow"", ""Vector Embeddings""]",7
+c5c58e75-ab1c-4fcb-9908-a0ebf6929c26,"[""Android"", ""Cloud Computing"", ""Database Administration"", ""Java"", ""Python"", ""React"", ""Software Engineering"", ""Spring Boot"", ""Team Leadership"", ""Web Development""]",10
+aa8e0419-6869-4352-9957-c2ce19a4df19,"[""Cryptography"", ""Ethical Hacking"", ""Linux"", ""Metasploit"", ""Network Security"", ""OWASP"", ""Penetration Testing"", ""Python"", ""Rapid Prototyping"", ""Wireshark""]",10
+bf71b5af-5a4f-4e44-ba7a-ca87d9f090ff,"[""Arena Simulation"", ""Git"", ""Operations Research"", ""Problem Solving"", ""Process Optimization"", ""Python"", ""SQL"", ""Tableau""]",8
+ae3dcd6d-68be-4555-8891-2616eea6618b,"[""Big Data"", ""Communication"", ""Data Visualization"", ""Pandas"", ""Power BI"", ""Python"", ""R"", ""Rapid Prototyping"", ""SQL"", ""Spark"", ""Statistical Modeling""]",11
+9544d1fd-71c1-42c2-9919-89bc5fc210bf,"[""Pandas"", ""Presentation"", ""Python"", ""R"", ""Vector Embeddings""]",5
+501caa1d-90ea-4e3d-a62b-21d64b15838b,"[""ASPEN Plus"", ""CHEMCAD"", ""Chemical Safety"", ""Fluid Mechanics"", ""Heat Transfer"", ""Mass Transfer"", ""Presentation"", ""Process Control"", ""Team Leadership""]",9
+f8ec485a-c1a7-4210-9311-e69a848199f8,"[""AgriTech"", ""AutoCAD"", ""Drone Mapping"", ""Git"", ""Hydrology"", ""Precision Agriculture"", ""Presentation"", ""Remote Sensing""]",8
+d34a1614-05f3-4f9a-88bf-dc0bf2b5aca7,"[""Deep Learning"", ""Git"", ""Keras"", ""Presentation"", ""PyTorch"", ""Scikit-Learn"", ""TensorFlow""]",7
+6c5a40d6-81b7-4c8c-8a43-28cbe9f7b6b1,"[""Arduino"", ""C++"", ""ESP32"", ""Embedded C"", ""FPGA"", ""MATLAB"", ""Problem Solving"", ""Signal Processing"", ""VHDL"", ""Verilog""]",10
+60bb75a2-5063-493a-8b0d-af43bcb01f84,"[""Arduino"", ""Embedded Systems"", ""PLC"", ""Rapid Prototyping"", ""Sensors""]",5
+c443afae-85b7-4769-9c9b-3aa42d2f9b49,"[""AgriTech"", ""AutoCAD"", ""Drone Mapping"", ""GIS"", ""Git"", ""Hydrology"", ""Precision Agriculture"", ""Presentation"", ""Python"", ""Remote Sensing"", ""Soil Mechanics""]",11
+31923181-f583-4704-8bd5-7071757bb7b2,"[""Data Visualization"", ""Pandas"", ""Problem Solving"", ""R"", ""SQL"", ""Spark"", ""Statistical Modeling"", ""Tableau"", ""Team Leadership""]",9
+dcb6a76d-24ae-4ddd-b286-849f0bc7b932,"[""Arduino"", ""Bioinstrumentation"", ""DICOM"", ""Git"", ""Medical AI"", ""Presentation"", ""SolidWorks""]",7
+fd53b824-68d3-4bf7-b335-9690414454ca,"[""Communication"", ""Gazebo"", ""Motion Planning"", ""OpenCV"", ""ROS2"", ""Raspberry Pi"", ""Robotics Kinematics"", ""Sensor Fusion"", ""SolidWorks"", ""Team Leadership""]",10
+15d763c8-c667-47dc-b0e4-4b655fcbea47,"[""Data Analysis"", ""NLP"", ""Power BI"", ""Presentation"", ""R"", ""SQL"", ""Scikit-Learn""]",7
+dff336e8-f014-4b2f-8fc6-e0d658b2c6ee,"[""Generative AI"", ""LangChain"", ""NLP"", ""Prompt Engineering"", ""PyTorch"", ""RAG"", ""Rapid Prototyping"", ""Scikit-Learn"", ""Transformer Models"", ""Vector Databases""]",10
+5c9edf70-b59e-4883-a7bb-83d28eedbee5,"[""Biomedical Signal Processing"", ""DICOM"", ""Git"", ""LabVIEW"", ""Medical AI"", ""Rapid Prototyping"", ""Sensor Design"", ""SolidWorks""]",8
+017a104d-03fa-4f29-9982-6dda6a7f45c0,"[""Communication"", ""Control Systems"", ""LabVIEW"", ""MATLAB"", ""PLC"", ""Presentation"", ""Simulink""]",7
+f2eaf3e8-b75a-47bc-9b11-9b7cd993df87,"[""Arduino"", ""Communication"", ""FPGA"", ""KiCAD"", ""LabVIEW"", ""Problem Solving"", ""RF Design"", ""STM32"", ""Signal Processing"", ""VLSI""]",10
+76a0650f-3ab3-46ef-a7bd-0757f8840278,"[""Control Theory"", ""Git"", ""Kinematics"", ""Pneumatics"", ""Sensors""]",5
+0664ac18-e4b1-4687-a748-cf62f7e567f9,"[""Arduino"", ""DCS"", ""Embedded Systems"", ""Instrumentation"", ""LabVIEW"", ""MATLAB"", ""PLC"", ""Process Control"", ""SCADA"", ""Team Leadership""]",10
+67a16551-d041-4a02-a244-08dfd022fb0c,"[""Communication"", ""Database Administration"", ""Java"", ""Problem Solving"", ""React"", ""Spring Boot""]",6
+bd82c70c-8fc0-4f72-a2ed-52a22a50ea58,"[""AWS"", ""DevOps"", ""Firebase"", ""HTML/CSS"", ""JavaScript"", ""Presentation"", ""Tailwind CSS"", ""Vue.js""]",8
+fba696b3-c8c2-4675-ba02-4061a30aef16,"[""CHEMCAD"", ""Fluid Mechanics"", ""Git"", ""Heat Transfer"", ""MATLAB"", ""Mass Transfer"", ""Reaction Engineering""]",7
+4bf3230d-f348-44df-8f97-f2f8545feb5b,"[""Arena Simulation"", ""Ergonomics"", ""Lean Manufacturing"", ""Operations Research"", ""Process Optimization"", ""Python"", ""SQL"", ""Supply Chain"", ""Tableau"", ""Team Leadership""]",10
+2af7712b-5192-4039-b527-b1a51858eda8,"[""Communication"", ""Docker"", ""Git"", ""Go"", ""JavaScript"", ""Linux"", ""Microservices"", ""Python"", ""Redis"", ""Rust""]",10
+1ec54584-53e9-4aeb-849b-1ecb628f6920,"[""Keras"", ""NLP"", ""Prompt Engineering"", ""PyTorch"", ""RAG"", ""Rapid Prototyping"", ""Scikit-Learn"", ""Team Leadership"", ""TensorFlow"", ""Transformer Models"", ""Vector Databases""]",11
+fa9c63b6-6671-44c4-a83a-564068563133,"[""Data Visualization"", ""Hadoop"", ""Pandas"", ""Power BI"", ""Rapid Prototyping"", ""Scikit-Learn""]",6
+69f3a439-decd-43f9-bbdd-a6d89724db17,"[""3D Printing"", ""CATIA"", ""FEA"", ""GD&T"", ""MATLAB"", ""Presentation"", ""Rapid Prototyping""]",7
+0b5106f1-f666-4035-8004-d8f2e00a6a1d,"[""Big Data"", ""Communication"", ""Data Visualization"", ""Power BI"", ""SQL"", ""Spark"", ""Statistical Modeling"", ""Team Leadership""]",8
+d0b145e9-d7e7-4c2c-8a38-d3590f04765d,"[""Bioinformatics"", ""Bioprocess Engineering"", ""Biostatistics"", ""CRISPR Design"", ""Communication"", ""Data Analysis"", ""Microbiology"", ""Molecular Biology"", ""Python""]",9
+cba3356f-8ea7-4b80-afcb-bdb783165508,"[""Cryptography"", ""Ethical Hacking"", ""Git"", ""Linux"", ""OWASP"", ""Rapid Prototyping""]",6
+6784c2a4-5419-4346-bd1e-8ddef76ea579,"[""Big Data"", ""Rapid Prototyping"", ""SQL"", ""Scikit-Learn"", ""Tableau"", ""Team Leadership""]",6
+3ee193d8-7126-4f80-b986-fd42c72759c2,"[""3D Printing"", ""ANSYS"", ""AutoCAD"", ""CATIA"", ""CNC Programming"", ""GD&T"", ""Rapid Prototyping"", ""SolidWorks"", ""Team Leadership"", ""Thermodynamics""]",10
+d0eb8a5d-6237-4eec-a4e0-158099cc2659,"[""AWS"", ""Docker"", ""Networking"", ""Presentation"", ""Python"", ""REST API"", ""Vue.js""]",7
+b94dbd3e-01cf-41d6-986f-f35a63a849a8,"[""BIM"", ""Geotechnical Engineering"", ""Primavera"", ""Problem Solving"", ""Revit"", ""SAP2000"", ""Structural Analysis""]",7
+e20b63aa-1094-46b0-89e8-7e6311e5962c,"[""Autonomous Navigation"", ""Git"", ""Python"", ""ROS2"", ""Rapid Prototyping"", ""SolidWorks""]",6
+49c9b4ca-d134-4461-a277-992b4d6ed843,"[""Battery Management"", ""CATIA"", ""MATLAB"", ""Problem Solving"", ""Rapid Prototyping"", ""Thermodynamics"", ""Vehicle Dynamics""]",7
+1b0eb8d9-5d90-4feb-85f8-57e9bb66294b,"[""Android"", ""Communication"", ""Java"", ""Python"", ""React"", ""Software Engineering"", ""Team Leadership""]",7
+a229e7eb-4cc4-4904-bc99-f96417bb5bf0,"[""Agile/Scrum"", ""Business Strategy"", ""Data Analytics"", ""Financial Modeling"", ""Market Research"", ""Pitching"", ""Product Management"", ""Rapid Prototyping"", ""Strategic Planning"", ""Team Leadership""]",10
+67a7cfcd-2ec3-4d77-a65d-e632b87f5456,"[""Agile/Scrum"", ""Data Analytics"", ""Financial Modeling"", ""Market Research"", ""Product Management"", ""Rapid Prototyping"", ""Strategic Planning""]",7
+16e1d5c0-c928-45c9-9206-d483c8771a33,"[""AgriTech"", ""Drone Mapping"", ""GIS"", ""IoT Sensors"", ""Python"", ""Remote Sensing"", ""Team Leadership""]",7
+b7e2ecbc-d330-413a-92ac-d3f85a79ef85,"[""Cloud Computing"", ""Cybersecurity"", ""Docker"", ""Express.js"", ""JavaScript"", ""MongoDB"", ""Networking"", ""React"", ""Tailwind CSS"", ""Team Leadership""]",10
+1044be72-5821-47e7-92b6-0796d7cba486,"[""Communication"", ""Keras"", ""NLP"", ""Rapid Prototyping"", ""TensorFlow"", ""Vector Databases""]",6
+ebd67270-7b36-40e2-ba76-ffe10b3142c3,"[""3ds Max"", ""BIM"", ""Grasshopper"", ""Lumion"", ""Presentation"", ""Problem Solving"", ""Revit"", ""Urban Planning""]",8
+14f94e94-7722-4ae8-8b7e-be63c79c6533,"[""AutoCAD"", ""AutoCAD Civil 3D"", ""Communication"", ""ETABS"", ""Geotechnical Engineering"", ""Hydrology"", ""Primavera"", ""Revit"", ""Surveying"", ""Team Leadership""]",10
+84b11712-b999-4294-9216-31439dee842d,"[""Cryptography"", ""Penetration Testing"", ""Presentation"", ""Problem Solving"", ""SOC Analysis"", ""Wireshark""]",6
+41548c0f-f749-405b-8baa-0d455112ae92,"[""Docker"", ""FastAPI"", ""Kubernetes"", ""Linux"", ""Microservices"", ""REST API"", ""Redis"", ""Team Leadership""]",8
+c0d7e26a-5ff2-486e-9549-731319f1a415,"[""ANSYS"", ""Aerodynamics"", ""Flight Mechanics"", ""MATLAB"", ""OpenFOAM"", ""Orbital Mechanics"", ""Presentation"", ""Propulsion Systems"", ""SolidWorks""]",9
+408c11bf-3b81-445f-b34d-5dc8d82d98a6,"[""Control Theory"", ""Hydraulics"", ""Presentation"", ""Python"", ""Rapid Prototyping"", ""Sensors""]",6
+72784713-9bf5-4872-b81e-90d330240b55,"[""Arduino"", ""ETAP"", ""IoT Sensors"", ""Power Electronics"", ""Power Systems"", ""Problem Solving"", ""Proteus"", ""SCADA"", ""Simulink""]",9
+2eb80ac5-5cde-49bd-92de-1cea1c48bc1e,"[""ASPEN Plus"", ""CHEMCAD"", ""Fluid Mechanics"", ""Heat Transfer"", ""Presentation"", ""Problem Solving"", ""Process Control"", ""Reaction Engineering""]",8
+ae7ebec1-fd6e-42b9-8252-7ca6592ae554,"[""Heat Transfer"", ""MATLAB"", ""Polymer Chemistry"", ""Reaction Engineering"", ""Team Leadership""]",5
+8232d63e-d487-4977-bd32-327717e11fb0,"[""CI/CD"", ""Git"", ""Go"", ""Kubernetes"", ""PostgreSQL"", ""Presentation"", ""TypeScript""]",7
+387913f7-3bc9-49cb-8fe2-9330745c9851,"[""Big Data"", ""Data Visualization"", ""Hadoop"", ""Pandas"", ""Power BI"", ""Problem Solving"", ""Python"", ""R"", ""SQL"", ""Scikit-Learn"", ""Team Leadership""]",11
+937d18e2-38a4-4b49-a93a-047fab3db10e,"[""CI/CD"", ""Communication"", ""Linux"", ""Microservices"", ""REST API"", ""System Design""]",6
+9c588639-a077-4e52-b96e-abc5b46ed667,"[""Hydraulics"", ""Kinematics"", ""PCB Design"", ""PLC"", ""Pneumatics"", ""Presentation"", ""Rapid Prototyping"", ""Sensors"", ""SolidWorks""]",9
+e08544ce-9fea-4ed5-926b-df8a4054cef4,"[""FastAPI"", ""Git"", ""Go"", ""JavaScript"", ""REST API"", ""Redis"", ""Rust"", ""TypeScript""]",8
+11ae27ca-bf45-46bd-9607-4def4f4b9847,"[""Adobe Illustrator"", ""CAD Fashion"", ""CLO 3D"", ""Fashion Analytics"", ""Garment Manufacturing"", ""Git"", ""Merchandising"", ""Pattern Making"", ""Textile Science""]",9
+5bb79aa1-96a0-4574-ab8a-8a44cc9b7d84,"[""Data Analysis"", ""NumPy"", ""Pandas"", ""PyTorch"", ""R"", ""Rapid Prototyping"", ""SQL"", ""Team Leadership"", ""TensorFlow"", ""Vector Embeddings""]",10
+e12d2d84-0277-4bcb-84ff-63450e3cc004,"[""Arduino"", ""DCS"", ""Embedded Systems"", ""Git"", ""Instrumentation"", ""LabVIEW"", ""Process Control"", ""SCADA""]",8
+fe99f611-2c6c-4443-b5ca-7a9efb2bbdf1,"[""AWS"", ""Cybersecurity"", ""Docker"", ""Firebase"", ""HTML/CSS"", ""Node.js"", ""Problem Solving"", ""REST API"", ""Tailwind CSS"", ""Team Leadership""]",10
+b3b6351b-3567-4776-9e69-58952ccbd617,"[""Big Data"", ""Data Visualization"", ""Git"", ""Hadoop"", ""Pandas"", ""Python"", ""R"", ""Rapid Prototyping"", ""SQL"", ""Spark"", ""Tableau""]",11
+d98f74bd-f178-4c27-b181-e77e0b0e657d,"[""CFD"", ""FEA"", ""Fluid Mechanics"", ""GD&T"", ""Problem Solving"", ""SolidWorks""]",6
+6f77d6a3-8da9-4180-a762-e5768bd04a12,"[""ESP32"", ""Embedded C"", ""FPGA"", ""Git"", ""PCB Design"", ""Presentation"", ""RTOS"", ""VLSI""]",8
+f0ae74dd-8a44-49f8-b614-11c3abb9efb5,"[""CATIA"", ""Electric Drive Systems"", ""Powertrain Design"", ""Team Leadership"", ""Vehicle Dynamics""]",5
+b33c7dd8-cc1e-4f75-abd7-db482c0308b4,"[""AutoCAD"", ""AutoCAD Civil 3D"", ""BIM"", ""Communication"", ""Geotechnical Engineering"", ""Hydrology"", ""Primavera"", ""Problem Solving"", ""SAP2000"", ""Surveying""]",10
+4a4c9e97-9845-42a6-98b8-c94aad38f9e6,"[""Communication"", ""Ergonomics"", ""Operations Research"", ""Python"", ""SQL"", ""Six Sigma"", ""Supply Chain"", ""Tableau""]",8
+286ddc0f-e370-4a6a-b71d-eafbac97a95f,"[""Arduino"", ""DCS"", ""Embedded Systems"", ""LabVIEW"", ""Presentation"", ""Process Control"", ""SCADA""]",7
+43965359-ca1d-45cf-91a8-d082153130f9,"[""AutoCAD"", ""GIS"", ""Geotechnical Engineering"", ""Git"", ""Primavera"", ""Revit"", ""SAP2000"", ""STAAD Pro"", ""Structural Analysis"", ""Surveying""]",10
+eea395fd-93bf-4317-b6e5-0916f9cab3b2,"[""Autonomous Navigation"", ""Gazebo"", ""OpenCV"", ""Problem Solving"", ""Raspberry Pi"", ""SLAM"", ""Sensor Fusion""]",7
+d650a5ef-4b67-4938-b860-7cdad70abcaa,"[""Data Analysis"", ""Git"", ""NumPy"", ""Prompt Engineering"", ""R"", ""Rapid Prototyping""]",6
+5061b396-fa5f-47ae-a0ae-f1592c9af4bc,"[""CHEMCAD"", ""Fluid Mechanics"", ""Git"", ""Heat Transfer"", ""Mass Transfer"", ""Team Leadership""]",6
+6e3fd000-3350-4764-982f-563f6caa0a70,"[""Communication"", ""Pneumatics"", ""Python"", ""ROS"", ""ROS2""]",5
+c1177040-dce4-4597-81dd-d97175e6d848,"[""AgriTech"", ""AutoCAD"", ""Communication"", ""GIS"", ""Presentation"", ""Remote Sensing"", ""Soil Mechanics""]",7
+fd0feb1e-8702-4e30-9a7d-f1a6152889b2,"[""Bioinformatics"", ""Bioprocess Engineering"", ""Genomics"", ""Microbiology"", ""Molecular Biology"", ""PyMOL"", ""R"", ""Team Leadership""]",8
+7414c738-2eef-4913-994b-6afa09ab6f6b,"[""ASPEN Plus"", ""CHEMCAD"", ""Chemical Safety"", ""Fluid Mechanics"", ""MATLAB"", ""Mass Transfer"", ""Problem Solving"", ""Rapid Prototyping""]",8
+8995f629-3c40-4be3-af08-55a1ef05567b,"[""AutoCAD"", ""AutoCAD Civil 3D"", ""Communication"", ""ETABS"", ""GIS"", ""Hydrology"", ""Presentation"", ""Primavera"", ""Structural Analysis""]",9
+aaf15e54-2ea9-4302-9eb0-49002b6784b3,"[""AutoCAD"", ""AutoCAD Civil 3D"", ""BIM"", ""ETABS"", ""Geotechnical Engineering"", ""Hydrology"", ""Presentation"", ""Primavera"", ""Problem Solving"", ""Revit"", ""Surveying""]",11
+10bc86f8-4c4f-44c5-ac1f-8300667bcd91,"[""Communication"", ""Deep Learning"", ""HuggingFace"", ""Keras"", ""LangChain"", ""NLP"", ""Prompt Engineering"", ""PyTorch"", ""Scikit-Learn"", ""Team Leadership"", ""TensorFlow""]",11
+7e0352df-50b1-49a4-85bc-9954988090f0,"[""3D Printing"", ""CNC Programming"", ""Fluid Mechanics"", ""GD&T"", ""Rapid Prototyping"", ""SolidWorks""]",6
+5fbb6942-6c35-4a1b-ad7e-c04350c2a97c,"[""Adobe Illustrator"", ""CAD Fashion"", ""Garment Manufacturing"", ""Git"", ""Pattern Making"", ""Team Leadership""]",6
+eceb9a38-a02e-488b-8056-dfe93cb6e122,"[""AutoCAD"", ""AutoCAD Civil 3D"", ""ETABS"", ""GIS"", ""Presentation"", ""Revit"", ""SAP2000"", ""STAAD Pro"", ""Structural Analysis"", ""Surveying""]",10
+bcbb259f-658e-4461-8c3d-c07b29aa5e23,"[""Cloud Computing"", ""Git"", ""Java"", ""MySQL"", ""Python"", ""React"", ""Software Engineering"", ""Spring Boot"", ""Team Leadership"", ""Web Development""]",10
+91c33b06-c698-49f7-b17c-be3d4a8a4efe,"[""ANSYS"", ""CATIA"", ""CFD"", ""CNC Programming"", ""Fusion 360"", ""GD&T"", ""MATLAB"", ""Problem Solving"", ""Rapid Prototyping"", ""Thermodynamics""]",10
+62e37ce6-ceca-4f3a-aa3a-b3f14c0ccdde,"[""BIM"", ""Communication"", ""ETABS"", ""Hydrology"", ""Primavera"", ""Revit"", ""STAAD Pro"", ""Structural Analysis"", ""Surveying""]",9
+6da5d977-9417-4177-8d85-9d17ec4d57b1,"[""Gazebo"", ""Motion Planning"", ""OpenCV"", ""Presentation"", ""ROS"", ""Raspberry Pi"", ""Robotics Kinematics"", ""SLAM"", ""Team Leadership""]",9
+0ccf56e5-46bd-47b3-b230-cc2db88dabf9,"[""Control Theory"", ""Kinematics"", ""Microcontrollers"", ""PLC"", ""Pneumatics"", ""Python"", ""ROS"", ""ROS2"", ""Rapid Prototyping"", ""Sensors""]",10
+6c14e06c-348f-4870-8099-0da821e87a20,"[""Adobe Illustrator"", ""CAD Fashion"", ""Communication"", ""Fashion Analytics"", ""Garment Manufacturing"", ""Merchandising"", ""Pattern Making"", ""Team Leadership""]",8
+3121dc95-f26c-4d0e-822b-4b9f324d2bb8,"[""Arduino"", ""Communication"", ""Control Systems"", ""LabVIEW"", ""PLC"", ""Power Electronics"", ""Power Systems"", ""Proteus"", ""SCADA"", ""Simulink""]",10
+7c59a687-5d33-4f1e-b160-4b4af927664b,"[""CI/CD"", ""Communication"", ""Docker"", ""Git"", ""Microservices"", ""MongoDB"", ""PostgreSQL"", ""React"", ""Redis"", ""Team Leadership""]",10
+5a5e88c1-5f2d-4dda-bf2b-57bab8f82575,"[""Cloud Computing"", ""Express.js"", ""MySQL"", ""Presentation"", ""Problem Solving"", ""REST API"", ""React""]",7
+9bd2188b-b88c-4911-b3b0-168e9e3e1ab3,"[""AutoCAD Civil 3D"", ""BIM"", ""Geotechnical Engineering"", ""Primavera"", ""SAP2000"", ""Team Leadership""]",6
+6604b8b7-f568-4fb9-a52b-767a49585bc8,"[""ANSYS"", ""Battery Management"", ""CATIA"", ""Electric Drive Systems"", ""MATLAB"", ""Powertrain Design"", ""Problem Solving"", ""SolidWorks"", ""Thermodynamics"", ""Vehicle Dynamics""]",10
+6c984ec2-ddc4-4ca1-8e04-8fe558b7446a,"[""Cryptography"", ""Ethical Hacking"", ""Linux"", ""Network Security"", ""Penetration Testing"", ""Presentation"", ""Rapid Prototyping"", ""SOC Analysis"", ""Wireshark""]",9
+79ace0f3-d328-4e54-99d8-c5fdd11aa452,"[""Agile/Scrum"", ""Business Strategy"", ""Communication"", ""Data Analytics"", ""Financial Modeling"", ""Market Research"", ""Pitching"", ""Product Management"", ""Rapid Prototyping"", ""Strategic Planning"", ""Team Leadership""]",11
+30591ae9-51a7-49ff-915a-2774d3908f84,"[""Arduino"", ""C++"", ""Embedded C"", ""FPGA"", ""Git"", ""IoT"", ""KiCAD"", ""PCB Design"", ""RF Design"", ""Rapid Prototyping"", ""Verilog""]",11
+25f8a3d3-8ede-4e0d-bda4-823968c1f78a,"[""Business Strategy"", ""Data Analytics"", ""Git"", ""Pitching"", ""Strategic Planning"", ""Team Leadership""]",6
+09e66042-dbeb-44f2-87d2-6575477a1ea9,"[""AutoCAD"", ""CNC Programming"", ""FEA"", ""Fluid Mechanics"", ""Fusion 360"", ""MATLAB"", ""Rapid Prototyping"", ""SolidWorks""]",8
+538469bd-76bb-4282-8098-c3a4b49df851,"[""ANSYS"", ""AutoCAD"", ""CATIA"", ""CFD"", ""Communication"", ""FEA"", ""Fluid Mechanics"", ""Fusion 360"", ""Rapid Prototyping"", ""Thermodynamics""]",10
+c7e4375f-a8fd-4865-8103-37abae37a3a5,"[""Arduino"", ""Bioinstrumentation"", ""Biomedical Signal Processing"", ""DICOM"", ""LabVIEW"", ""Medical AI"", ""Medical Imaging"", ""Presentation"", ""Problem Solving"", ""Sensor Design""]",10
+eaaf1148-a323-40bb-9ae9-592ace11a073,"[""Bioinformatics"", ""Biostatistics"", ""CRISPR Design"", ""Data Analysis"", ""Genomics"", ""Molecular Biology"", ""Presentation"", ""PyMOL"", ""Python"", ""R""]",10
+348841ad-ba6a-47d4-b330-96d68c5c0b3f,"[""Git"", ""MLOps"", ""Power BI"", ""Prompt Engineering"", ""PyTorch"", ""Scikit-Learn"", ""TensorFlow""]",7
+359cd95a-3ba1-415a-89c5-e2d4d3e11945,"[""AutoCAD"", ""GIS"", ""IoT Sensors"", ""Precision Agriculture"", ""Problem Solving"", ""Python"", ""Rapid Prototyping""]",7
+0f60b7fb-bc7e-48e4-95b5-f5b0a7f7bc31,"[""Cloud Computing"", ""Database Administration"", ""Java"", ""MySQL"", ""Python"", ""Rapid Prototyping"", ""Software Engineering""]",7
+afc2bd90-04a1-4a8a-82b7-e1582e9a16d8,"[""Arduino"", ""Bioinstrumentation"", ""Biomedical Signal Processing"", ""DICOM"", ""LabVIEW"", ""MATLAB"", ""Medical AI"", ""Sensor Design"", ""SolidWorks"", ""Team Leadership""]",10
+1bf2ac9a-4858-4f47-8632-78375ffd5317,"[""C++"", ""FastAPI"", ""Git"", ""Node.js"", ""Python"", ""Redis"", ""Team Leadership""]",7
+7b1118d2-ff79-4404-acfb-d497a98b3256,"[""Bioinformatics"", ""CRISPR Design"", ""Data Analysis"", ""Genomics"", ""Python"", ""Rapid Prototyping""]",6
+dc121a55-7e67-46ad-8a5e-d5f29f0627c4,"[""Communication"", ""Control Systems"", ""IoT Sensors"", ""Microcontrollers"", ""Rapid Prototyping"", ""SCADA""]",6
+1ac50d1b-e5e1-448b-9a7c-d0b1946dd32f,"[""Big Data"", ""Communication"", ""Data Visualization"", ""Hadoop"", ""Pandas"", ""Power BI"", ""Python"", ""R"", ""Rapid Prototyping"", ""SQL"", ""Spark""]",11
+aef464f5-af76-44a4-87e7-f6be50045a9c,"[""Agile/Scrum"", ""Market Research"", ""Problem Solving"", ""Product Management"", ""Strategic Planning"", ""Team Leadership""]",6
+133a715d-4f56-43a7-bb5f-3e79e3b6da6c,"[""Arduino"", ""Communication"", ""IoT Sensors"", ""LabVIEW"", ""Microcontrollers"", ""Power Systems"", ""Proteus"", ""SCADA"", ""Simulink""]",9
+087b73f9-9ad8-434c-b57d-4f1046ff9811,"[""Bioprocess Engineering"", ""CRISPR Design"", ""Genomics"", ""Git"", ""Microbiology"", ""Problem Solving"", ""R""]",7
+2c3a61f7-7a00-431a-88b8-3cebad4617d3,"[""ANSYS"", ""AutoCAD"", ""CFD"", ""MATLAB"", ""Powertrain Design"", ""Rapid Prototyping"", ""Team Leadership""]",7
+5f1f946b-d5f8-40bb-8a4e-e31b98a7063b,"[""Bioprocess Engineering"", ""Biostatistics"", ""CRISPR Design"", ""Communication"", ""Genomics"", ""Microbiology"", ""Molecular Biology"", ""Problem Solving"", ""PyMOL"", ""Python"", ""R""]",11
+930e1ffd-fd29-4319-a6b1-cc15b7906c5b,"[""ASPEN Plus"", ""CHEMCAD"", ""MATLAB"", ""Mass Transfer"", ""Polymer Chemistry"", ""Process Control"", ""Rapid Prototyping"", ""Reaction Engineering"", ""Team Leadership""]",9
+1940ff65-3c28-41a4-9813-5a3ada45eb94,"[""AutoCAD"", ""BIM"", ""Geotechnical Engineering"", ""Git"", ""Hydrology"", ""Presentation"", ""Primavera"", ""Revit"", ""Structural Analysis"", ""Surveying""]",10
+1538ac8c-01d2-479a-9cc9-7eca051bd928,"[""Embedded Systems"", ""LabVIEW"", ""Process Control"", ""Rapid Prototyping"", ""SCADA"", ""Sensors""]",6
+61b17d01-04ee-42cb-bbfc-f28d39781cbd,"[""Android"", ""Cloud Computing"", ""Database Administration"", ""Java"", ""Python"", ""Rapid Prototyping"", ""React"", ""Software Engineering"", ""Spring Boot"", ""Web Development""]",10
+0dabe4e1-350b-4355-83ee-2950ef0ed983,"[""Android"", ""Cloud Computing"", ""Communication"", ""Database Administration"", ""Java"", ""MySQL"", ""Python"", ""Spring Boot""]",8
+5cab9df0-fce9-4f96-b7d4-77b04d8ef79a,"[""AutoCAD"", ""BIM"", ""Communication"", ""Geotechnical Engineering"", ""Hydrology"", ""Primavera"", ""Problem Solving"", ""STAAD Pro"", ""Structural Analysis"", ""Surveying""]",10
+0366bf32-f9d4-4aa2-a3f8-e65520b0768c,"[""Adobe Illustrator"", ""CAD Fashion"", ""CLO 3D"", ""Communication"", ""Fashion Analytics"", ""Garment Manufacturing"", ""Merchandising"", ""Pattern Making"", ""Team Leadership"", ""Textile Science""]",10
+a77319ee-9873-49de-b21e-6b3e001b5e9a,"[""Control Systems"", ""LabVIEW"", ""Microcontrollers"", ""Power Systems"", ""Problem Solving""]",5
+f3c3b313-5833-4177-8e71-e4f43b160626,"[""Firebase"", ""Git"", ""MySQL"", ""Node.js"", ""Vue.js""]",5
+47bb619e-c8da-4f9d-b2b8-c1f34353bcbe,"[""Communication"", ""Firebase"", ""HTML/CSS"", ""JavaScript"", ""MySQL"", ""Problem Solving"", ""REST API""]",7
+e2fce6e3-f948-4770-b5e5-a66e7d104e15,"[""Arduino"", ""Control Systems"", ""ETAP"", ""Git"", ""LabVIEW"", ""PLC"", ""Power Systems"", ""SCADA"", ""Team Leadership""]",9
+865025ab-17ab-4a0a-9d53-5985612261a0,"[""ANSYS"", ""AutoCAD"", ""Battery Management"", ""MATLAB"", ""Problem Solving"", ""SolidWorks"", ""Vehicle Dynamics""]",7
+8fdb4f75-2082-46bd-ac46-3d880127590a,"[""3ds Max"", ""AutoCAD"", ""Communication"", ""Grasshopper"", ""Lumion"", ""Rapid Prototyping"", ""Revit"", ""SketchUp"", ""Urban Planning""]",9
+4b17ddf9-16f9-48fc-9d6d-51afa2390456,"[""Communication"", ""Ergonomics"", ""Lean Manufacturing"", ""Operations Research"", ""Problem Solving"", ""Process Optimization"", ""Python"", ""Supply Chain"", ""Tableau""]",9
+c65f13b3-7b3a-48d0-afed-fd8dde83f3c3,"[""Arduino"", ""Control Systems"", ""ETAP"", ""LabVIEW"", ""MATLAB"", ""Microcontrollers"", ""Presentation"", ""SCADA"", ""Simulink"", ""Team Leadership""]",10
+4628ab0b-3b8f-4738-8e72-f931e9ca9aa3,"[""Arduino"", ""Embedded Systems"", ""LabVIEW"", ""MATLAB"", ""PLC"", ""Presentation"", ""SCADA"", ""Sensors""]",8
+31dcad26-4ef6-4733-ae9d-014171bbf233,"[""Deep Learning"", ""HuggingFace"", ""NLP"", ""PyTorch"", ""Rapid Prototyping"", ""Scikit-Learn"", ""Team Leadership"", ""TensorFlow""]",8
+61fd5470-3e56-4a8f-95c3-c80c3571e83a,"[""Arduino"", ""DCS"", ""Instrumentation"", ""LabVIEW"", ""PLC"", ""Process Control"", ""SCADA"", ""Sensors"", ""Team Leadership""]",9
+1d66819b-e8d6-4d38-a01a-7c1e10682d7a,"[""Burp Suite"", ""Communication"", ""Cryptography"", ""Git"", ""Network Security"", ""OWASP"", ""Python""]",7
+9bba2348-18e5-4a9c-af06-3a0a13237599,"[""Communication"", ""Generative AI"", ""Keras"", ""LangChain"", ""Prompt Engineering"", ""PyTorch"", ""RAG"", ""Scikit-Learn"", ""Team Leadership""]",9
+ae6cb331-f877-4763-9728-6e2651b1be61,"[""AutoCAD"", ""Powertrain Design"", ""Presentation"", ""Problem Solving"", ""SolidWorks"", ""Thermodynamics""]",6
+7330eba1-85ce-43aa-866d-b5df0c4f5175,"[""Data Analysis"", ""Deep Learning"", ""Git"", ""NumPy"", ""OpenCV"", ""PyTorch"", ""Rapid Prototyping"", ""SQL"", ""Tableau""]",9
+d095cbba-302b-48b1-b0fc-d4269950c37a,"[""Data Analysis"", ""Deep Learning"", ""Feature Engineering"", ""Git"", ""NLP"", ""NumPy"", ""PyTorch"", ""SQL"", ""Team Leadership"", ""TensorFlow"", ""Vector Embeddings""]",11
+764a5184-1cb3-4b67-90a5-b8daa11ab4db,"[""Communication"", ""DevOps"", ""Express.js"", ""Firebase"", ""JavaScript"", ""MongoDB"", ""MySQL"", ""Networking"", ""Node.js"", ""REST API"", ""Rapid Prototyping""]",11
+da656870-ec8c-477f-ac77-d99f762a096a,"[""AutoCAD"", ""Hydrology"", ""Precision Agriculture"", ""Python"", ""Team Leadership""]",5
+c4dd2160-9823-4402-81d3-8707c241bdd5,"[""Arduino"", ""C++"", ""Hydraulics"", ""Kinematics"", ""Microcontrollers"", ""PCB Design"", ""PLC"", ""Pneumatics"", ""ROS2"", ""Team Leadership""]",10
+37921f8e-6940-4221-a34b-d7be678be5c4,"[""Adobe Illustrator"", ""CAD Fashion"", ""Fashion Analytics"", ""Git"", ""Merchandising"", ""Pattern Making"", ""Textile Science""]",7
+550d3980-7d3a-4102-86fa-046f33d46845,"[""Data Visualization"", ""Hadoop"", ""Power BI"", ""Presentation"", ""Python"", ""R"", ""Spark""]",7
+b4480ab9-68c4-405e-89c5-4425b42b6a50,"[""Arena Simulation"", ""Problem Solving"", ""SQL"", ""Six Sigma"", ""Tableau""]",5
+1d9b4b3e-c4c0-43ca-8453-f32f9ffec287,"[""Communication"", ""Cryptography"", ""Ethical Hacking"", ""Linux"", ""Network Security"", ""OWASP"", ""Python"", ""SOC Analysis"", ""Team Leadership""]",9
+0d7aa2ad-f54e-438f-805a-7cb4ac9fb423,"[""Communication"", ""Data Visualization"", ""Hadoop"", ""Pandas"", ""Power BI"", ""R"", ""SQL"", ""Spark"", ""Tableau""]",9
+1cca7ff7-949b-4b61-ab87-5e3a12f08e01,"[""GIS"", ""Git"", ""IoT Sensors"", ""Precision Agriculture"", ""Soil Mechanics"", ""Team Leadership""]",6
+2f7aab88-8c56-4ac2-afb3-ea61ddce7899,"[""Burp Suite"", ""Cryptography"", ""Linux"", ""Network Security"", ""OWASP"", ""Penetration Testing"", ""Presentation"", ""Problem Solving"", ""SOC Analysis"", ""Wireshark""]",10
+bb770a17-7d83-4cbb-aca4-e2a868dafa3e,"[""Arduino"", ""DCS"", ""Embedded Systems"", ""Git"", ""Instrumentation"", ""LabVIEW"", ""MATLAB"", ""PLC"", ""SCADA"", ""Sensors""]",10
+db9b9a6c-7010-490f-b192-b87384ac6cdb,"[""ESP32"", ""Embedded C"", ""Git"", ""KiCAD"", ""PCB Design"", ""Presentation"", ""RTOS"", ""Verilog""]",8
+4b282682-3a5b-46d9-9de9-e6085fcaf92c,"[""Bioinformatics"", ""Data Analysis"", ""Genomics"", ""Presentation"", ""R"", ""Rapid Prototyping""]",6
+43e5a54e-789c-45a4-8d3a-342e4cd105d1,"[""CHEMCAD"", ""Chemical Safety"", ""MATLAB"", ""Mass Transfer"", ""Polymer Chemistry"", ""Process Control"", ""Team Leadership""]",7
+38812e74-0884-4445-9981-78634874951b,"[""Deep Learning"", ""Feature Engineering"", ""Git"", ""NLP"", ""NumPy"", ""OpenCV"", ""Presentation"", ""Prompt Engineering"", ""R"", ""SQL"", ""Scikit-Learn""]",11
+bb674ff0-1424-4409-99df-9f0eebde85eb,"[""C++"", ""Gazebo"", ""Git"", ""OpenCV"", ""Python"", ""ROS"", ""Rapid Prototyping"", ""Raspberry Pi"", ""Robotics Kinematics"", ""Sensor Fusion"", ""SolidWorks""]",11
+6750c492-31c8-4aa9-8d43-05cfda6f0f44,"[""Adobe Illustrator"", ""CAD Fashion"", ""CLO 3D"", ""Fashion Analytics"", ""Garment Manufacturing"", ""Git"", ""Merchandising"", ""Presentation"", ""Textile Science""]",9
+89d8fc5d-e5fd-43e4-9fa2-b97feeb783d5,"[""Presentation"", ""Primavera"", ""Problem Solving"", ""Revit"", ""Structural Analysis"", ""Surveying""]",6
+aff604cd-f7da-4db8-84b1-9a8b7025294f,"[""DevOps"", ""Docker"", ""Firebase"", ""HTML/CSS"", ""JavaScript"", ""MongoDB"", ""MySQL"", ""Problem Solving"", ""Vue.js""]",9
+8ad6c823-a9c7-4460-aa3b-8594a99e72f2,"[""Aerodynamics"", ""CFD"", ""Flight Mechanics"", ""Problem Solving"", ""Propulsion Systems"", ""SolidWorks""]",6
+4a592bb5-0eb1-4432-9361-7200f4085604,"[""Bioprocess Engineering"", ""Biostatistics"", ""CRISPR Design"", ""Genomics"", ""Git"", ""Problem Solving"", ""PyMOL"", ""Python"", ""R""]",9
+47a94596-24f8-4c7c-9961-3337e72d1feb,"[""Adobe Illustrator"", ""CAD Fashion"", ""Fashion Analytics"", ""Garment Manufacturing"", ""Merchandising"", ""Pattern Making"", ""Presentation"", ""Team Leadership"", ""Textile Science""]",9
+e2cd9ecd-2a7e-47a0-a70f-5b6c97586fa9,"[""3D Printing"", ""CFD"", ""CNC Programming"", ""Communication"", ""FEA"", ""Fluid Mechanics"", ""Fusion 360"", ""MATLAB"", ""Presentation"", ""Thermodynamics""]",10
+2fbfa86f-52f2-4cd0-a0d9-623b6209eccd,"[""Hadoop"", ""SQL"", ""Spark"", ""Statistical Modeling"", ""Team Leadership""]",5
+ceb57173-b7f5-48a0-998f-44a39197a8ac,"[""AutoCAD"", ""CATIA"", ""Fluid Mechanics"", ""GD&T"", ""Problem Solving""]",5
+f37400af-de93-44f8-b68e-61e1a07cbf84,"[""CHEMCAD"", ""Communication"", ""Fluid Mechanics"", ""Heat Transfer"", ""Polymer Chemistry"", ""Process Control"", ""Reaction Engineering""]",7
+c5644ec7-56a1-4c47-9050-b7704cf711bd,"[""C++"", ""Git"", ""Java"", ""Presentation"", ""React"", ""Redis"", ""System Design"", ""TypeScript""]",8
+25444a13-cd34-4765-9746-ff99a1521325,"[""Arduino"", ""DICOM"", ""LabVIEW"", ""MATLAB"", ""Medical Imaging"", ""SolidWorks"", ""Team Leadership""]",7
+9819149e-0509-4b74-a86f-7975147d2768,"[""Burp Suite"", ""Metasploit"", ""OWASP"", ""Penetration Testing"", ""Presentation"", ""Python"", ""Team Leadership"", ""Wireshark""]",8
+73959e1f-79e1-4754-a8eb-88b8c30b76cb,"[""CAD Fashion"", ""CLO 3D"", ""Git"", ""Merchandising"", ""Pattern Making""]",5
+ee0e5321-7a36-48e8-a779-33227c94a127,"[""3ds Max"", ""AutoCAD"", ""BIM"", ""Grasshopper"", ""Rapid Prototyping"", ""Revit"", ""Rhino"", ""SketchUp"", ""Sustainable Design"", ""Urban Planning""]",10
+595e0130-e17f-413e-b188-78166328de09,"[""AutoCAD Civil 3D"", ""GIS"", ""Geotechnical Engineering"", ""Hydrology"", ""Presentation"", ""Problem Solving"", ""Revit"", ""SAP2000"", ""STAAD Pro""]",9
+ee8e02a0-9f5d-4f2a-98f8-77485ed5989e,"[""Express.js"", ""Firebase"", ""Git"", ""HTML/CSS"", ""JavaScript"", ""MongoDB"", ""MySQL"", ""REST API"", ""Team Leadership""]",9
+32ac216b-0872-4b63-8b3d-efe240162165,"[""LlamaIndex"", ""Presentation"", ""Python"", ""RAG"", ""Scikit-Learn""]",5
+71356e5d-9127-4bbd-9772-a4c4e1f40a13,"[""Arduino"", ""Communication"", ""DCS"", ""Embedded Systems"", ""Instrumentation"", ""LabVIEW"", ""PLC"", ""Process Control"", ""Rapid Prototyping"", ""SCADA"", ""Sensors""]",11
+039089eb-97a5-449d-bee2-00908fe0a587,"[""AutoCAD Civil 3D"", ""ETABS"", ""GIS"", ""Geotechnical Engineering"", ""Problem Solving"", ""SAP2000"", ""STAAD Pro"", ""Structural Analysis""]",8
+9f9b0eda-2962-4e7d-b183-2577399042d9,"[""Agile/Scrum"", ""Business Strategy"", ""Financial Modeling"", ""Market Research"", ""Presentation"", ""Rapid Prototyping"", ""Strategic Planning"", ""Team Leadership""]",8
+fcf55a24-23c2-4309-a192-7f47d52acf29,"[""Arena Simulation"", ""Communication"", ""Git"", ""Lean Manufacturing"", ""Operations Research"", ""Process Optimization"", ""Python"", ""SQL"", ""Six Sigma"", ""Supply Chain"", ""Tableau""]",11
+c1a1ab53-2ff7-4fec-b883-968673ac227a,"[""Deep Learning"", ""Git"", ""MLOps"", ""NLP"", ""NumPy"", ""OpenCV"", ""PyTorch"", ""Python"", ""SQL"", ""Scikit-Learn"", ""Team Leadership""]",11
+5f9cfcc6-552b-4718-a0ae-2c03abd29b11,"[""Adobe Illustrator"", ""CAD Fashion"", ""CLO 3D"", ""Fashion Analytics"", ""Garment Manufacturing"", ""Git"", ""Merchandising"", ""Pattern Making"", ""Textile Science""]",9
+0c35f9a0-6d65-4934-a241-359a7e8a4f8b,"[""Arduino"", ""Communication"", ""MATLAB"", ""PLC"", ""Power Electronics"", ""Presentation"", ""Proteus"", ""Simulink""]",8
+e010432f-7f95-480f-9c68-b6292bbbbefd,"[""Agile/Scrum"", ""Business Strategy"", ""Data Analytics"", ""Financial Modeling"", ""Git"", ""Market Research"", ""Pitching"", ""Product Management"", ""Strategic Planning"", ""Team Leadership""]",10
+f2678cee-0f88-456f-9d8c-da04a86f8ea8,"[""Agile/Scrum"", ""Business Strategy"", ""Data Analytics"", ""Financial Modeling"", ""Market Research"", ""Pitching"", ""Presentation"", ""Product Management"", ""Strategic Planning"", ""Team Leadership""]",10
+2df251e3-b72c-4b1c-be29-4f4a1a0e19f7,"[""Cloud Computing"", ""Git"", ""Java"", ""Software Engineering"", ""Web Development""]",5
+ee3b1533-299c-4e72-98f8-51677fd888c2,"[""Communication"", ""Cryptography"", ""Linux"", ""Metasploit"", ""Penetration Testing""]",5
+03152bf2-5613-4b4e-bfb1-5457c4f81fb3,"[""Chemical Safety"", ""Fluid Mechanics"", ""MATLAB"", ""Mass Transfer"", ""Presentation""]",5
+61ef963c-2d5a-43ec-831d-06a2131d686e,"[""ANSYS"", ""Aerodynamics"", ""CFD"", ""Flight Mechanics"", ""OpenFOAM"", ""Orbital Mechanics"", ""Presentation"", ""Propulsion Systems"", ""SolidWorks""]",9
+9c7b6795-f410-4c60-a33d-1b394b14a28e,"[""C++"", ""Git"", ""PCB Design"", ""Pneumatics"", ""SolidWorks""]",5
+906b7c83-8d8a-4fd8-91e5-44be728572c1,"[""CHEMCAD"", ""Chemical Safety"", ""Mass Transfer"", ""Polymer Chemistry"", ""Presentation"", ""Process Control"", ""Team Leadership""]",7
+2e6429ae-0f2a-44a0-a1f8-20065eb6cfe2,"[""Docker"", ""JavaScript"", ""MongoDB"", ""Node.js"", ""PostgreSQL"", ""Problem Solving"", ""Team Leadership""]",7
+c2c837eb-9da5-4084-8bad-249a505da0ef,"[""Communication"", ""Control Systems"", ""ETAP"", ""IoT Sensors"", ""LabVIEW"", ""MATLAB"", ""Power Electronics"", ""Proteus"", ""SCADA"", ""Simulink""]",10
+c07b1843-8687-4258-9ad7-9ab65909a578,"[""Business Strategy"", ""Communication"", ""Data Analytics"", ""Financial Modeling"", ""Market Research"", ""Pitching"", ""Problem Solving"", ""Product Management"", ""Strategic Planning"", ""Team Leadership""]",10
+661f3618-4b9f-4890-b5b9-ac942b752fd5,"[""DCS"", ""Embedded Systems"", ""MATLAB"", ""PLC"", ""Presentation"", ""Sensors""]",6
+19d329f2-3d8d-46b4-9a4c-c52d841a38aa,"[""Android"", ""Cloud Computing"", ""Java"", ""MySQL"", ""React"", ""Software Engineering"", ""Spring Boot"", ""Team Leadership""]",8
+d25bd5e3-330a-4555-a834-db21146c8618,"[""AutoCAD"", ""Git"", ""Lumion"", ""Presentation"", ""Revit"", ""Rhino"", ""Sustainable Design""]",7
+a488a43c-38ab-4a5d-b6d1-e4ebb9f9c281,"[""AWS"", ""Docker"", ""Express.js"", ""MySQL"", ""Networking"", ""Presentation"", ""Rapid Prototyping"", ""React"", ""Tailwind CSS"", ""Vue.js""]",10
+ea526b22-b31d-4bcc-bf22-b26e667a0389,"[""Android"", ""Cloud Computing"", ""MySQL"", ""Presentation"", ""React"", ""Software Engineering"", ""Spring Boot"", ""Web Development""]",8
+026d7a41-6d0c-4425-bc94-74799fa8319f,"[""Computer Vision"", ""Deep Learning"", ""Generative AI"", ""Git"", ""Keras"", ""LangChain"", ""Python"", ""Scikit-Learn"", ""TensorFlow"", ""Transformer Models""]",10
+4f7b4233-d37f-40e9-b1c8-3850e71693d5,"[""AutoCAD Civil 3D"", ""GIS"", ""Geotechnical Engineering"", ""Hydrology"", ""Surveying"", ""Team Leadership""]",6
+0fb77dc3-3168-4912-8bdb-eb91f70010dd,"[""Computer Vision"", ""Deep Learning"", ""Generative AI"", ""Keras"", ""LangChain"", ""RAG"", ""Rapid Prototyping"", ""TensorFlow"", ""Vector Databases""]",9
+c14cdc98-76b8-4f75-94a7-d0af30fa0dec,"[""Autonomous Navigation"", ""C++"", ""Gazebo"", ""OpenCV"", ""Presentation"", ""Rapid Prototyping"", ""Raspberry Pi"", ""Robotics Kinematics""]",8
+202833cf-72c1-4a1a-94cf-7da9f9466fd7,"[""Cryptography"", ""Metasploit"", ""Network Security"", ""OWASP"", ""Penetration Testing"", ""Presentation"", ""Problem Solving"", ""Wireshark""]",8
+cccfba1b-ed2e-4a9a-bd25-c6065845a27c,"[""Battery Management"", ""CATIA"", ""CFD"", ""Communication"", ""MATLAB"", ""Powertrain Design"", ""SolidWorks"", ""Thermodynamics"", ""Vehicle Dynamics""]",9
+ef7c61a2-dde5-449b-88e6-13dd92fbe187,"[""3D Printing"", ""AutoCAD"", ""CNC Programming"", ""Fusion 360"", ""GD&T"", ""Rapid Prototyping"", ""SolidWorks"", ""Team Leadership"", ""Thermodynamics""]",9
+ba86a929-17c0-4066-af10-99311c211163,"[""Big Data"", ""Communication"", ""Git"", ""Hadoop"", ""Power BI"", ""R"", ""Scikit-Learn"", ""Spark""]",8
+e887736d-bf55-4cf8-919a-9a3b332033d1,"[""Communication"", ""Control Systems"", ""IoT Sensors"", ""Power Electronics"", ""Power Systems"", ""Problem Solving"", ""SCADA""]",7
+ffe0d273-f719-408a-aa21-4cf1c812a031,"[""CFD"", ""Communication"", ""Flight Mechanics"", ""MATLAB"", ""OpenFOAM"", ""Orbital Mechanics"", ""Rapid Prototyping""]",7
+887a6e2f-751f-4c67-b70f-e6710e6db785,"[""Git"", ""Pandas"", ""Presentation"", ""R"", ""SQL"", ""Tableau""]",6
+1aa4dd0e-1723-4fe7-82c4-cc8f8c26eaf8,"[""Communication"", ""Deep Learning"", ""OpenCV"", ""Pandas"", ""PyTorch"", ""SQL"", ""Team Leadership""]",7
+dfd6a237-0a98-43be-8837-4607f5015d2c,"[""Arduino"", ""Control Theory"", ""Git"", ""Hydraulics"", ""PLC"", ""Pneumatics"", ""ROS"", ""ROS2"", ""Sensors"", ""SolidWorks""]",10
+fce40198-f588-46cb-81a7-fb2b2f159039,"[""Android"", ""Problem Solving"", ""Rapid Prototyping"", ""React"", ""Spring Boot"", ""Web Development""]",6
+a9f3c96e-2956-41f4-8111-071edbcacdc0,"[""Agile/Scrum"", ""Business Strategy"", ""Data Analytics"", ""Market Research"", ""Product Management"", ""Team Leadership""]",6
+03e288d6-b5f5-4c3f-b75d-3807da225e35,"[""Cloud Computing"", ""Python"", ""Rapid Prototyping"", ""Software Engineering"", ""Web Development""]",5
+c942d9cb-4340-4ddb-9e60-09cb93fcb96d,"[""Communication"", ""Computer Vision"", ""Deep Learning"", ""Keras"", ""Prompt Engineering""]",5
+6d04bbd9-50f3-4969-a3f7-bb0d4f0614fe,"[""KiCAD"", ""Rapid Prototyping"", ""Signal Processing"", ""Team Leadership"", ""VHDL"", ""Verilog""]",6
+6865cca3-4c65-4233-ad13-01f07df1e294,"[""ANSYS"", ""Aerodynamics"", ""CFD"", ""Flight Mechanics"", ""Git"", ""MATLAB"", ""OpenFOAM"", ""Presentation"", ""Propulsion Systems"", ""SolidWorks""]",10
+b5b19d8a-de3e-45ba-bba5-521f2a25f95f,"[""Adobe Illustrator"", ""CAD Fashion"", ""CLO 3D"", ""Fashion Analytics"", ""Garment Manufacturing"", ""Merchandising"", ""Pattern Making"", ""Team Leadership"", ""Textile Science""]",9
+1e0e2f42-c427-4c4d-83bd-e57542369eb1,"[""C++"", ""Control Theory"", ""Microcontrollers"", ""Pneumatics"", ""Problem Solving"", ""Python"", ""ROS"", ""ROS2"", ""Rapid Prototyping"", ""Sensors""]",10
+b7dad599-a16d-4fcf-b509-98101812c67c,"[""Adobe Illustrator"", ""CAD Fashion"", ""Garment Manufacturing"", ""Git"", ""Merchandising"", ""Team Leadership"", ""Textile Science""]",7
+689ef428-5690-41ea-8a1b-ebc15103c183,"[""AgriTech"", ""AutoCAD"", ""GIS"", ""Hydrology"", ""IoT Sensors"", ""Precision Agriculture"", ""Python"", ""Rapid Prototyping"", ""Remote Sensing"", ""Soil Mechanics""]",10
+b0c406c2-cfd3-4349-b3de-c77e91c6b52c,"[""Adobe Illustrator"", ""Garment Manufacturing"", ""Pattern Making"", ""Presentation"", ""Textile Science""]",5
+b72b4665-e42c-4033-9c61-31b99ebc5161,"[""Bioinformatics"", ""Bioprocess Engineering"", ""Biostatistics"", ""CRISPR Design"", ""Data Analysis"", ""Genomics"", ""PyMOL"", ""Python"", ""R"", ""Rapid Prototyping"", ""Team Leadership""]",11
+3a212f49-df4c-495e-9787-a66a9881678f,"[""Big Data"", ""Data Visualization"", ""Pandas"", ""Presentation"", ""Problem Solving"", ""R"", ""SQL"", ""Scikit-Learn"", ""Spark"", ""Statistical Modeling"", ""Tableau""]",11
+085e4057-c0dd-431b-a78c-ff334b23176d,"[""Adobe Illustrator"", ""CAD Fashion"", ""CLO 3D"", ""Garment Manufacturing"", ""Pattern Making"", ""Presentation"", ""Team Leadership""]",7
+7b929e32-04b2-4631-ad5e-edb95f7b57ce,"[""Control Systems"", ""ETAP"", ""IoT Sensors"", ""LabVIEW"", ""Microcontrollers"", ""Proteus"", ""Team Leadership""]",7
+1312ab45-4134-46b2-a7bc-80cc06648943,"[""AWS"", ""Cloud Computing"", ""Cybersecurity"", ""Node.js"", ""Python"", ""Team Leadership""]",6
+89725f1b-cf77-46ec-b600-8d479c5336f0,"[""Burp Suite"", ""Communication"", ""Cryptography"", ""Git"", ""Linux"", ""Network Security"", ""Penetration Testing"", ""Python"", ""Wireshark""]",9
+3ed7abd2-0827-4ed4-b481-04b77872f7ed,"[""AWS"", ""Cloud Computing"", ""Communication"", ""Cybersecurity"", ""Docker"", ""MongoDB"", ""Python"", ""React""]",8
+b5bdc175-0d76-4760-ba9e-a6886725d1cc,"[""Agile/Scrum"", ""Business Strategy"", ""Market Research"", ""Presentation"", ""Strategic Planning""]",5
+26c0644c-a983-46f1-8011-8113f9f5e1e8,"[""Bioinformatics"", ""Bioprocess Engineering"", ""Biostatistics"", ""Communication"", ""Microbiology"", ""Molecular Biology"", ""R"", ""Rapid Prototyping""]",8
+38ec06b2-32c5-44b5-9006-583e15a4e8de,"[""Docker"", ""FastAPI"", ""JavaScript"", ""Kubernetes"", ""Microservices"", ""Python"", ""Team Leadership""]",7
+97f1639b-02d7-491e-b55e-723ec9973a3b,"[""Generative AI"", ""Problem Solving"", ""TensorFlow"", ""Transformer Models"", ""Vector Databases""]",5
+71347510-c0fa-4c17-9340-1d4f34a9e024,"[""Agile/Scrum"", ""Business Strategy"", ""Data Analytics"", ""Financial Modeling"", ""Market Research"", ""Pitching"", ""Problem Solving"", ""Product Management"", ""Rapid Prototyping"", ""Strategic Planning"", ""Team Leadership""]",11
+78fc6901-7fbc-449d-ba7c-32ccbe16273a,"[""Cloud Computing"", ""DevOps"", ""Express.js"", ""HTML/CSS"", ""JavaScript"", ""Node.js"", ""Presentation"", ""Python"", ""Tailwind CSS"", ""Team Leadership""]",10
+57f1deb3-f6b6-4040-937c-f8842a4bdeb1,"[""Arduino"", ""Biomedical Signal Processing"", ""DICOM"", ""Git"", ""LabVIEW"", ""MATLAB"", ""Medical AI"", ""Medical Imaging"", ""Problem Solving"", ""Sensor Design"", ""SolidWorks""]",11
+2c34b234-dd0c-4b60-91a8-9959c95c9859,"[""Bioinformatics"", ""Bioprocess Engineering"", ""Biostatistics"", ""CRISPR Design"", ""Genomics"", ""Molecular Biology"", ""Problem Solving"", ""PyMOL"", ""Python""]",9
+61651476-b23b-4e95-9a84-a886cfb57efc,"[""AutoCAD"", ""CATIA"", ""CFD"", ""Electric Drive Systems"", ""Git"", ""Problem Solving"", ""SolidWorks"", ""Vehicle Dynamics""]",8
+0c8bb400-827f-49e1-a7d9-1d94cb7f8dfc,"[""Embedded C"", ""Git"", ""KiCAD"", ""LabVIEW"", ""Problem Solving"", ""Signal Processing""]",6
+8500cf34-7cf8-4e37-896e-0444443e65af,"[""ASPEN Plus"", ""CHEMCAD"", ""Chemical Safety"", ""Communication"", ""Fluid Mechanics"", ""MATLAB"", ""Mass Transfer"", ""Team Leadership""]",8
+d92644e4-b1af-4c67-97b4-42a739dc989f,"[""Android"", ""Cloud Computing"", ""Communication"", ""Database Administration"", ""Git"", ""Java"", ""MySQL"", ""Python"", ""React"", ""Software Engineering""]",10
+be383411-f3cf-4b9b-86fc-e4856043fba8,"[""Big Data"", ""Communication"", ""Data Visualization"", ""Problem Solving"", ""Python"", ""SQL""]",6
+3f631164-dc26-430c-8497-8c7760bfcedd,"[""Data Visualization"", ""Hadoop"", ""Pandas"", ""Presentation"", ""Problem Solving"", ""Python"", ""SQL"", ""Scikit-Learn"", ""Spark"", ""Tableau""]",10
+9aa99dc7-a5e9-4eee-acb5-b5656d6583c8,"[""Communication"", ""ESP32"", ""STM32"", ""VHDL"", ""VLSI"", ""Verilog""]",6
+0be069f8-4359-46f5-8597-2da68f4dacb5,"[""Cloud Computing"", ""Communication"", ""Database Administration"", ""Java"", ""React"", ""Software Engineering"", ""Spring Boot""]",7
+0c80f749-3d68-49f7-b466-a887bbecea6b,"[""AgriTech"", ""AutoCAD"", ""GIS"", ""Hydrology"", ""IoT Sensors"", ""Precision Agriculture"", ""Problem Solving"", ""Python"", ""Remote Sensing"", ""Team Leadership""]",10
+7b2e3b2a-c45e-40d1-b5a3-f4c25123b11c,"[""Communication"", ""Data Analysis"", ""Feature Engineering"", ""Git"", ""Prompt Engineering"", ""PyTorch"", ""Python"", ""Scikit-Learn"", ""Tableau"", ""TensorFlow"", ""Vector Embeddings""]",11
+bcd5ab2e-cbc6-4fb3-8f9e-4e431f84a173,"[""Computer Vision"", ""Deep Learning"", ""Generative AI"", ""Git"", ""LangChain"", ""Rapid Prototyping"", ""TensorFlow""]",7
+ed5299a2-0bad-49b4-926e-1cf67c877fe8,"[""Communication"", ""Deep Learning"", ""NLP"", ""NumPy"", ""Power BI"", ""Rapid Prototyping"", ""Tableau"", ""TensorFlow""]",8
+6d8f0325-f1c0-4cae-b27e-784bc5bd1b60,"[""Arduino"", ""Embedded C"", ""LabVIEW"", ""MATLAB"", ""Problem Solving"", ""STM32"", ""Signal Processing"", ""VHDL"", ""VLSI"", ""Verilog""]",10
+9365a220-90af-4de1-ab03-eb3a03eac0e3,"[""Communication"", ""Data Visualization"", ""Hadoop"", ""Pandas"", ""Power BI"", ""Spark""]",6
+542b7d19-73c7-45fb-b92c-53bcb997d9cf,"[""ANSYS"", ""Aerodynamics"", ""CATIA"", ""MATLAB"", ""OpenFOAM"", ""Orbital Mechanics"", ""Problem Solving"", ""Propulsion Systems"", ""Rapid Prototyping"", ""SolidWorks""]",10
+fe666b31-cdfb-495a-9c8a-2288a74bae75,"[""Arena Simulation"", ""Ergonomics"", ""Operations Research"", ""Problem Solving"", ""Python"", ""SQL"", ""Six Sigma"", ""Supply Chain""]",8
+7bd82166-0181-4cbe-b9a6-a1cf8a92be4c,"[""C++"", ""Communication"", ""FPGA"", ""PCB Design"", ""Team Leadership"", ""VLSI""]",6
+8c18a2bb-3ec0-4545-8fa8-02ccbc89971c,"[""ASPEN Plus"", ""CHEMCAD"", ""Heat Transfer"", ""MATLAB"", ""Mass Transfer"", ""Polymer Chemistry"", ""Presentation"", ""Process Control"", ""Team Leadership""]",9
+e1d8cfae-372f-4a25-b650-e90bcb367e87,"[""BIM"", ""GIS"", ""Git"", ""SAP2000"", ""Structural Analysis"", ""Surveying""]",6
+0398edf0-1654-443e-8430-98ce7d688969,"[""Arduino"", ""Communication"", ""ESP32"", ""MATLAB"", ""PCB Design"", ""RF Design"", ""Team Leadership"", ""VHDL""]",8
+556e9915-9ae4-403c-be22-8db0499bc5e5,"[""Autonomous Navigation"", ""Git"", ""Python"", ""Raspberry Pi"", ""Robotics Kinematics"", ""Team Leadership""]",6
+6743983b-209e-4bf0-9eed-5c7d813f9a5a,"[""Communication"", ""Deep Learning"", ""PyTorch"", ""Python"", ""Vector Embeddings""]",5
+8b572eff-2e4b-4c15-8ec4-0e9a89a990c8,"[""Communication"", ""GraphQL"", ""Java"", ""Node.js"", ""Problem Solving"", ""Python""]",6
+89fd636c-f318-4056-861f-7c69aabaed3f,"[""Cloud Computing"", ""Cybersecurity"", ""Firebase"", ""HTML/CSS"", ""MySQL"", ""Node.js"", ""Presentation"", ""Python"", ""REST API"", ""Vue.js""]",10
+03b5c41b-9b04-4bc6-9771-af990671b169,"[""Android"", ""Cloud Computing"", ""Database Administration"", ""MySQL"", ""Presentation"", ""Python"", ""React"", ""Software Engineering"", ""Spring Boot"", ""Web Development""]",10

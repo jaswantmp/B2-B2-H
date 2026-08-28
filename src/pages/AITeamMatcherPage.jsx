@@ -1,7 +1,7 @@
 // src/pages/AITeamMatcherPage.jsx
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { Sparkles, UserCheck, MapPin, Trophy, Check, ArrowRight, RefreshCw, AlertCircle } from 'lucide-react'
+import { Sparkles, UserCheck, MapPin, Trophy, Check, ArrowRight, RefreshCw, AlertCircle, Cpu } from 'lucide-react'
 import { generateTeamMatches, getAIUsage, explainTeamMatch } from '../services/api.js'
 import { useAuth } from '../context/AuthContext.jsx'
 import PulseAvatar from '../components/PulseAvatar.jsx'
@@ -263,9 +263,11 @@ export default function AITeamMatcherPage() {
                     </div>
                     <div className="text-right flex-shrink-0">
                       <div className={`text-2xl font-black ${getScoreTextColor(candidate.compatibility_score)}`}>
-                        {candidate.compatibility_score}%
+                        ⭐ {candidate.compatibility_score}%
                       </div>
-                      <span className="text-[10px] uppercase font-bold tracking-wider theme-muted">Compatibility</span>
+                      <span className="text-[10px] uppercase font-bold tracking-wider text-violet-600 dark:text-violet-400">
+                        {candidate.compatibility_level || 'Compatible'}
+                      </span>
                     </div>
                   </div>
 
@@ -276,6 +278,63 @@ export default function AITeamMatcherPage() {
                       {candidate.recommended_role}
                     </span>
                   </div>
+                </div>
+              </div>
+
+              {/* Skills Breakdown Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-5 text-xs">
+                {/* Common Skills */}
+                <div className="p-3 rounded-xl border border-violet-500/20 bg-violet-500/5">
+                  <div className="font-bold text-violet-700 dark:text-violet-300 mb-1.5 flex items-center gap-1">
+                    <Check size={12} className="text-violet-500" /> Common Skills
+                  </div>
+                  {candidate.common_skills && candidate.common_skills.length > 0 ? (
+                    <div className="flex flex-wrap gap-1">
+                      {candidate.common_skills.map((s, idx) => (
+                        <span key={idx} className="px-2 py-0.5 rounded bg-violet-500/10 text-violet-800 dark:text-violet-300 font-medium">
+                          {s}
+                        </span>
+                      ))}
+                    </div>
+                  ) : (
+                    <span className="theme-muted italic">None shared</span>
+                  )}
+                </div>
+
+                {/* Complementary Skills */}
+                <div className="p-3 rounded-xl border border-emerald-500/20 bg-emerald-500/5">
+                  <div className="font-bold text-emerald-700 dark:text-emerald-300 mb-1.5 flex items-center gap-1">
+                    <Sparkles size={12} className="text-emerald-500" /> Complementary Skills
+                  </div>
+                  {candidate.complementary_skills && candidate.complementary_skills.length > 0 ? (
+                    <div className="flex flex-wrap gap-1">
+                      {candidate.complementary_skills.map((s, idx) => (
+                        <span key={idx} className="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-800 dark:text-emerald-300 font-medium">
+                          {s}
+                        </span>
+                      ))}
+                    </div>
+                  ) : (
+                    <span className="theme-muted italic">Full stack overlap</span>
+                  )}
+                </div>
+
+                {/* Common Domains */}
+                <div className="p-3 rounded-xl border border-cyan-500/20 bg-cyan-500/5">
+                  <div className="font-bold text-cyan-700 dark:text-cyan-300 mb-1.5 flex items-center gap-1">
+                    <Cpu size={12} className="text-cyan-500" /> Common Domains
+                  </div>
+                  {candidate.common_domains && candidate.common_domains.length > 0 ? (
+                    <div className="flex flex-wrap gap-1">
+                      {candidate.common_domains.map((d, idx) => (
+                        <span key={idx} className="px-2 py-0.5 rounded bg-cyan-500/10 text-cyan-800 dark:text-cyan-300 font-medium">
+                          {d}
+                        </span>
+                      ))}
+                    </div>
+                  ) : (
+                    <span className="theme-muted italic">General alignment</span>
+                  )}
                 </div>
               </div>
 
@@ -335,6 +394,79 @@ export default function AITeamMatcherPage() {
                   </div>
                 )}
               </div>
+
+              {/* ML Insights section (rendered if any ML field is available) */}
+              {(candidate.ml_score != null ||
+                candidate.probability_good_fit != null ||
+                candidate.predicted_compatibility != null ||
+                candidate.cluster_segment != null ||
+                candidate.model_version != null) && (
+                <div
+                  className="rounded-xl p-4 mb-5 border"
+                  style={{
+                    backgroundColor: 'var(--bg-surface)',
+                    borderColor: 'var(--border-subtle)',
+                  }}
+                >
+                  <div className="flex items-center justify-between gap-2 mb-2">
+                    <div className="flex items-center gap-2">
+                      <Cpu size={14} className="text-violet-400" />
+                      <h4 className="text-xs font-bold theme-text uppercase tracking-wider">
+                        ML Insights
+                      </h4>
+                    </div>
+                    {candidate.model_version != null && (
+                      <span className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-violet-100 dark:bg-violet-900/30 text-violet-800 dark:text-violet-300 border border-violet-300 dark:border-violet-700/40 font-medium">
+                        {candidate.model_version}
+                      </span>
+                    )}
+                  </div>
+                  <hr className="theme-divider border-t my-2" style={{ borderColor: 'var(--border-subtle)' }} />
+
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 mt-2.5">
+                    {candidate.ml_score != null && (
+                      <div className="p-2.5 rounded-lg bg-violet-50 dark:bg-violet-950/30 border border-violet-200 dark:border-violet-800/40 text-center">
+                        <div className="text-[10px] uppercase font-semibold text-violet-700 dark:text-violet-400/80 tracking-wider">
+                          ML Score
+                        </div>
+                        <div className="text-base font-extrabold text-violet-900 dark:text-violet-300 mt-0.5">
+                          {Number(candidate.ml_score).toFixed(1)}
+                        </div>
+                      </div>
+                    )}
+                    {candidate.probability_good_fit != null && (
+                      <div className="p-2.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-800/40 text-center">
+                        <div className="text-[10px] uppercase font-semibold text-emerald-700 dark:text-emerald-400/80 tracking-wider">
+                          Good Fit Prob
+                        </div>
+                        <div className="text-base font-extrabold text-emerald-700 dark:text-emerald-400 mt-0.5">
+                          {(Number(candidate.probability_good_fit) * 100).toFixed(1)}%
+                        </div>
+                      </div>
+                    )}
+                    {candidate.predicted_compatibility != null && (
+                      <div className="p-2.5 rounded-lg bg-cyan-50 dark:bg-cyan-950/20 border border-cyan-200 dark:border-cyan-800/40 text-center">
+                        <div className="text-[10px] uppercase font-semibold text-cyan-700 dark:text-cyan-400/80 tracking-wider">
+                          Predicted Compat
+                        </div>
+                        <div className="text-base font-extrabold text-cyan-700 dark:text-cyan-400 mt-0.5">
+                          {Number(candidate.predicted_compatibility).toFixed(1)}
+                        </div>
+                      </div>
+                    )}
+                    {candidate.cluster_segment != null && (
+                      <div className="p-2.5 rounded-lg bg-violet-50 dark:bg-violet-950/30 border border-violet-200 dark:border-violet-800/40 text-center flex flex-col justify-center col-span-2 sm:col-span-1">
+                        <div className="text-[10px] uppercase font-semibold text-violet-700 dark:text-violet-400/80 tracking-wider">
+                          Student Segment
+                        </div>
+                        <div className="text-xs font-bold text-violet-900 dark:text-violet-200 mt-0.5 truncate" title={candidate.cluster_segment}>
+                          {candidate.cluster_segment}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
 
               {/* Match reasons check list */}
               {candidate.reasons && candidate.reasons.length > 0 && (

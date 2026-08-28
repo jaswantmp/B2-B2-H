@@ -73,11 +73,22 @@ export default function FilterPanel({ filters, onChange }) {
   const [statesList, setStatesList] = useState([])
 
   useEffect(() => {
-    getBuilders().then(data => {
-      setCollegesList([...new Set(data.map(u => u.college).filter(Boolean))].sort())
-      setCitiesList([...new Set(data.map(u => u.city).filter(Boolean))].sort())
-      setStatesList([...new Set(data.map(u => u.state).filter(Boolean))].sort())
-    }).catch(console.error)
+    let active = true
+    getBuilders()
+      .then(data => {
+        if (!active || !Array.isArray(data)) return
+        setCollegesList([...new Set(data.map(u => u.college).filter(Boolean))].sort())
+        setCitiesList([...new Set(data.map(u => u.city).filter(Boolean))].sort())
+        setStatesList([...new Set(data.map(u => u.state).filter(Boolean))].sort())
+      })
+      .catch(err => {
+        if (err.name !== 'AbortError') {
+          console.warn('[FilterPanel] Could not load filter options:', err)
+        }
+      })
+    return () => {
+      active = false
+    }
   }, [])
 
   const toggle = (key, value) => {

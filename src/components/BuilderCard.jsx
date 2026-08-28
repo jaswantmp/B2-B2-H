@@ -39,7 +39,6 @@ export default function BuilderCard({ user, onInvite }) {
           <SkillBadge
             key={skill}
             skill={skill}
-            verified={user.verifiedSkills?.includes(skill)}
           />
         ))}
         {[...new Set(user.skills || [])].length > 4 && (

@@ -23,7 +23,7 @@ export default function RecommendationCard({ rec, onInvite }) {
           </div>
           <div className="flex flex-wrap gap-1 mt-2">
             {[...new Set(builder.skills)].slice(0, 3).map(skill => (
-              <SkillBadge key={skill} skill={skill} verified={builder.verifiedSkills?.includes(skill)} />
+              <SkillBadge key={skill} skill={skill} />
             ))}
           </div>
         </div>

@@ -16,7 +16,6 @@ class RecommendationService:
         matched_skills = []
 
         builder_skills = {us.skill.name.lower() for us in builder.user_skills}
-        builder_verified_skills = {us.skill.name.lower() for us in builder.user_skills if us.is_verified}
 
         # 1. Match skills against missing roles / skills categories
         for cat, keywords in TeamHealthService.CATEGORIES.items():
@@ -24,12 +23,8 @@ class RecommendationService:
             if intersection:
                 fit_areas.append(cat)
                 matched_skills.extend(list(intersection))
-                # Add score points for matches
+                # Add score points for matches based on declared skills
                 score += len(intersection) * 10
-                
-                # Verified skills bonus
-                verified_intersection = builder_verified_skills.intersection(set(keywords))
-                score += len(verified_intersection) * 5
 
         # 2. Hackathons won bonus
         score += min(15, builder.hackathons_won * 5)
@@ -48,11 +43,10 @@ class RecommendationService:
 
         # Build natural language explanation reasons
         skill_list_str = ", ".join(matched_skills[:3]).title()
-        verified_str = " (verified)" if any(s in builder_verified_skills for s in matched_skills) else ""
         
         reason = (
             f"{builder.name} is a strong fit for your team because they cover your critical "
-            f"{'/'.join(fit_areas) if fit_areas else 'builder'} gaps with expertise in {skill_list_str}{verified_str}. "
+            f"{'/'.join(fit_areas) if fit_areas else 'builder'} gaps with expertise in {skill_list_str}. "
         )
         if builder.hackathons_won > 0:
             reason += f"They are a proven innovator with {builder.hackathons_won} hackathon win(s). "

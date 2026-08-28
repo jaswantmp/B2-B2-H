@@ -1,0 +1,9 @@
+experiment,model,mae,rmse,r2
+Baseline,Non-ML Baseline (Heuristic),6.7962,8.7215,0.3294
+Experiment A (Full),Ridge Regression,3.7599,4.6429,0.81
+Experiment A (Full),Random Forest,3.7872,4.6739,0.8074
+Experiment A (Full),Gradient Boosting,3.7622,4.6427,0.81
+Experiment B (Ablated),Ridge Regression,4.0434,5.0463,0.7755
+Experiment B (Ablated),Random Forest,3.9671,4.9153,0.787
+Experiment B (Ablated),Gradient Boosting,3.9265,4.8598,0.7918
+Final Test Set,Gradient Boosting (Test Evaluation),3.8264,4.7215,0.8076

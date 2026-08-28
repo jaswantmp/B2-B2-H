@@ -1,0 +1,9 @@
+experiment,model,accuracy,precision,recall,f1,auc,tn,fp,fn,tp
+Baseline,Non-ML Baseline (Heuristic),0.7006,0.989,0.2431,0.3903,0.7355,15874,28,7832,2516
+Experiment A (Full),Logistic Regression,0.8667,0.9071,0.7373,0.8135,0.9039,15121,781,2718,7630
+Experiment A (Full),Random Forest,0.8657,0.914,0.7278,0.8103,0.9016,15193,709,2817,7531
+Experiment A (Full),Gradient Boosting,0.8668,0.9017,0.7431,0.8148,0.9049,15064,838,2658,7690
+Experiment B (Ablated),Logistic Regression,0.8637,0.9148,0.7215,0.8067,0.8896,15207,695,2882,7466
+Experiment B (Ablated),Random Forest,0.8643,0.9064,0.7314,0.8096,0.8852,15120,782,2779,7569
+Experiment B (Ablated),Gradient Boosting,0.8638,0.9092,0.7273,0.8081,0.8942,15150,752,2822,7526
+Final Test Set,Gradient Boosting (Test Evaluation),0.869,0.9155,0.7363,0.8162,0.8982,15173,705,2735,7637

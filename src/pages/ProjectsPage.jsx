@@ -1,8 +1,7 @@
-// src/pages/ProjectsPage.jsx
 import { useState, useEffect } from 'react'
-import { FolderOpen, Search, Users, Clock, Tag, ArrowRight, ExternalLink } from 'lucide-react'
+import { FolderOpen, Search, Users, Clock, Tag, ArrowRight, ExternalLink, Sparkles, ChevronDown, ChevronUp } from 'lucide-react'
 import PulseAvatar from '../components/PulseAvatar.jsx'
-import { getProjects, applyProject } from '../services/api.js'
+import { getProjects, applyProject, getProjectRecommendations } from '../services/api.js'
 import { useToast } from '../context/ToastContext.jsx'
 
 
@@ -27,12 +26,15 @@ const STATUS_STYLES = {
   completed:  'bg-slate-100 dark:bg-slate-800/60 border-slate-200 dark:border-slate-700/50 text-slate-600 dark:text-slate-400',
 }
 
-function ProjectCard({ project }) {
+function ProjectCard({ project, recommendation }) {
   const cat    = CAT_STYLES[project.category] ?? CAT_STYLES.college
   const status = STATUS_STYLES[project.status] ?? STATUS_STYLES.active
   const { push } = useToast()
   const [applying, setApplying] = useState(false)
   const [applied, setApplied] = useState(false)
+  const [showReasons, setShowReasons] = useState(false)
+
+  const rec = recommendation || project.recommendation
 
   const handleApply = async () => {
     try {
@@ -62,6 +64,11 @@ function ProjectCard({ project }) {
             <span className={`text-xs px-2 py-0.5 rounded-full border font-medium capitalize ${status}`}>
               {project.status}
             </span>
+            {rec && (
+              <span className="text-xs px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/40 border border-emerald-300 dark:border-emerald-800/50 text-emerald-800 dark:text-emerald-400 font-bold flex items-center gap-1">
+                ⭐ {rec.match_score}% Match
+              </span>
+            )}
           </div>
           <h2 className="font-bold theme-text text-base leading-snug">{project.title}</h2>
           <p className="text-xs theme-muted mt-0.5">{project.university}</p>
@@ -71,13 +78,39 @@ function ProjectCard({ project }) {
       {/* Description */}
       <p className="text-sm theme-muted leading-relaxed line-clamp-2">{project.description}</p>
 
+      {/* AI Recommendation explanation panel */}
+      {rec && rec.match_reasons && rec.match_reasons.length > 0 && (
+        <div className="rounded-xl p-3 border border-violet-400 dark:border-violet-800/40" style={{ backgroundColor: 'var(--bg-raised)' }}>
+          <button
+            onClick={() => setShowReasons(v => !v)}
+            className="w-full flex items-center justify-between text-xs font-semibold text-violet-800 dark:text-violet-400"
+          >
+            <span className="flex items-center gap-1.5">
+              <Sparkles size={12} /> Why recommended?
+            </span>
+            {showReasons ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
+          </button>
+          {showReasons && (
+            <ul className="mt-2 space-y-1 text-xs theme-text-secondary list-disc list-inside">
+              {rec.match_reasons.map((r, idx) => (
+                <li key={idx}>{r}</li>
+              ))}
+            </ul>
+          )}
+        </div>
+      )}
+
       {/* Tech stack */}
       <div className="flex flex-wrap gap-1.5">
         {[...new Set(project.tech)].map(t => (
           <span
             key={t}
-            className="text-xs px-2.5 py-0.5 rounded-md border font-medium theme-muted"
-            style={{ backgroundColor: 'var(--bg-raised)', borderColor: 'var(--border-strong)' }}
+            className={`text-xs px-2.5 py-0.5 rounded-md border font-medium ${
+              rec?.matched_skills?.includes(t)
+                ? 'bg-violet-100 dark:bg-violet-900/40 border-violet-400 text-violet-800 dark:text-violet-300 font-semibold'
+                : 'theme-muted'
+            }`}
+            style={!rec?.matched_skills?.includes(t) ? { backgroundColor: 'var(--bg-raised)', borderColor: 'var(--border-strong)' } : {}}
           >
             {t}
           </span>
@@ -97,18 +130,16 @@ function ProjectCard({ project }) {
       </div>
 
       {/* Footer */}
-      <div
-        className="flex items-center justify-between pt-3 border-t theme-divider"
-      >
+      <div className="flex items-center justify-between pt-3 border-t theme-divider">
         <div className="flex items-center gap-2">
           {/* Team avatars */}
           <div className="flex -space-x-2">
-            {project.team.slice(0, 3).map(member => (
+            {(project.team || []).slice(0, 3).map(member => (
               <PulseAvatar key={member.id} user={member} size="xs" showTooltip={true} />
             ))}
           </div>
           <span className="text-xs theme-muted">
-            {project.team.length} member{project.team.length !== 1 ? 's' : ''}
+            {(project.team || []).length} member{(project.team || []).length !== 1 ? 's' : ''}
           </span>
         </div>
 
@@ -136,7 +167,10 @@ export default function ProjectsPage() {
   const [search, setSearch]     = useState('')
   const [category, setCategory] = useState('')
   const [projectsList, setProjectsList] = useState([])
+  const [recommendationsMap, setRecommendationsMap] = useState({})
+  const [aiRecommended, setAiRecommended] = useState(false)
   const [loading, setLoading] = useState(true)
+  const [recLoading, setRecLoading] = useState(false)
 
   useEffect(() => {
     getProjects().then(data => {
@@ -145,11 +179,34 @@ export default function ProjectsPage() {
     }).catch(console.error)
   }, [])
 
+  const handleToggleAI = async () => {
+    if (!aiRecommended && Object.keys(recommendationsMap).length === 0) {
+      try {
+        setRecLoading(true)
+        const recData = await getProjectRecommendations()
+        const recMap = {}
+        if (recData && Array.isArray(recData.recommendations)) {
+          recData.recommendations.forEach(r => {
+            if (r.project && r.project.id) {
+              recMap[r.project.id] = r
+            }
+          })
+        }
+        setRecommendationsMap(recMap)
+      } catch (err) {
+        console.warn('Failed to load project recommendations:', err)
+      } finally {
+        setRecLoading(false)
+      }
+    }
+    setAiRecommended(v => !v)
+  }
+
   if (loading) {
     return <div className="p-4 sm:p-6 lg:p-8 max-w-7xl theme-text">Loading projects...</div>
   }
 
-  const filtered = projectsList.filter(p => {
+  let displayedProjects = projectsList.filter(p => {
     const q = search.toLowerCase()
     const matchSearch = !q || p.title.toLowerCase().includes(q) ||
       p.description.toLowerCase().includes(q) ||
@@ -158,22 +215,44 @@ export default function ProjectsPage() {
     return matchSearch && matchCat
   })
 
+  if (aiRecommended) {
+    displayedProjects = [...displayedProjects].sort((a, b) => {
+      const scoreA = recommendationsMap[a.id]?.match_score ?? 0
+      const scoreB = recommendationsMap[b.id]?.match_score ?? 0
+      return scoreB - scoreA
+    })
+  }
+
   const counts = CATEGORIES.reduce((acc, c) => {
     acc[c.key] = c.key ? projectsList.filter(p => p.category === c.key).length : projectsList.length
     return acc
   }, {})
 
-
   return (
     <div className="p-4 sm:p-6 lg:p-8 max-w-7xl">
       {/* Header */}
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold theme-text mb-1 flex items-center gap-2">
-          <FolderOpen size={22} className="text-violet-400" /> Projects
-        </h1>
-        <p className="theme-muted text-sm">
-          College projects, research, open source, and startup opportunities. Find your next collaboration.
-        </p>
+      <div className="mb-6 flex items-start justify-between gap-4 flex-wrap">
+        <div>
+          <h1 className="text-2xl font-bold theme-text mb-1 flex items-center gap-2">
+            <FolderOpen size={22} className="text-violet-400" /> Projects
+          </h1>
+          <p className="theme-muted text-sm">
+            College projects, research, open source, and startup opportunities. Find your next collaboration.
+          </p>
+        </div>
+
+        <button
+          onClick={handleToggleAI}
+          disabled={recLoading}
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all ${
+            aiRecommended
+              ? 'bg-gradient-to-r from-violet-600 to-indigo-600 text-white shadow-lg shadow-violet-600/20'
+              : 'theme-btn-ghost border border-violet-500/30 text-violet-400 hover:border-violet-500/60'
+          }`}
+        >
+          <Sparkles size={16} className={recLoading ? 'animate-spin' : ''} />
+          {recLoading ? 'Ranking ML Matches...' : aiRecommended ? 'AI Recommended Active' : 'Sort by AI Recommendation'}
+        </button>
       </div>
 
       {/* Stats */}
@@ -221,19 +300,18 @@ export default function ProjectsPage() {
             >
               {c.label} {c.key ? `(${counts[c.key]})` : `(${projectsList.length})`}
             </button>
-
           ))}
         </div>
       </div>
 
-      <p className="text-xs theme-muted mb-5">{filtered.length} project{filtered.length !== 1 ? 's' : ''} found</p>
+      <p className="text-xs theme-muted mb-5">{displayedProjects.length} project{displayedProjects.length !== 1 ? 's' : ''} found</p>
 
       {projectsList.length === 0 ? (
         <div className="text-center py-20">
           <FolderOpen size={36} className="theme-muted mx-auto mb-3" />
           <p className="theme-text font-medium mb-1">No projects available.</p>
         </div>
-      ) : filtered.length === 0 ? (
+      ) : displayedProjects.length === 0 ? (
         <div className="text-center py-20">
           <FolderOpen size={36} className="theme-muted mx-auto mb-3" />
           <p className="theme-text font-medium mb-1">No projects match your search</p>
@@ -246,9 +324,16 @@ export default function ProjectsPage() {
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
-          {filtered.map(p => <ProjectCard key={p.id} project={p} />)}
+          {displayedProjects.map(p => (
+            <ProjectCard
+              key={p.id}
+              project={p}
+              recommendation={recommendationsMap[p.id]}
+            />
+          ))}
         </div>
       )}
     </div>
   )
 }
+

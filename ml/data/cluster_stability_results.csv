@@ -1,0 +1,3 @@
+k,mean_silhouette,std_silhouette,mean_inertia,std_inertia,mean_ari,min_ari,max_ari
+2,0.13,0.0041,5583.32,0.65,0.8846,0.7804,1.0
+4,0.1108,0.0025,4743.45,7.38,0.8911,0.7754,0.9953

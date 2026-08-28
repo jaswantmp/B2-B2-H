@@ -175,6 +175,7 @@ def get_hackathon_recommendations(
         rec["hackathon"] = {
             "id": hk.id,
             "title": hk.title,
+            "name": hk.title,
             "organizer": hk.organizer,
             "date": hk.date.isoformat() if hk.date else None,
             "end_date": hk.end_date.isoformat() if hk.end_date else None,
@@ -182,10 +183,47 @@ def get_hackathon_recommendations(
             "prize": hk.prize,
             "team_size": hk.team_size,
             "description": hk.description,
-            "tracks": hk.tracks,
-            "tags": hk.tags,
-            "user_registered": user_registered
+            "tracks": hk.tracks or [],
+            "tags": hk.tags or [],
+            "technologies": hk.tracks or [],
+            "status": "open" if hk.end_date and hk.end_date >= datetime.utcnow() else "closed",
+            "user_registered": user_registered,
+            "userRegistered": user_registered
         }
+        rec["recommendation_score"] = rec.get("recommendation_score", rec.get("score", 85))
+        rec["match_reasons"] = rec.get("match_reasons", rec.get("explanation", []))
 
     return res
+
+
+@router.get("/project-recommendations", status_code=status.HTTP_200_OK)
+def get_project_recommendations(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Get ML-based project recommendations for the authenticated user based on skills,
+    interests, academic background, and TF-IDF profile text similarity.
+    """
+    from app.services.project_recommendation_service import ProjectRecommendationService
+    return ProjectRecommendationService.get_recommendations(db, current_user)
+
+
+@router.get("/student-cluster", status_code=status.HTTP_200_OK)
+def get_student_cluster(
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Get K-Means ML skill cluster assignment, centroid distance, confidence,
+    dominant skills/domains, and explainable rationale for the authenticated user.
+    """
+    from app.services.student_clustering_service import StudentClusteringService
+    from app.database import SessionLocal
+
+    db = SessionLocal()
+    try:
+        return StudentClusteringService.get_user_cluster(db, current_user)
+    finally:
+        db.close()
+
 

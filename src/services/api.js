@@ -56,6 +56,49 @@ export function normalizeProject(p) {
 }
 
 
+function isNetworkError(err) {
+  if (!err) return false
+  if (err.name === 'AbortError') return false
+  if (typeof err.status === 'number' && err.status > 0) return false
+  return (
+    err instanceof TypeError ||
+    (typeof err.message === 'string' && (
+      err.message.includes('fetch') ||
+      err.message.includes('Failed to fetch') ||
+      err.message.includes('NetworkError') ||
+      err.message.includes('CONNECTION') ||
+      err.message.includes('connection')
+    )) ||
+    err.code === 'ECONNREFUSED'
+  )
+}
+
+function attachCallerSignal(promise, signal) {
+  if (!signal) return promise
+  if (signal.aborted) {
+    const abortErr = new Error('Request aborted')
+    abortErr.name = 'AbortError'
+    return Promise.reject(abortErr)
+  }
+  return new Promise((resolve, reject) => {
+    const abortHandler = () => {
+      const abortErr = new Error('Request aborted')
+      abortErr.name = 'AbortError'
+      reject(abortErr)
+    }
+    signal.addEventListener('abort', abortHandler, { once: true })
+    promise
+      .then(res => {
+        signal.removeEventListener('abort', abortHandler)
+        resolve(res)
+      })
+      .catch(err => {
+        signal.removeEventListener('abort', abortHandler)
+        reject(err)
+      })
+  })
+}
+
 const inflightGetRequests = new Map()
 
 // Generic fetch wrapper (used when BASE is set to a real API)
@@ -63,8 +106,10 @@ async function request(path, options = {}) {
   const method = (options.method || 'GET').toUpperCase()
   const isGet = method === 'GET'
   const requestKey = `${method}:${BASE}${path}`
+
   if (isGet && inflightGetRequests.has(requestKey)) {
-    return inflightGetRequests.get(requestKey)
+    const sharedPromise = inflightGetRequests.get(requestKey)
+    return attachCallerSignal(sharedPromise, options.signal)
   }
 
   const executeRequest = async () => {
@@ -83,65 +128,97 @@ async function request(path, options = {}) {
       console.error('Error reading auth token for API request:', e)
     }
 
-    const timeoutMs = options.timeout ?? 10000
-    const controller = new AbortController()
-    const timer = setTimeout(() => controller.abort(), timeoutMs)
+    const maxRetries = options.retries ?? 3
+    const retryDelayMs = options.retryDelay ?? 500
 
-    const abortHandler = () => controller.abort()
-    if (options.signal) {
-      if (options.signal.aborted) {
-        controller.abort()
-      } else {
-        options.signal.addEventListener('abort', abortHandler, { once: true })
-      }
-    }
+    let attempt = 0
+    let res = null
 
-    try {
-      const res = await fetch(url, {
-        ...options,
-        headers,
-        signal: controller.signal,
-      })
+    while (attempt <= maxRetries) {
+      const timeoutMs = options.timeout ?? 10000
+      const attemptController = new AbortController()
+      const timer = setTimeout(() => attemptController.abort(), timeoutMs)
 
-      if (!res.ok) {
-        let body = null
-        try {
-          body = await res.json()
-        } catch (_) {}
-        const err = new Error(`API error: ${res.status} ${res.statusText}`)
-        err.status = res.status
-        err.body = body
+      try {
+        res = await fetch(url, {
+          ...options,
+          headers,
+          signal: attemptController.signal,
+        })
+        clearTimeout(timer)
+        break
+      } catch (err) {
+        clearTimeout(timer)
+
+        // If caller explicitly cancelled the request (e.g. unmounted), rethrow immediately
+        if (options.signal?.aborted) {
+          const abortErr = new Error('Request aborted')
+          abortErr.name = 'AbortError'
+          throw abortErr
+        }
+
+        const isStartupTimeout = err.name === 'AbortError' && attemptController.signal.aborted
+        const isTransientNetwork = isNetworkError(err) || isStartupTimeout
+
+        if (isTransientNetwork && attempt < maxRetries) {
+          attempt++
+          console.warn(`[API] Connection/startup failed for ${path} (${err.message}). Retrying (${attempt}/${maxRetries}) in ${retryDelayMs}ms...`)
+          await new Promise(r => setTimeout(r, retryDelayMs))
+          if (options.signal?.aborted) {
+            const abortErr = new Error('Request aborted during retry')
+            abortErr.name = 'AbortError'
+            throw abortErr
+          }
+          continue
+        }
+
+        if (err.name === 'AbortError' || isStartupTimeout) {
+          const isTimeout = !options.signal?.aborted
+          const timeoutErr = new Error(isTimeout ? `Request timeout after ${timeoutMs}ms` : 'Request aborted')
+          timeoutErr.name = 'AbortError'
+          throw timeoutErr
+        }
         throw err
       }
-      return await res.json()
-    } catch (err) {
-      if (err.name === 'AbortError') {
-        const isTimeout = !options.signal?.aborted
-        const timeoutErr = new Error(isTimeout ? `Request timeout after ${timeoutMs}ms` : 'Request aborted')
-        timeoutErr.name = 'AbortError'
-        throw timeoutErr
-      }
-      throw err
-    } finally {
-      clearTimeout(timer)
-      if (options.signal) {
-        options.signal.removeEventListener('abort', abortHandler)
-      }
     }
+
+    if (!res.ok) {
+      if (res.status === 401) {
+        try {
+          if (typeof localStorage !== 'undefined') {
+            localStorage.removeItem('b2b2h-auth')
+          }
+          if (typeof window !== 'undefined' && typeof CustomEvent !== 'undefined') {
+            window.dispatchEvent(new CustomEvent('b2b2h:unauthorized'))
+          }
+        } catch (_) {}
+      }
+      let body = null
+      try {
+        body = await res.json()
+      } catch (_) {}
+      const err = new Error(`API error: ${res.status} ${res.statusText}`)
+      err.status = res.status
+      err.body = body
+      throw err
+    }
+    return await res.json()
   }
 
   const promise = executeRequest()
 
   if (isGet) {
     inflightGetRequests.set(requestKey, promise)
-    promise.finally(() => {
-      if (inflightGetRequests.get(requestKey) === promise) {
-        inflightGetRequests.delete(requestKey)
-      }
-    })
+    promise
+      .finally(() => {
+        if (inflightGetRequests.get(requestKey) === promise) {
+          inflightGetRequests.delete(requestKey)
+        }
+      })
+      .catch(() => {})
   }
 
-  return promise
+  return attachCallerSignal(promise, options.signal)
 }
 
 // ─── Mock helpers (simulate async API) ───────────────────────────────────────
@@ -234,8 +311,8 @@ export async function getBuilders({
       if (e.name === 'AbortError') {
         throw e
       }
-      console.warn('Backend builders error, returning empty list:', e)
-      return []
+      console.warn('Backend builders fetch failed:', e)
+      throw e
     }
   }
 
@@ -305,9 +382,9 @@ export async function getBuilder(id) {
 }
 
 // GET /api/v1/auth/me
-export async function getMe() {
+export async function getMe(options = {}) {
   if (BASE) {
-    const data = await request('/api/v1/auth/me')
+    const data = await request('/api/v1/auth/me', options)
     return normalizeBuilder(data)
   }
 
@@ -357,8 +434,9 @@ export async function getMyTeam() {
   if (BASE) {
     const team = await request('/api/v1/teams/my')
     if (team) {
-      team.healthScores = team.healthScores || { Frontend: 60, Backend: 70, 'AI/ML': 40, Design: 50, Product: 60 }
-      team.missingRoles = team.missingRoles || []
+      team.healthScores = team.health_scores || team.healthScores || {}
+      team.missingRoles = team.missing_roles || team.missingRoles || []
+      team.healthDetails = team.health_details || team.healthDetails || {}
       team.createdAt = team.createdAt || team.created_at || '2026-06-20'
       team.hackathon = team.hackathon || 'SKCET Hackathon 2026'
       if (Array.isArray(team.members)) {
@@ -389,8 +467,9 @@ export async function createTeam(data) {
       body: JSON.stringify(data),
     })
     if (team) {
-      team.healthScores = team.healthScores || { Frontend: 60, Backend: 70, 'AI/ML': 40, Design: 50, Product: 60 }
-      team.missingRoles = team.missingRoles || []
+      team.healthScores = team.health_scores || team.healthScores || {}
+      team.missingRoles = team.missing_roles || team.missingRoles || []
+      team.healthDetails = team.health_details || team.healthDetails || {}
       team.createdAt = team.createdAt || team.created_at || new Date().toISOString()
       team.hackathon = team.hackathon || 'SKCET Hackathon 2026'
       if (Array.isArray(team.members)) {
@@ -424,7 +503,7 @@ export async function createTeam(data) {
         verifiedSkills: currentUser.verifiedSkills || [],
       }
     ],
-    healthScores: { Frontend: 60, Backend: 70, 'AI/ML': 40, Design: 50, Product: 60 },
+    healthScores: {},
     missingRoles: [],
   }
   myTeam = newTeam
@@ -433,53 +512,114 @@ export async function createTeam(data) {
 
 
 // GET /api/v1/recommendations
-export async function getRecommendations() {
+export async function getRecommendations(options = {}) {
   if (BASE) {
-    try {
-      const [me, builders] = await Promise.all([
-    getMe(),
-    getBuilders()
+    const [me, builders] = await Promise.all([
+      getMe(options),
+      getBuilders(options)
     ])
-    const matchesData = await generateTeamMatches(me.id)
-      
-      const buildersMap = {}
-      if (Array.isArray(builders)) {
-        builders.forEach(b => {
-          buildersMap[b.id] = b
-        })
-      }
-      
-      const mapped = (matchesData.matches || []).map(match => {
-        const fullBuilder = buildersMap[match.id] || {
-          id: match.id,
-          name: match.name,
-          avatar: match.avatar,
-          branch: match.branch,
-          university: match.university,
-          status: 'LOOKING_FOR_TEAM',
-          location: match.university || '',
-          hackathonsWon: 0,
-          skills: [],
-          verifiedSkills: []
-        }
-        return {
-          id: match.id,
-          compatibility_score: match.compatibility_score,
-          builder: fullBuilder,
-          reason: match.reasons.join('. ') || `Recommended as a ${match.recommended_role}.`,
-          fitAreas: [match.recommended_role.replace(' Developer', '').replace(' Engineer', '').replace(' Lead', '')],
-          hackathon: 'HackIndia 2026'
-        }
+    const matchesData = await generateTeamMatches(me.id, options)
+    
+    const buildersMap = {}
+    if (Array.isArray(builders)) {
+      builders.forEach(b => {
+        buildersMap[b.id] = b
       })
-      return mapped
-    } catch (e) {
-      console.error("Failed to load real recommendations:", e)
-      return []
     }
+    
+    const mapped = (matchesData.matches || []).map(match => {
+      const fullBuilder = buildersMap[match.id] || {
+        id: match.id,
+        name: match.name,
+        avatar: match.avatar,
+        branch: match.branch,
+        university: match.university,
+        status: 'LOOKING_FOR_TEAM',
+        location: match.university || '',
+        hackathonsWon: 0,
+        skills: [],
+        verifiedSkills: []
+      }
+      return {
+        id: match.id,
+        compatibility_score: match.compatibility_score,
+        builder: fullBuilder,
+        reason: match.reasons.join('. ') || `Recommended as a ${match.recommended_role}.`,
+        fitAreas: [match.recommended_role.replace(' Developer', '').replace(' Engineer', '').replace(' Lead', '')],
+        hackathon: 'HackIndia 2026'
+      }
+    })
+    return mapped
   }
 
   await delay(800)
   return recommendations
+}
+
+// GET /api/v1/ai/project-recommendations
+export async function getProjectRecommendations() {
+  if (BASE) {
+    try {
+      return await request('/api/v1/ai/project-recommendations')
+    } catch (e) {
+      console.warn('Backend project recommendations error, returning fallback empty list:', e)
+      return { total_projects: 0, recommended_count: 0, recommendations: [] }
+    }
+  }
+
+  await delay(600)
+  const pList = projects.map((p, idx) => {
+    const normP = normalizeProject(p)
+    return {
+      project: normP,
+      match_score: Math.max(50, 94 - (idx * 5)),
+      ml_score: Math.max(50, 93.5 - (idx * 5)),
+      probability_good_fit: Math.max(0.4, 0.94 - (idx * 0.05)),
+      predicted_compatibility: Math.max(50, 92.0 - (idx * 4)),
+      matched_skills: normP.tech.slice(0, 2),
+      match_reasons: [
+        `Matches required skills: ${normP.tech.slice(0, 2).join(', ')}`,
+        `Aligned with ${normP.category} domain interests`,
+        'High profile text similarity'
+      ]
+    }
+  })
+  return {
+    total_projects: pList.length,
+    recommended_count: pList.length,
+    recommendations: pList
+  }
+}
+
+// GET /api/v1/ai/student-cluster
+export async function getStudentCluster() {
+  if (BASE) {
+    try {
+      return await request('/api/v1/ai/student-cluster')
+    } catch (e) {
+      console.warn('Backend student cluster error, returning fallback cluster:', e)
+      return {
+        cluster_id: 0,
+        segment_name: 'Applied Project Specialist',
+        confidence: 0.88,
+        centroid_distance: 1.34,
+        dominant_skills: ['Python', 'FastAPI', 'React'],
+        dominant_domains: ['AI/ML', 'Web Development'],
+        explanation: 'Your profile shows strong practical project execution with technical depth across full-stack applications.'
+      }
+    }
+  }
+
+  await delay(400)
+  return {
+    cluster_id: 0,
+    segment_name: 'Applied Project Specialist',
+    confidence: 0.88,
+    centroid_distance: 1.34,
+    dominant_skills: ['Python', 'FastAPI', 'React'],
+    dominant_domains: ['AI/ML', 'Web Development'],
+    explanation: 'Your profile shows strong practical project execution with technical depth across full-stack applications.'
+  }
 }
 
 // POST /api/v1/recommend-team   body: { idea: string }
@@ -836,11 +976,13 @@ export async function deleteUserSkill(skillId) {
 }
 
 // ─── AI Team Matching ─────────────────────────────────────────────────────────
-export async function generateTeamMatches(userId) {
+export async function generateTeamMatches(userId, options = {}) {
   if (BASE) {
     return request('/api/v1/ai/team-match', {
       method: 'POST',
-      body: JSON.stringify({ user_id: userId })
+      body: JSON.stringify({ user_id: userId }),
+      timeout: 25000,
+      ...options,
     })
   }
   await delay(1250)
@@ -1015,7 +1157,8 @@ export async function explainTeamMatch(targetUserId) {
   if (BASE) {
     return request('/api/v1/ai/team-match/explain', {
       method: 'POST',
-      body: JSON.stringify({ target_user_id: targetUserId })
+      body: JSON.stringify({ target_user_id: targetUserId }),
+      timeout: 25000,
     })
   }
   await delay(800)

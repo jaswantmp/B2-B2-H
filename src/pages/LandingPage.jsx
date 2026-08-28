@@ -11,6 +11,8 @@ import SkillBadge from '../components/SkillBadge.jsx'
 import { getBuilders } from '../services/api.js'
 
 
+import { useAuth } from '../context/AuthContext.jsx'
+
 const FEATURES = [
   {
     icon: Sparkles,
@@ -23,8 +25,8 @@ const FEATURES = [
     icon: ShieldCheck,
     color: 'text-cyan-400',
     bg: 'bg-cyan-900/30 border-cyan-800/40',
-    title: 'Verified Skills',
-    desc: 'Skills are verified against real GitHub activity, not self-reported claims. A shield icon means they\'ve actually shipped code in that technology.',
+    title: 'Skills & Expertise',
+    desc: 'Showcase your declared skills and experience levels so teammates can easily evaluate project compatibility.',
   },
   {
     icon: Circle,
@@ -89,8 +91,11 @@ const STATS = [
 ]
 export default function LandingPage() {
   const [usersList, setUsersList] = useState([])
+  const { loading: authLoading } = useAuth()
 
   useEffect(() => {
+    if (authLoading) return
+
     const controller = new AbortController()
     getBuilders({ limit: 5, signal: controller.signal })
       .then(setUsersList)
@@ -102,7 +107,7 @@ export default function LandingPage() {
     return () => {
       controller.abort()
     }
-  }, [])
+  }, [authLoading])
 
   const testimonials = TESTIMONIALS_RAW.map(t => ({
     ...t,
@@ -162,7 +167,7 @@ export default function LandingPage() {
 
           {/* Subheadline */}
           <p className="text-lg text-slate-400 max-w-2xl mx-auto mb-10 leading-relaxed">
-            B2B2H is the operating system for student builders. Find verified teammates, form balanced teams, and ship something that matters — for hackathons, projects, research, or your next startup.
+            B2B2H is the operating system for student builders. Find compatible teammates, form balanced teams, and ship something that matters — for hackathons, projects, research, or your next startup.
           </p>
 
           {/* CTAs */}
@@ -216,7 +221,7 @@ export default function LandingPage() {
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-3">See who's building right now</h2>
-            <p className="text-slate-400">Every builder shows their live status, verified skills, and what they're looking for.</p>
+            <p className="text-slate-400">Every builder shows their live status, skills, and what they're looking for.</p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -236,7 +241,7 @@ export default function LandingPage() {
                 <p className="text-xs text-slate-400 line-clamp-2 mb-3 leading-relaxed">{user.bio}</p>
                 <div className="flex flex-wrap gap-1.5">
                   {[...new Set(user.skills || [])].slice(0, 3).map(skill => (
-                    <SkillBadge key={skill} skill={skill} verified={user.verifiedSkills?.includes(skill)} />
+                    <SkillBadge key={skill} skill={skill} />
                   ))}
                 </div>
               </article>

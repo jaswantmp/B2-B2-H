@@ -243,7 +243,7 @@ export default function TeamsPage() {
                   </div>
                   <div className="hidden sm:flex flex-wrap gap-1 justify-end">
                     {m.skills.slice(0, 2).map(s => (
-                      <SkillBadge key={s} skill={s} verified={m.verifiedSkills?.includes(s)} size="xs" />
+                      <SkillBadge key={s} skill={s} size="xs" />
                     ))}
                   </div>
                 </div>
@@ -321,7 +321,7 @@ export default function TeamsPage() {
               Team Health Radar
             </h2>
             <p className="text-xs theme-muted mb-4">Current skill coverage across domains.</p>
-            <TeamHealthRadar scores={team.healthScores} height={220} />
+            <TeamHealthRadar scores={team.health_scores || team.healthScores || {}} height={220} />
           </div>
 
           {/* Coverage bars */}
@@ -333,16 +333,26 @@ export default function TeamsPage() {
               <Shield size={15} className="text-cyan-400" />
               Skill Coverage
             </h2>
-            <div className="space-y-3">
-              {Object.entries(team.healthScores).map(([area, score]) => {
+            <div className="space-y-4">
+              {Object.entries(team.health_scores || team.healthScores || {}).map(([area, score]) => {
                 const { label, cls, bar, pill } = COVER_SEVERITY(score)
+                const details = (team.health_details || team.healthDetails || {})[area] || {}
+                const explanation = details.explanation || ''
+                const skillsList = (details.relevant_skills || []).slice(0, 3).join(' • ')
+                const contribText = skillsList
+                  ? `${skillsList} • ${details.contributors_count || 1} contributor${(details.contributors_count || 1) > 1 ? 's' : ''}`
+                  : explanation || (score < 40 ? 'No strong coverage' : 'Basic coverage')
+
                 return (
-                  <div key={area}>
-                    <div className="flex items-center justify-between mb-1">
-                      <span className="text-xs font-medium theme-text">{area}</span>
-                      <span className={`text-xs px-1.5 py-0.5 rounded border font-medium ${pill}`}>
-                        {label}
-                      </span>
+                  <div key={area} className="space-y-1">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-semibold theme-text">{area}</span>
+                      <div className="flex items-center gap-2">
+                        <span className={`text-xs ${cls} font-bold`}>{score}%</span>
+                        <span className={`text-[10px] px-2 py-0.5 rounded border font-medium ${pill}`}>
+                          {label}
+                        </span>
+                      </div>
                     </div>
                     <div
                       className="w-full h-1.5 rounded-full overflow-hidden"
@@ -353,7 +363,9 @@ export default function TeamsPage() {
                         style={{ width: `${score}%`, backgroundColor: bar }}
                       />
                     </div>
-                    <p className={`text-xs ${cls} mt-0.5 text-right`}>{score}%</p>
+                    <p className="text-[11px] theme-muted leading-tight pt-0.5">
+                      {contribText}
+                    </p>
                   </div>
                 )
               })}

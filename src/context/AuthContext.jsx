@@ -184,14 +184,40 @@ export function AuthProvider({ children }) {
           const timer = setTimeout(() => activeController.abort(), 15000)
 
           try {
-            const response = await fetch(`${BASE}/api/v1/auth/me`, {
-              method: 'GET',
-              headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${stored.token}`,
-              },
-              signal: activeController.signal,
-            })
+            let response = null
+            let attempt = 0
+            const maxRetries = 3
+            const retryDelayMs = 500
+
+            while (attempt <= maxRetries) {
+              try {
+                response = await fetch(`${BASE}/api/v1/auth/me`, {
+                  method: 'GET',
+                  headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${stored.token}`,
+                  },
+                  signal: activeController.signal,
+                })
+                break
+              } catch (fetchErr) {
+                if (fetchErr.name === 'AbortError' || activeController.signal.aborted) {
+                  throw fetchErr
+                }
+                if (attempt < maxRetries) {
+                  attempt++
+                  console.warn(`[Auth] Connection failed during session restore (${fetchErr.message}). Retrying (${attempt}/${maxRetries}) in ${retryDelayMs}ms...`)
+                  await new Promise(r => setTimeout(r, retryDelayMs))
+                  if (activeController.signal.aborted) {
+                    const abortErr = new Error('Session restore aborted during retry')
+                    abortErr.name = 'AbortError'
+                    throw abortErr
+                  }
+                  continue
+                }
+                throw fetchErr
+              }
+            }
 
             if (response.ok) {
               const data = await response.json()
@@ -240,6 +266,21 @@ export function AuthProvider({ children }) {
       isMounted = false
     }
   }, [logout])
+
+  // Listen for global unauthorized API responses (e.g. 401 from api.js)
+  useEffect(() => {
+    const handleUnauthorized = () => {
+      console.warn('[Auth] Unauthorized response detected. Clearing session.')
+      setUser(null)
+      localStorage.removeItem(STORAGE_KEY)
+    }
+
+    window.addEventListener('b2b2h:unauthorized', handleUnauthorized)
+
+    return () => {
+      window.removeEventListener('b2b2h:unauthorized', handleUnauthorized)
+    }
+  }, [])
 
   // ── Login ──────────────────────────────────────────────────────────────
   const login = useCallback(async ({ email, password }) => {

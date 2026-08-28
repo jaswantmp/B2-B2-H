@@ -122,7 +122,7 @@ export default function TeamBuilderPage() {
                   </div>
                   <div className="flex flex-wrap gap-1 justify-end">
                     {member.skills.slice(0, 2).map(s => (
-                      <SkillBadge key={s} skill={s} verified={member.verifiedSkills?.includes(s)} size="xs" />
+                      <SkillBadge key={s} skill={s} size="xs" />
                     ))}
                   </div>
                 </div>
@@ -189,14 +189,14 @@ export default function TeamBuilderPage() {
           <div className="theme-card p-5">
             <h2 className="font-semibold theme-text mb-1">Team Health Radar</h2>
             <p className="text-xs theme-muted mb-4">Skill coverage across key areas.</p>
-            <TeamHealthRadar scores={team.healthScores} height={240} />
+            <TeamHealthRadar scores={team.health_scores || team.healthScores || {}} height={240} />
           </div>
 
           {/* Coverage summary */}
           <div className="theme-card p-5">
             <h2 className="font-semibold theme-text mb-3">Coverage Summary</h2>
             <div className="space-y-2">
-              {Object.entries(team.healthScores).map(([area, score]) => {
+              {Object.entries(team.health_scores || team.healthScores || {}).map(([area, score]) => {
                 const { label, cls, bg } = GAP_SEVERITY(score)
                 return (
                   <div key={area} className={`flex items-center justify-between p-2.5 rounded-lg border ${bg}`}>
@@ -209,11 +209,18 @@ export default function TeamBuilderPage() {
           </div>
 
           {/* Overall readiness */}
-          <div className="rounded-xl p-5 border border-violet-800/30 text-center" style={{ backgroundColor: 'var(--bg-raised)' }}>
-            <div className="text-3xl font-bold gradient-text mb-1">56%</div>
-            <p className="text-xs text-violet-800 dark:text-violet-400 font-semibold">Overall team readiness</p>
-            <p className="text-xs theme-muted mt-1">Add 3 more members to reach 90%+</p>
-          </div>
+          {(() => {
+            const scoresObj = team.health_scores || team.healthScores || {}
+            const scoreVals = Object.values(scoresObj)
+            const readiness = scoreVals.length ? Math.round(scoreVals.reduce((a, b) => a + b, 0) / scoreVals.length) : 0
+            return (
+              <div className="rounded-xl p-5 border border-violet-800/30 text-center" style={{ backgroundColor: 'var(--bg-raised)' }}>
+                <div className="text-3xl font-bold gradient-text mb-1">{readiness}%</div>
+                <p className="text-xs text-violet-800 dark:text-violet-400 font-semibold">Overall team readiness</p>
+                <p className="text-xs theme-muted mt-1">Dynamically calculated across 5 core skill dimensions</p>
+              </div>
+            )
+          })()}
         </div>
       </div>
 

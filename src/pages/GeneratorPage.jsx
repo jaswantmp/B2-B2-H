@@ -105,7 +105,7 @@ function BuilderMatchCard({ builder, score, onInvite }) {
 
           <div className="flex flex-wrap gap-1 mb-3">
             {[...new Set(builder.skills)].slice(0, 3).map(s => (
-              <SkillBadge key={s} skill={s} verified={builder.verifiedSkills?.includes(s)} size="xs" />
+              <SkillBadge key={s} skill={s} size="xs" />
             ))}
             {builder.skills.length > 3 && (
               <span className="text-xs theme-muted self-center">+{builder.skills.length - 3}</span>

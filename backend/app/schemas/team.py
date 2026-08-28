@@ -1,5 +1,6 @@
 # app/schemas/team.py
 from datetime import datetime
+from typing import Any
 from pydantic import BaseModel, ConfigDict, Field
 from app.schemas.user import UserResponse
 
@@ -84,11 +85,14 @@ class TeamResponse(TeamBase):
     model_config = ConfigDict(from_attributes=True)
 
 
-# Detailed team response including leader, members, and active invites lists
+# Detailed team response including leader, members, active invites lists, and dynamic ML health scores
 class TeamDetailResponse(TeamResponse):
     leader: UserResponse
     members: list[TeamMemberResponse] = []
     invites: list[TeamInviteResponse] = []
+    health_scores: dict[str, int] = {}
+    missing_roles: list[str] = []
+    health_details: dict[str, Any] = {}
 
     model_config = ConfigDict(from_attributes=True)
 

@@ -1,4 +1,12 @@
 # app/main.py
+import os
+import sys
+
+# Ensure project root is in sys.path so root-level packages ('ml') are importable when running uvicorn from backend/
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+if project_root not in sys.path:
+    sys.path.insert(0, project_root)
+
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
@@ -39,6 +47,14 @@ async def lifespan(app: FastAPI):
                 db.close()
         else:
             print("Warning: Database table 'skills' does not exist yet. Please run 'alembic upgrade head' to apply database migrations.")
+
+        # Pre-warm ML models during startup
+        try:
+            from ml.inference import get_inference_engine
+            get_inference_engine()
+            print("ML inference models loaded successfully.")
+        except Exception as ml_err:
+            print(f"Warning: ML model pre-warm failed: {ml_err}")
 
     except Exception as e:
         print(f"Warning: Database connectivity or startup check failed: {e}")

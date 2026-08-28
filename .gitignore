@@ -12,3 +12,12 @@ __pycache__/
 # Virtual environment
 .venv/
 venv/
+
+# Offline / generated ML artifacts
+ml/data/skill_gap_analysis.csv
+ml/data/student_project_rankings.csv
+ml/data/student_project_targets.csv
+ml/data/student_project_pairs.csv
+ml/data/regression_predictions.csv
+ml/models/random_forest_regressor.pkl
+ml/models/random_forest_classifier.pkl

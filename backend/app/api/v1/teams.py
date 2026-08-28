@@ -7,8 +7,18 @@ from app.models.notification import Notification, NotificationType
 from app.schemas.team import TeamCreate, TeamUpdate, TeamDetailResponse, TeamInviteCreate, TeamInviteResponse, UserTeamInviteResponse, TeamInviteActionResponse
 from app.dependencies import get_current_user
 from app.models.user import User
+from app.services.team_health_service import TeamHealthService
 
 router = APIRouter(prefix="/teams", tags=["teams"])
+
+
+def _attach_team_health(team: Team, db: Session) -> Team:
+    if team:
+        health_info = TeamHealthService.get_full_team_health(team, db)
+        team.health_scores = health_info["health_scores"]
+        team.missing_roles = health_info["missing_roles"]
+        team.health_details = health_info["health_details"]
+    return team
 
 
 @router.post("/", response_model=TeamDetailResponse, status_code=status.HTTP_201_CREATED)
@@ -46,7 +56,7 @@ def create_team(
     db.commit()
     db.refresh(team)
 
-    return (
+    fetched_team = (
         db.query(Team)
         .options(
             joinedload(Team.leader),
@@ -56,6 +66,7 @@ def create_team(
         .filter(Team.id == team.id)
         .first()
     )
+    return _attach_team_health(fetched_team, db)
 
 
 @router.get("/my", response_model=TeamDetailResponse)
@@ -87,7 +98,7 @@ def get_my_team(
         .filter(Team.id == membership.team_id)
         .first()
     )
-    return team
+    return _attach_team_health(team, db)
 
 
 @router.post("/invite", response_model=TeamInviteResponse, status_code=status.HTTP_201_CREATED)
@@ -438,7 +449,7 @@ def update_team(
     db.commit()
     db.refresh(team)
 
-    return team
+    return _attach_team_health(team, db)
 
 
 @router.delete("/members/leave", status_code=status.HTTP_204_NO_CONTENT)

@@ -58,22 +58,19 @@ function getGroupedSkills(builder) {
         seen.add(skillName.toLowerCase())
         if (!groups[cat]) groups[cat] = []
         groups[cat].push({
-          name: skillName,
-          verified: us.is_verified
+          name: skillName
         })
       }
     })
   } else {
     // 2. Fallback to builder.skills
     const skills = [...new Set(builder.skills || [])]
-    const verified = builder.verifiedSkills || []
     skills.forEach(name => {
       const lowerName = name.toLowerCase()
       const cat = MOCK_SKILL_TO_CATEGORY[lowerName] || 'Technical'
       if (!groups[cat]) groups[cat] = []
       groups[cat].push({
-        name: name,
-        verified: verified.includes(name)
+        name: name
       })
     })
   }
@@ -211,7 +208,7 @@ export default function BuilderProfilePage() {
                       </h3>
                       <div className="flex flex-wrap gap-1.5">
                         {items.map(item => (
-                          <SkillBadge key={item.name} skill={item.name} verified={item.verified} />
+                          <SkillBadge key={item.name} skill={item.name} />
                         ))}
                       </div>
                     </div>

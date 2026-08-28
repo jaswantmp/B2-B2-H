@@ -1,9 +1,9 @@
 // src/pages/DashboardPage.jsx
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import {
   Sparkles, TrendingUp, Users, Calendar, ArrowRight,
-  Bell, Trophy, ChevronRight, Zap, Clock,
+  Bell, Trophy, ChevronRight, Zap, Clock, RefreshCw,
 } from 'lucide-react'
 import PulseAvatar from '../components/PulseAvatar.jsx'
 import SkillBadge from '../components/SkillBadge.jsx'
@@ -21,15 +21,17 @@ const STATUS_OPTIONS = [
 ]
 
 export default function DashboardPage() {
-  const { user } = useAuth()
+  const { user, loading: authLoading } = useAuth()
   const navigate = useNavigate()
   const [status, setStatus]         = useState(user?.status || 'LOOKING_FOR_TEAM')
   const [statusOpen, setStatusOpen] = useState(false)
 
-  const [hackathonsList, setHackathonsList] = useState([])
+  const [hackathonsList, setHackathonsList]           = useState([])
   const [recommendationsList, setRecommendationsList] = useState([])
-  const [notificationsList, setNotificationsList] = useState([])
-  const [loading, setLoading] = useState(true)
+  const [notificationsList, setNotificationsList]     = useState([])
+
+  const [recsLoading, setRecsLoading] = useState(true)
+  const [recsError, setRecsError]     = useState(null)
 
   useEffect(() => {
     if (user && user.onboarding_completed === false && !sessionStorage.getItem('onboarding_skipped')) {
@@ -38,41 +40,67 @@ export default function DashboardPage() {
     }
   }, [user, navigate])
 
-  useEffect(() => {
-    if (!user?.id) return
-    const fetchDashboardData = async () => {
-      try {
-        const [hList, rList, nList] = await Promise.all([
-          getHackathons().catch(err => {
-            console.warn('Failed to load hackathons:', err)
-            return []
-          }),
-          getRecommendations().catch(err => {
-            console.warn('Failed to load recommendations:', err)
-            return []
-          }),
-          getNotifications().catch(err => {
-            console.warn('Failed to load notifications:', err)
-            return []
-          })
-        ])
-        setHackathonsList(hList || [])
-        setRecommendationsList(rList || [])
-        setNotificationsList(nList || [])
-      } catch (err) {
-        console.error('Unexpected error loading dashboard data:', err)
-      } finally {
-        setLoading(false)
+  const loadRecommendations = useCallback(async () => {
+    setRecsLoading(true)
+    setRecsError(null)
+    try {
+      const recs = await getRecommendations()
+      setRecommendationsList(recs || [])
+    } catch (err) {
+      if (err.name === 'AbortError' && err.message === 'Request aborted') {
+        return
       }
+      console.warn('Failed to load recommendations:', err)
+      setRecsError(err?.message || 'Failed to load recommendations')
+    } finally {
+      setRecsLoading(false)
     }
-    fetchDashboardData()
-  }, [user])
+  }, [])
+
+  useEffect(() => {
+    if (authLoading || !user?.id) return
+
+    let cancelled = false
+
+    getHackathons()
+      .then(hList => { if (!cancelled) setHackathonsList(hList || []) })
+      .catch(err => console.warn('Failed to load hackathons:', err))
+
+    getNotifications()
+      .then(nList => { if (!cancelled) setNotificationsList(nList || []) })
+      .catch(err => console.warn('Failed to load notifications:', err))
+
+    loadRecommendations()
+
+    return () => {
+      cancelled = true
+    }
+  }, [authLoading, user?.id, loadRecommendations])
 
   const unread             = notificationsList.filter(n => !n.read).length
   const upcomingHackathons = hackathonsList.slice(0, 3)
   const topRecs            = recommendationsList.slice(0, 2)
   const currentStatusCfg   = STATUS_OPTIONS.find(s => s.value === status)
 
+  if (authLoading) {
+    return (
+      <div className="p-4 sm:p-6 lg:p-8 space-y-8 max-w-7xl animate-pulse">
+        <div className="h-20 bg-slate-800/40 rounded-2xl" />
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          {[1, 2, 3, 4].map(i => (
+            <div key={i} className="h-24 bg-slate-800/40 rounded-xl" />
+          ))}
+        </div>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="lg:col-span-2 space-y-4">
+            <div className="h-32 bg-slate-800/40 rounded-xl" />
+            <div className="h-32 bg-slate-800/40 rounded-xl" />
+          </div>
+          <div className="h-64 bg-slate-800/40 rounded-xl" />
+        </div>
+      </div>
+    )
+  }
 
   if (!user) return null
 
@@ -212,38 +240,83 @@ export default function DashboardPage() {
 
           {/* AI recommendation cards */}
           <div className="space-y-3">
-            {topRecs.map(rec => (
+            {recsLoading ? (
+              <div className="space-y-3">
+                {[1, 2].map(i => (
+                  <div
+                    key={i}
+                    className="rounded-xl border p-4 animate-pulse flex items-start gap-3"
+                    style={{ backgroundColor: 'var(--bg-surface)', borderColor: 'var(--border-subtle)' }}
+                  >
+                    <div className="w-10 h-10 rounded-full bg-slate-700/50 flex-shrink-0" />
+                    <div className="flex-1 space-y-2">
+                      <div className="h-4 bg-slate-700/50 rounded w-1/3" />
+                      <div className="h-3 bg-slate-700/30 rounded w-1/2" />
+                      <div className="h-3 bg-slate-700/20 rounded w-3/4" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : recsError ? (
               <div
-                key={rec.id}
-                className="rounded-xl border p-4 hover:border-violet-500/50 transition-all"
+                className="rounded-xl border p-4 text-center space-y-3"
+                style={{ backgroundColor: 'var(--bg-surface)', borderColor: 'rgba(239, 68, 68, 0.3)' }}
+              >
+                <p className="text-xs text-red-400 font-medium">
+                  Unable to connect to recommendation service right now.
+                </p>
+                <button
+                  onClick={() => loadRecommendations()}
+                  className="px-3 py-1.5 rounded-lg bg-violet-600 hover:bg-violet-500 text-white text-xs font-semibold transition-all inline-flex items-center gap-1.5 shadow-sm"
+                >
+                  <RefreshCw size={13} className={recsLoading ? 'animate-spin' : ''} />
+                  Retry Loading Recommendations
+                </button>
+              </div>
+            ) : topRecs.length === 0 ? (
+              <div
+                className="rounded-xl border p-6 text-center space-y-2"
                 style={{ backgroundColor: 'var(--bg-surface)', borderColor: 'var(--border-subtle)' }}
               >
-                <div className="flex items-start gap-3">
-                  <PulseAvatar user={rec.builder} size="md" />
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center justify-between gap-2">
-                      <div>
-                        <p className="font-semibold text-sm theme-text">{rec.builder.name}</p>
-                        <p className="text-xs theme-muted">{rec.builder.branch} · {rec.builder.university}</p>
+                <p className="text-sm font-semibold theme-text">No Recommended Builders Found</p>
+                <p className="text-xs theme-muted max-w-md mx-auto">
+                  We currently don't have builder matches for your profile. Update your skills or check back soon as new builders join!
+                </p>
+              </div>
+            ) : (
+              topRecs.map(rec => (
+                <div
+                  key={rec.id}
+                  className="rounded-xl border p-4 hover:border-violet-500/50 transition-all"
+                  style={{ backgroundColor: 'var(--bg-surface)', borderColor: 'var(--border-subtle)' }}
+                >
+                  <div className="flex items-start gap-3">
+                    <PulseAvatar user={rec.builder} size="md" />
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between gap-2">
+                        <div>
+                          <p className="font-semibold text-sm theme-text">{rec.builder.name}</p>
+                          <p className="text-xs theme-muted">{rec.builder.branch} · {rec.builder.university}</p>
+                        </div>
+                        <Link
+                          to="/recommendations"
+                          className="flex-shrink-0 text-xs px-3 py-1.5 rounded-lg border font-medium transition-colors text-violet-500 hover:text-violet-400"
+                          style={{ backgroundColor: 'var(--bg-raised)', borderColor: 'var(--border-strong)' }}
+                        >
+                          Invite
+                        </Link>
                       </div>
-                      <Link
-                        to="/recommendations"
-                        className="flex-shrink-0 text-xs px-3 py-1.5 rounded-lg border font-medium transition-colors text-violet-500 hover:text-violet-400"
-                        style={{ backgroundColor: 'var(--bg-raised)', borderColor: 'var(--border-strong)' }}
-                      >
-                        Invite
-                      </Link>
-                    </div>
-                    <p className="text-xs theme-muted mt-2 leading-relaxed line-clamp-2">{rec.reason}</p>
-                    <div className="flex flex-wrap gap-1 mt-2">
-                      {rec.builder.skills.slice(0, 3).map(s => (
-                        <SkillBadge key={s} skill={s} verified={rec.builder.verifiedSkills?.includes(s)} size="xs" />
-                      ))}
+                      <p className="text-xs theme-muted mt-2 leading-relaxed line-clamp-2">{rec.reason}</p>
+                      <div className="flex flex-wrap gap-1 mt-2">
+                        {(rec.builder.skills || []).slice(0, 3).map(s => (
+                          <SkillBadge key={s} skill={s} size="xs" />
+                        ))}
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))
+            )}
           </div>
 
           {/* Skills summary */}
@@ -251,10 +324,10 @@ export default function DashboardPage() {
             className="rounded-xl border p-4"
             style={{ backgroundColor: 'var(--bg-surface)', borderColor: 'var(--border-subtle)' }}
           >
-            <h3 className="text-sm font-semibold theme-text mb-3">Your verified skills</h3>
+            <h3 className="text-sm font-semibold theme-text mb-3">Your skills</h3>
             <div className="flex flex-wrap gap-1.5">
               {user.skills.map(s => (
-                <SkillBadge key={s} skill={s} verified={user.verifiedSkills?.includes(s)} />
+                <SkillBadge key={s} skill={s} />
               ))}
             </div>
             <Link

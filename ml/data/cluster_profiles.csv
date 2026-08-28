@@ -1,0 +1,7 @@
+k,cluster_id,student_count,pct_students,avg_projects,avg_hackathons,avg_commits,avg_repos,top_high_zfeatures,top_low_zfeatures
+2,0,326,65.2,0.36,1.68,428.2,21.2,github_repos (+0.43z); github_commits (+0.43z); github_stars (+0.28z); github_followers (+0.26z),project_count (-0.38z); project_technology_count (-0.38z); interest_count (-0.12z); profile_completion (-0.10z)
+2,1,174,34.8,1.33,2.08,130.9,8.0,project_count (+0.71z); project_technology_count (+0.70z); interest_count (+0.23z); profile_completion (+0.20z),github_repos (-0.81z); github_commits (-0.80z); github_stars (-0.53z); github_followers (-0.49z)
+4,0,69,13.8,2.46,2.33,204.3,13.0,project_count (+1.99z); project_technology_count (+1.96z); profile_completion (+0.34z); hackathons_participated (+0.29z),github_commits (-0.50z); github_stars (-0.37z); github_repos (-0.34z); tfidf_development (-0.28z)
+4,1,67,13.4,0.4,3.3,316.3,18.2,hackathons_won (+1.91z); hackathons_participated (+0.83z); domain_count (+0.24z); tfidf_cloud (+0.23z),project_technology_count (-0.34z); project_count (-0.34z); tfidf_leadership (-0.17z); tfidf_team (-0.17z)
+4,2,183,36.6,0.4,1.28,542.9,25.7,github_commits (+0.90z); github_repos (+0.86z); github_stars (+0.40z); github_followers (+0.22z),hackathons_won (-0.41z); project_count (-0.34z); project_technology_count (-0.32z); hackathons_participated (-0.30z)
+4,3,181,36.2,0.44,1.61,153.3,8.2,tfidf_cleantech (+0.13z); tfidf_computing (+0.10z); tfidf_robotics (+0.09z); tfidf_git (+0.08z),github_repos (-0.79z); github_commits (-0.71z); hackathons_won (-0.40z); github_stars (-0.31z)

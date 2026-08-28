@@ -1,0 +1,5 @@
+configuration,spearman_rho,top5_avg_compatibility,top10_avg_compatibility
+Full Hybrid ML Model (Reg 40% + Clf 30% + Sim 30%),0.7019,55.67,49.68
+Ablation 1: No Classifier Signal,0.6998,55.65,49.69
+Ablation 2: No Regressor Signal,0.7006,55.25,49.35
+Random Baseline Student Selection,0.0,11.32,11.86
