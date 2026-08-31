@@ -4,7 +4,6 @@ import { Link, useNavigate } from 'react-router-dom'
 import { Eye, EyeOff, UserPlus } from 'lucide-react'
 import AuthLayout from '../../layouts/AuthLayout.jsx'
 import FormField from '../../components/auth/FormField.jsx'
-import GoogleButton from '../../components/auth/GoogleButton.jsx'
 import PasswordStrength, { scorePassword } from '../../components/auth/PasswordStrength.jsx'
 import { useAuth } from '../../context/AuthContext.jsx'
 import { useToast } from '../../context/ToastContext.jsx'
@@ -209,17 +208,6 @@ export default function SignUpPage() {
           {loading ? 'Creating account...' : 'Create Account'}
         </button>
       </form>
-
-      <div className="flex items-center gap-3 my-5">
-        <div className="flex-1 h-px" style={{ backgroundColor: 'var(--border-subtle)' }} />
-        <span className="text-xs theme-muted">or</span>
-        <div className="flex-1 h-px" style={{ backgroundColor: 'var(--border-subtle)' }} />
-      </div>
-
-      <GoogleButton
-        label="Sign up with Google"
-        onClick={() => push('Google sign-up is not available in this demo.', 'info')}
-      />
 
       <p className="text-center text-sm theme-muted mt-6">
         Already have an account?{' '}

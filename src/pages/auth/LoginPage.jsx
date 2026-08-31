@@ -4,7 +4,6 @@ import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { Eye, EyeOff, LogIn, Zap } from 'lucide-react'
 import AuthLayout from '../../layouts/AuthLayout.jsx'
 import FormField from '../../components/auth/FormField.jsx'
-import GoogleButton from '../../components/auth/GoogleButton.jsx'
 import { useAuth } from '../../context/AuthContext.jsx'
 import { useToast } from '../../context/ToastContext.jsx'
 
@@ -210,17 +209,6 @@ export default function LoginPage() {
           {loading ? 'Logging in...' : 'Log In'}
         </button>
       </form>
-
-      {/* ── Google ── */}
-      <div className="flex items-center gap-3 my-5">
-        <div className="flex-1 h-px" style={{ backgroundColor: 'var(--border-subtle)' }} />
-        <span className="text-xs theme-muted">or</span>
-        <div className="flex-1 h-px" style={{ backgroundColor: 'var(--border-subtle)' }} />
-      </div>
-
-      <GoogleButton
-        onClick={() => push('Google sign-in is not available in this demo.', 'info')}
-      />
 
       <p className="text-center text-sm theme-muted mt-6">
         Don't have an account?{' '}
