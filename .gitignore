@@ -1,13 +1,15 @@
 node_modules/
-.env
 dist/
 build/
+
 # Python
 __pycache__/
 *.pyc
 
 # Environment variables
 .env
+.env.*
+.env*.local
 
 # Virtual environment
 .venv/
@@ -20,4 +22,4 @@ ml/data/student_project_targets.csv
 ml/data/student_project_pairs.csv
 ml/data/regression_predictions.csv
 ml/models/random_forest_regressor.pkl
-ml/models/random_forest_classifier.pkl
+ml/models/random_forest_classifier.pkl
