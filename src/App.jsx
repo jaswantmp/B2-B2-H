@@ -27,7 +27,6 @@ const AIProjectIdeaPage = lazy(() => import('./pages/AIProjectIdeaPage.jsx'))
 const NotificationsPage = lazy(() => import('./pages/NotificationsPage.jsx'))
 const SettingsPage = lazy(() => import('./pages/SettingsPage.jsx'))
 const AITeamMatcherPage = lazy(() => import('./pages/AITeamMatcherPage.jsx'))
-const ChatTestPage = lazy(() => import('./pages/ChatTestPage.jsx'))
 
 export default function App() {
   return (
@@ -49,7 +48,6 @@ export default function App() {
                 <Route path="/login"           element={<LoginPage />} />
                 <Route path="/signup"          element={<SignUpPage />} />
                 <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-                <Route path="/chat-test"       element={<ChatTestPage />} />
 
                 {/* Protected app shell — redirects to /login if not authenticated */}
                 <Route element={<ProtectedRoute />}>
