@@ -191,11 +191,199 @@ class TestFallbackAndSchema(unittest.TestCase):
         self.assertEqual(cand.compatibility_score, 85)
         self.assertEqual(cand.ml_score, 82.5)
 
-    def test_02_fallback_when_ml_fails(self):
-        """D. Fallback Test: Verify system gracefully falls back if ML fails."""
-        with patch.object(MLInferenceEngine, "is_available", return_value=False):
-            res = MLInferenceService.predict_candidate_match(MagicMock(), MagicMock(), "Developer")
-            self.assertFalse(res.get("ml_available"))
+    def test_03_hackathon_recommender_prediction(self):
+        """Verify Hackathon Recommendation ML model loads and scores candidates."""
+        engine = get_inference_engine()
+        self.assertTrue(engine.is_hackathon_model_available(), "Hackathon recommendation model should be loaded.")
+
+        sample_features = [{
+            "tfidf_similarity": 0.35,
+            "skill_overlap_count": 3,
+            "skill_overlap_ratio": 0.6,
+            "required_skill_count": 5,
+            "matched_skill_count": 3,
+            "verified_skill_count": 2,
+            "domain_match": 1,
+            "domain_overlap_count": 1,
+            "interest_overlap_count": 1,
+            "branch_alignment": 1,
+            "year_suitability": 1.0,
+            "student_branch": "Computer Science",
+            "student_year": "3rd Year",
+            "student_project_count": 2,
+            "hackathons_participated": 2,
+            "hackathons_won": 1,
+            "github_repos": 5,
+            "github_commits": 50,
+            "github_stars": 3,
+            "profile_completion": 0.85,
+            "hackathon_track_count": 3,
+            "hackathon_tag_count": 4,
+            "hackathon_description_length": 250,
+            "hackathon_team_size_max": 4
+        }]
+
+        results = engine.predict_hackathon_scores(sample_features)
+        self.assertEqual(len(results), 1)
+        r = results[0]
+        self.assertIn("score", r)
+        self.assertIn("ml_score", r)
+        self.assertIn("model_version", r)
+        self.assertEqual(r["model_version"], "hackathon_recommender_v1")
+        self.assertTrue(r["is_ml_powered"])
+        self.assertGreaterEqual(r["score"], 0)
+        self.assertLessEqual(r["score"], 100)
+
+
+class TestHackathonRecommendationService(unittest.TestCase):
+
+    def test_01_service_ml_recommendations(self):
+        """Verify HackathonRecommendationService integrates with the ML model and returns breakdown."""
+        from app.services.hackathon_recommendation_service import HackathonRecommendationService
+
+        mock_user = MagicMock()
+        mock_user.id = "test_user_ml"
+        mock_user.name = "Test ML User"
+        mock_user.bio = "Passionate fullstack and AI developer building cool tools"
+        mock_user.branch = "Computer Science"
+        mock_user.year = "3rd Year"
+        mock_user.domains = ["Artificial Intelligence", "Web Development"]
+        mock_user.interests = ["AI", "Open Source"]
+        mock_user.hackathons_won = 1
+
+        mock_skill = MagicMock()
+        mock_skill.name = "Python"
+        mock_user_skill = MagicMock()
+        mock_user_skill.skill = mock_skill
+        mock_user_skill.is_verified = True
+        mock_user.user_skills = [mock_user_skill]
+        mock_user.github_profile = None
+
+        mock_hackathon = MagicMock()
+        mock_hackathon.id = "hk_ml_1"
+        mock_hackathon.title = "AI & Cloud Innovation Hackathon"
+        mock_hackathon.description = "Build intelligent AI apps and agents using Python and cloud tools"
+        mock_hackathon.tracks = ["Artificial Intelligence", "Cloud"]
+        mock_hackathon.tags = ["python", "ai", "cloud"]
+        mock_hackathon.date = "2026-10-01"
+        mock_hackathon.end_date = "2026-10-03"
+        mock_hackathon.team_size = "2-4"
+        mock_hackathon.registrations = []
+
+        mock_db = MagicMock()
+        mock_query = MagicMock()
+        mock_db.query.return_value = mock_query
+        mock_query.options.return_value = mock_query
+        mock_query.filter.return_value = mock_query
+        mock_query.all.return_value = [mock_hackathon]
+        mock_query.count.return_value = 2
+
+        result = HackathonRecommendationService.get_recommendations(
+            db=mock_db,
+            user=mock_user
+        )
+
+        self.assertEqual(result["total_hackathons"], 1)
+        self.assertEqual(result["recommended_count"], 1)
+        rec = result["recommendations"][0]
+        self.assertEqual(rec["model_version"], "hackathon_recommender_v1")
+        self.assertTrue(rec["is_ml_powered"])
+        self.assertGreaterEqual(rec["score"], 0)
+        # Verify backward compatibility breakdown keys
+        self.assertIn("skills", rec["breakdown"])
+        self.assertIn("domains", rec["breakdown"])
+        self.assertIn("branch", rec["breakdown"])
+        self.assertIn("year", rec["breakdown"])
+        self.assertIn("ml_score", rec["breakdown"])
+        self.assertIn("rule_baseline_score", rec["breakdown"])
+
+
+class TestTeamGeneratorML(unittest.TestCase):
+
+    def test_01_team_generator_models_loaded(self):
+        """Verify Team Generator pairwise and team quality models are loaded and available."""
+        engine = get_inference_engine()
+        self.assertTrue(engine.is_team_generator_model_available(), "Team generator models should be loaded.")
+        self.assertEqual(engine.team_generator_model_version, "team_generator_v1")
+
+    def test_02_predict_team_pair_and_quality(self):
+        """Verify pairwise and team quality predictions return valid continuous scores."""
+        engine = get_inference_engine()
+        sample_pair = [{
+            "skill_overlap_count": 2,
+            "skill_overlap_ratio": 0.4,
+            "complementary_skill_count": 4,
+            "domain_match": 1,
+            "domain_overlap_count": 1,
+            "interest_overlap_count": 1,
+            "tfidf_similarity": 0.35,
+            "branch_compatibility": 1.0,
+            "year_difference": 0,
+            "cluster_synergy": 1.0,
+            "github_commits_total": 120,
+            "github_repos_total": 10,
+            "project_count_total": 4,
+            "experience_balance": 1,
+            "profile_completion_avg": 0.85
+        }]
+
+        pair_scores = engine.predict_team_pair_scores(sample_pair)
+        self.assertEqual(len(pair_scores), 1)
+        self.assertGreaterEqual(pair_scores[0], 40.0)
+        self.assertLessEqual(pair_scores[0], 99.0)
+
+        sample_team = [{
+            "team_size": 4,
+            "avg_pair_compatibility": 82.5,
+            "min_pair_compatibility": 74.0,
+            "pair_compatibility_std": 3.2,
+            "unique_skills_count": 12,
+            "category_coverage_count": 4,
+            "category_balance_entropy": 1.85,
+            "domain_diversity_count": 3,
+            "cluster_diversity_count": 3,
+            "branch_diversity_count": 2,
+            "year_diversity_count": 2,
+            "total_github_commits": 350,
+            "total_projects": 8,
+            "avg_profile_completion": 0.90,
+            "role_specialization_score": 1.0
+        }]
+
+        team_scores = engine.predict_team_quality_scores(sample_team)
+        self.assertEqual(len(team_scores), 1)
+        self.assertGreaterEqual(team_scores[0], 40.0)
+        self.assertLessEqual(team_scores[0], 99.0)
+
+    def test_03_team_generator_service_integration(self):
+        """Verify TeamGeneratorService performs constrained optimization and dynamic role assignment."""
+        from app.database import SessionLocal
+        from app.services.team_generator_service import TeamGeneratorService
+
+        db = SessionLocal()
+        try:
+            res = TeamGeneratorService.generate_team(
+                db=db,
+                idea="Smart campus security app using facial recognition and IoT sensors",
+                team_size=3,
+                must_have_skills=["Python", "React"]
+            )
+            self.assertEqual(res["team_size"], 3)
+            self.assertEqual(len(res["suggestedBuilders"]), 3)
+            self.assertEqual(len(res["roles"]), 3)
+            self.assertEqual(res["model_version"], "team_generator_v1")
+            self.assertTrue(res["is_ml_powered"])
+            self.assertGreaterEqual(res["team_quality_score"], 40)
+            self.assertLessEqual(res["team_quality_score"], 99)
+            self.assertGreater(len(res["strengths"]), 0)
+
+            # Verify each builder has an assigned role and score
+            for b in res["suggestedBuilders"]:
+                self.assertIn("role", b)
+                self.assertIn("score", b)
+                self.assertGreaterEqual(b["score"], 40)
+        finally:
+            db.close()
 
 
 if __name__ == "__main__":

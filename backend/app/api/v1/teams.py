@@ -15,9 +15,15 @@ router = APIRouter(prefix="/teams", tags=["teams"])
 def _attach_team_health(team: Team, db: Session) -> Team:
     if team:
         health_info = TeamHealthService.get_full_team_health(team, db)
-        team.health_scores = health_info["health_scores"]
-        team.missing_roles = health_info["missing_roles"]
-        team.health_details = health_info["health_details"]
+        team.health_scores = health_info.get("health_scores", {})
+        team.missing_roles = health_info.get("missing_roles", [])
+        team.health_details = health_info.get("health_details", {})
+        team.health_score = health_info.get("health_score")
+        team.ml_health_score = health_info.get("ml_health_score")
+        team.health_status = health_info.get("health_status")
+        team.is_ml_powered = health_info.get("is_ml_powered", False)
+        team.model_version = health_info.get("model_version")
+        team.explainability = health_info.get("explainability", {})
     return team
 
 

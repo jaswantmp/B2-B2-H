@@ -28,8 +28,6 @@ const EXAMPLE_IDEAS = [
   'An automated peer code review tool powered by LLMs',
 ]
 
-const MATCH_SCORES = [96, 91, 88, 84]
-
 function RoleCard({ role, index }) {
   const [open, setOpen] = useState(false)
 
@@ -82,8 +80,9 @@ function RoleCard({ role, index }) {
 }
 
 function BuilderMatchCard({ builder, score, onInvite }) {
-  const scoreColor = score >= 90 ? 'text-emerald-800 dark:text-emerald-400' : score >= 80 ? 'text-amber-800 dark:text-amber-400' : 'text-cyan-800 dark:text-cyan-400'
-  const scoreBg    = score >= 90 ? 'bg-emerald-100 dark:bg-emerald-900/30 border border-emerald-400 dark:border-emerald-800/40 font-semibold' : score >= 80 ? 'bg-amber-100 dark:bg-amber-900/30 border border-amber-400 dark:border-amber-800/40 font-semibold' : 'bg-cyan-100 dark:bg-cyan-900/30 border border-cyan-400 dark:border-cyan-800/40 font-semibold'
+  const displayScore = score ?? builder.score ?? 85
+  const scoreColor = displayScore >= 90 ? 'text-emerald-800 dark:text-emerald-400' : displayScore >= 80 ? 'text-amber-800 dark:text-amber-400' : 'text-cyan-800 dark:text-cyan-400'
+  const scoreBg    = displayScore >= 90 ? 'bg-emerald-100 dark:bg-emerald-900/30 border border-emerald-400 dark:border-emerald-800/40 font-semibold' : displayScore >= 80 ? 'bg-amber-100 dark:bg-amber-900/30 border border-amber-400 dark:border-amber-800/40 font-semibold' : 'bg-cyan-100 dark:bg-cyan-900/30 border border-cyan-400 dark:border-cyan-800/40 font-semibold'
 
   return (
     <div
@@ -97,9 +96,14 @@ function BuilderMatchCard({ builder, score, onInvite }) {
             <div>
               <p className="font-semibold text-sm theme-text">{builder.name}</p>
               <p className="text-xs theme-muted">{builder.branch} · {builder.university}</p>
+              {builder.role && (
+                <span className="inline-block mt-0.5 text-[11px] font-medium text-violet-400">
+                  {builder.role}
+                </span>
+              )}
             </div>
             <span className={`flex-shrink-0 text-xs font-bold px-2 py-0.5 rounded-full border ${scoreColor} ${scoreBg}`}>
-              {score}%
+              {displayScore}%
             </span>
           </div>
 
@@ -144,7 +148,7 @@ export default function GeneratorPage() {
     setLoading(true)
     setResult(null)
     try {
-      const data = await generateTeam(idea.trim())
+      const data = await generateTeam(idea.trim(), teamSize, selectedSkills)
       setResult(data)
     } catch {
       setError('Something went wrong. Please try again.')
@@ -348,18 +352,45 @@ export default function GeneratorPage() {
           {/* Results */}
           {result && !loading && (
             <div className="space-y-5">
-              {/* Idea summary */}
+              {/* Idea summary & ML Quality Banner */}
               <div
-                className="rounded-2xl border p-4 border-violet-800/40"
+                className="rounded-2xl border p-4 border-violet-800/40 space-y-3"
                 style={{ backgroundColor: 'var(--bg-raised)' }}
               >
-                <div className="flex items-center gap-2 mb-2">
-                  <CheckCircle size={16} className="text-emerald-400" />
-                  <span className="text-sm font-semibold text-emerald-400">Team blueprint generated</span>
+                <div className="flex items-center justify-between flex-wrap gap-2">
+                  <div className="flex items-center gap-2">
+                    <CheckCircle size={16} className="text-emerald-400" />
+                    <span className="text-sm font-semibold text-emerald-400">Team blueprint generated</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-violet-600/20 text-violet-300 border border-violet-500/40">
+                      ⭐ ML Team Quality: {result.team_quality_score ?? 85}%
+                    </span>
+                    {result.model_version && (
+                      <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">
+                        {result.model_version}
+                      </span>
+                    )}
+                  </div>
                 </div>
                 <p className="text-sm theme-muted leading-relaxed italic">
                   "{result.idea}"
                 </p>
+
+                {/* Strengths list */}
+                {result.strengths && result.strengths.length > 0 && (
+                  <div className="pt-2 border-t border-violet-900/30">
+                    <p className="text-xs font-semibold theme-muted uppercase tracking-wider mb-1.5">Formation Strengths</p>
+                    <ul className="space-y-1">
+                      {result.strengths.map((str, sIdx) => (
+                        <li key={sIdx} className="text-xs text-emerald-300/90 flex items-center gap-1.5">
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                          {str}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
               </div>
 
               {/* Recommended roles */}
@@ -382,11 +413,11 @@ export default function GeneratorPage() {
                   Matched Builders ({result.suggestedBuilders.length})
                 </h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  {result.suggestedBuilders.map((builder, i) => (
+                  {result.suggestedBuilders.map((builder) => (
                     <BuilderMatchCard
                       key={builder.id}
                       builder={builder}
-                      score={MATCH_SCORES[i] ?? 80}
+                      score={builder.score}
                       onInvite={setInviteUser}
                     />
                   ))}

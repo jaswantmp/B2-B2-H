@@ -93,6 +93,12 @@ class TeamDetailResponse(TeamResponse):
     health_scores: dict[str, int] = {}
     missing_roles: list[str] = []
     health_details: dict[str, Any] = {}
+    health_score: int | None = None
+    ml_health_score: float | None = None
+    health_status: str | None = None
+    is_ml_powered: bool = False
+    model_version: str | None = None
+    explainability: dict[str, Any] | None = None
 
     model_config = ConfigDict(from_attributes=True)
 

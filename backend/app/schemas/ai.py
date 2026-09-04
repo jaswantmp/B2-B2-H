@@ -49,3 +49,29 @@ class AIUsageResponse(BaseModel):
     team_matcher: FeatureUsage
     project_generator: FeatureUsage
     hackathon_recommender: FeatureUsage
+
+
+class TeamRoleItem(BaseModel):
+    role: str
+    reason: str
+    skills: list[str] = []
+
+
+class TeamGenerateRequest(BaseModel):
+    idea: str = Field(..., min_length=1, description="Description of the project idea")
+    team_size: Optional[int] = Field(4, ge=2, le=6, description="Target team size from 2 to 6")
+    must_have_skills: Optional[list[str]] = Field(default_factory=list, description="Optional must-have skill requirements")
+
+
+class TeamGenerateResponse(BaseModel):
+    idea: str
+    team_size: int
+    roles: list[TeamRoleItem]
+    suggestedBuilders: list[dict]
+    team_quality_score: int
+    ml_score: float
+    model_version: str
+    is_ml_powered: bool
+    strengths: list[str] = []
+    weaknesses: list[str] = []
+    category_coverage: Optional[dict] = None

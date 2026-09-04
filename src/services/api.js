@@ -622,28 +622,28 @@ export async function getStudentCluster() {
   }
 }
 
-// POST /api/v1/recommend-team   body: { idea: string }
-// Returns: { roles: string[], builders: User[] }
-export async function generateTeam(idea) {
+// POST /api/v1/ai/team-generator   body: { idea: string, team_size: number, must_have_skills: string[] }
+// Returns: { roles, suggestedBuilders, idea, team_quality_score, ml_score, model_version, is_ml_powered, strengths, weaknesses }
+export async function generateTeam(idea, teamSize = 4, mustHaveSkills = []) {
   if (BASE) {
     try {
-      const builders = await getBuilders()
-      const roles = [
-        { role: 'Frontend Developer', reason: 'To build the user-facing interface and ensure great UX.', skills: ['React', 'Tailwind', 'TypeScript'] },
-        { role: 'Backend Developer', reason: 'To design APIs, database schemas, and server infrastructure.', skills: ['Node.js', 'PostgreSQL', 'FastAPI'] },
-        { role: 'AI / ML Engineer', reason: `To build and integrate the core AI capabilities for "${idea.slice(0, 40)}..."`, skills: ['Python', 'TensorFlow', 'LangChain'] },
-        { role: 'UI/UX Designer', reason: 'To define user flows, wireframes, and a consistent design language.', skills: ['Figma', 'Prototyping', 'User Research'] },
-        { role: 'Product Lead', reason: 'To own the roadmap, user interviews, and prioritization decisions.', skills: ['Product Strategy', 'Agile', 'Market Research'] },
-      ]
-      const suggestedBuilders = (builders || []).slice(0, 4)
-      return { roles, suggestedBuilders, idea }
+      const data = await request('/api/v1/ai/team-generator', {
+        method: 'POST',
+        body: JSON.stringify({
+          idea,
+          team_size: teamSize,
+          must_have_skills: mustHaveSkills
+        })
+      })
+      if (data && data.suggestedBuilders) {
+        return data
+      }
     } catch (e) {
-      console.error(e)
-      return { roles: [], suggestedBuilders: [], idea }
+      console.warn('Backend ML team generator call failed, falling back:', e)
     }
   }
-  await delay(1500)
-  // Mock AI response based on idea keywords
+  await delay(1200)
+  // Non-ML Fallback
   const roles = [
     { role: 'Frontend Developer', reason: 'To build the user-facing interface and ensure great UX.', skills: ['React', 'Tailwind', 'TypeScript'] },
     { role: 'Backend Developer', reason: 'To design APIs, database schemas, and server infrastructure.', skills: ['Node.js', 'PostgreSQL', 'FastAPI'] },
@@ -651,8 +651,18 @@ export async function generateTeam(idea) {
     { role: 'UI/UX Designer', reason: 'To define user flows, wireframes, and a consistent design language.', skills: ['Figma', 'Prototyping', 'User Research'] },
     { role: 'Product Lead', reason: 'To own the roadmap, user interviews, and prioritization decisions.', skills: ['Product Strategy', 'Agile', 'Market Research'] },
   ]
-  const suggestedBuilders = users.slice(0, 4)
-  return { roles, suggestedBuilders, idea }
+  const suggestedBuilders = users.slice(0, teamSize || 4)
+  return {
+    roles: roles.slice(0, teamSize || 4),
+    suggestedBuilders,
+    idea,
+    team_quality_score: 75,
+    ml_score: 75.0,
+    model_version: 'legacy_rule_baseline',
+    is_ml_powered: false,
+    strengths: ['Standard functional distribution'],
+    weaknesses: ['Fallback mode without ML optimization']
+  }
 }
 
 // POST /api/v1/teams/invite   body: { user_id, role, message }

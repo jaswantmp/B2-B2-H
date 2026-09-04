@@ -320,8 +320,15 @@ export default function TeamsPage() {
               <TrendingUp size={15} className="text-violet-800 dark:text-violet-400" />
               Team Health Radar
             </h2>
-            <p className="text-xs theme-muted mb-4">Current skill coverage across domains.</p>
-            <TeamHealthRadar scores={team.health_scores || team.healthScores || {}} height={220} />
+            <TeamHealthRadar
+              scores={team.health_scores || team.healthScores || {}}
+              overallScore={team.health_score ?? team.healthScore}
+              isMlPowered={team.is_ml_powered ?? team.isMlPowered}
+              modelVersion={team.model_version ?? team.modelVersion}
+              healthStatus={team.health_status ?? team.healthStatus}
+              explainability={team.explainability}
+              height={220}
+            />
           </div>
 
           {/* Coverage bars */}

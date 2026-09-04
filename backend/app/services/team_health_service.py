@@ -1,7 +1,9 @@
 # app/services/team_health_service.py
 import math
 import logging
+from itertools import combinations
 from typing import Dict, Any, List, Optional
+import numpy as np
 from sqlalchemy.orm import Session
 from app.models.team import Team
 
@@ -39,6 +41,12 @@ ROLE_CATEGORY_MAP = {
     "lead": "Product"
 }
 
+BRANCH_GROUPS = {
+    "cs": {"computer science", "information technology", "software engineering", "computer engineering", "cse", "it"},
+    "ece_ee": {"electronics", "electrical", "ece", "eee", "embedded"},
+    "mech_civil": {"mechanical", "civil", "aerospace", "mechatronics"}
+}
+
 
 class TeamHealthService:
     CATEGORIES = CATEGORY_KEYWORDS
@@ -47,20 +55,24 @@ class TeamHealthService:
     def _extract_member_features(cls, member, db: Optional[Session] = None) -> dict:
         """
         Extract non-PII features from a TeamMember model.
-        STRICTLY EXCLUDES: student_id, name, username, email.
+        STRICTLY EXCLUDES: student_id, name, username, email, auth tokens.
         """
         user = getattr(member, 'user', None)
         if not user:
             return {
+                "member_key": getattr(member, 'id', 'anon'),
                 "role": getattr(member, 'role', 'Member'),
                 "skills": [],
                 "domains": [],
+                "interests": [],
                 "commits": 0,
                 "repos": 0,
                 "stars": 0,
+                "projects": 0,
                 "hackathons_won": 0,
                 "branch": "",
                 "year": "",
+                "year_num": 3,
                 "cluster_id": 3,
                 "cluster_confidence": 0.5
             }
@@ -86,6 +98,7 @@ class TeamHealthService:
 
         # 2. Domains / Interests
         domains = [d.lower().strip() for d in (getattr(user, 'domains', []) or []) if isinstance(d, str)]
+        interests = [i.lower().strip() for i in (getattr(user, 'interests', []) or []) if isinstance(i, str)]
 
         # 3. GitHub Activity (Non-PII stats)
         gh_profile = getattr(user, 'github_profile', None)
@@ -102,7 +115,28 @@ class TeamHealthService:
             repos = int(gh_stats.get('repos', 0) or 0)
             stars = int(gh_stats.get('stars', 0) or 0)
 
-        # 4. K-Means Student Cluster
+        # 4. Projects count
+        projects_count = 0
+        if hasattr(user, 'student_projects') and user.student_projects:
+            projects_count = len(user.student_projects)
+        elif hasattr(user, 'projects') and user.projects:
+            projects_count = len(user.projects)
+        elif db and user:
+            try:
+                from app.models.project import ProjectMember
+                projects_count = db.query(ProjectMember).filter(ProjectMember.user_id == user.id).count()
+            except Exception:
+                projects_count = 0
+
+        # 5. Year as numeric integer
+        year_str = getattr(user, 'year', '') or ''
+        year_num = 3
+        for c in str(year_str):
+            if c.isdigit():
+                year_num = int(c)
+                break
+
+        # 6. K-Means Student Cluster
         cluster_id = 3
         cluster_confidence = 0.5
         if db and user:
@@ -116,58 +150,282 @@ class TeamHealthService:
                 logger.debug(f"Non-fatal error fetching student cluster for member: {err}")
 
         return {
+            "member_key": str(getattr(member, 'id', 'anon')),
             "role": (getattr(member, 'role', '') or 'Member').strip(),
             "skills": skills,
             "domains": domains,
+            "interests": interests,
             "commits": commits,
             "repos": repos,
             "stars": stars,
+            "projects": projects_count,
             "hackathons_won": getattr(user, 'hackathons_won', 0) or 0,
             "branch": getattr(user, 'branch', '') or '',
             "year": getattr(user, 'year', '') or '',
+            "year_num": year_num,
             "cluster_id": cluster_id,
             "cluster_confidence": cluster_confidence
+        }
+
+    @classmethod
+    def _compute_pair_features(cls, a: dict, b: dict) -> dict:
+        """Compute Level 1 pair features between two team members (Non-PII)."""
+        skills_a = {s["name_lower"] for s in a.get("skills", [])}
+        skills_b = {s["name_lower"] for s in b.get("skills", [])}
+        shared_skills = skills_a & skills_b
+        union_skills = skills_a | skills_b
+        overlap_count = len(shared_skills)
+        overlap_ratio = round(overlap_count / max(1, len(union_skills)), 4)
+        complementary_count = len(union_skills - shared_skills)
+
+        domains_a = set(a.get("domains", []))
+        domains_b = set(b.get("domains", []))
+        shared_domains = domains_a & domains_b
+        domain_match = 1 if len(shared_domains) > 0 else 0
+        domain_overlap_count = len(shared_domains)
+
+        interests_a = set(a.get("interests", []))
+        interests_b = set(b.get("interests", []))
+        interest_overlap_count = len(interests_a & interests_b)
+
+        text_a = skills_a | domains_a
+        text_b = skills_b | domains_b
+        sim = len(text_a & text_b) / max(1, len(text_a | text_b))
+
+        branch_compat = 0.5
+        b_a = (a.get("branch") or "").lower()
+        b_b = (b.get("branch") or "").lower()
+        for group in BRANCH_GROUPS.values():
+            if any(term in b_a for term in group) and any(term in b_b for term in group):
+                branch_compat = 1.0
+                break
+
+        y_a = a.get("year_num", 3)
+        y_b = b.get("year_num", 3)
+        year_diff = abs(y_a - y_b)
+        cluster_syn = 1.0 if a.get("cluster_id") != b.get("cluster_id") else 0.6
+        gh_commits = a.get("commits", 0) + b.get("commits", 0)
+        gh_repos = a.get("repos", 0) + b.get("repos", 0)
+        proj_total = a.get("projects", 0) + b.get("projects", 0)
+        exp_balance = abs(a.get("projects", 0) - b.get("projects", 0))
+
+        return {
+            "skill_overlap_count": overlap_count,
+            "skill_overlap_ratio": overlap_ratio,
+            "complementary_skill_count": complementary_count,
+            "domain_match": domain_match,
+            "domain_overlap_count": domain_overlap_count,
+            "interest_overlap_count": interest_overlap_count,
+            "tfidf_similarity": round(sim, 4),
+            "branch_compatibility": branch_compat,
+            "year_difference": year_diff,
+            "cluster_synergy": cluster_syn,
+            "github_commits_total": gh_commits,
+            "github_repos_total": gh_repos,
+            "project_count_total": proj_total,
+            "experience_balance": exp_balance,
+            "profile_completion_avg": 0.80
+        }
+
+    @classmethod
+    def _compute_team_health_features(cls, members_features: list[dict], health_scores: dict[str, int], engine=None) -> dict:
+        """Compute the dedicated 18-feature contract for team_health_v1 ML inference."""
+        k = len(members_features)
+        pair_scores = []
+        pair_jaccards = []
+
+        if k >= 2:
+            pair_dicts = []
+            for a, b in combinations(members_features, 2):
+                pf = cls._compute_pair_features(a, b)
+                pair_dicts.append(pf)
+                di_a = set(a.get("domains", [])) | set(a.get("interests", []))
+                di_b = set(b.get("domains", [])) | set(b.get("interests", []))
+                jacc = len(di_a & di_b) / max(1, len(di_a | di_b))
+                pair_jaccards.append(jacc)
+
+            try:
+                if engine is not None and engine.is_team_generator_model_available():
+                    pair_scores = engine.predict_team_pair_scores(pair_dicts)
+            except Exception as e:
+                logger.debug(f"Pair scoring in team health failed: {e}")
+
+            if not pair_scores:
+                pair_scores = [
+                    70.0 + pf["skill_overlap_ratio"] * 15.0 + pf["domain_match"] * 10.0
+                    for pf in pair_dicts
+                ]
+        else:
+            pair_scores = [75.0]
+            pair_jaccards = [0.5]
+
+        mean_pair_compat = round(float(np.mean(pair_scores)), 2) if pair_scores else 75.0
+        min_pair_compat = round(float(np.min(pair_scores)), 2) if pair_scores else 70.0
+        std_pair_compat = round(float(np.std(pair_scores)), 2) if pair_scores else 0.0
+        domain_jaccard_mean = round(float(np.mean(pair_jaccards)), 4) if pair_jaccards else 0.25
+
+        # Functional category entropy
+        cat_scores_vals = list(health_scores.values())
+        tot_cats = sum(cat_scores_vals)
+        if tot_cats > 0:
+            entropy = 0.0
+            for val in cat_scores_vals:
+                if val > 0:
+                    p = val / tot_cats
+                    entropy -= p * math.log2(p)
+            norm_entropy = round(min(1.0, max(0.0, entropy / math.log2(5))), 4)
+        else:
+            norm_entropy = 0.0
+
+        all_skills = []
+        for m in members_features:
+            all_skills.extend([s["name_lower"] for s in m.get("skills", [])])
+        unique_skills = set(all_skills)
+        unique_skill_count = len(unique_skills)
+        core_skill_redundancy = round(len(all_skills) / max(1, unique_skill_count), 2)
+        missing_category_count = sum(1 for sc in cat_scores_vals if sc < 40)
+
+        # Multi-contributor categories count
+        multi_contributors = 0
+        for cat, keywords in CATEGORY_KEYWORDS.items():
+            contribs = 0
+            for m in members_features:
+                if any(any(kw in s["name_lower"] for kw in keywords) for s in m.get("skills", [])):
+                    contribs += 1
+            if contribs >= 2:
+                multi_contributors += 1
+
+        roles_assigned = sum(1 for m in members_features if m.get("role") and m.get("role").lower() not in ["", "member"])
+        role_ratio = round(roles_assigned / max(1, k), 2)
+
+        all_weights = [s["final_weight"] for m in members_features for s in m.get("skills", [])]
+        avg_skill_level = round(float(np.mean(all_weights)), 2) if all_weights else 1.25
+
+        cluster_div = len(set(m.get("cluster_id", 3) for m in members_features))
+        branch_div = len(set(m.get("branch", "") for m in members_features if m.get("branch"))) or 1
+        years = [m.get("year_num", 3) for m in members_features]
+        exp_range = max(years) - min(years) if years else 0
+
+        tot_commits = sum(m.get("commits", 0) for m in members_features)
+        log_commits = round(float(math.log2(1 + tot_commits)), 2)
+        mean_projects = round(float(np.mean([m.get("projects", 0) for m in members_features])), 2)
+        active_gh = round(sum(1 for m in members_features if m.get("commits", 0) > 0) / max(1, k), 2)
+
+        return {
+            "team_size": k,
+            "role_assigned_ratio": role_ratio,
+            "multi_contributor_categories": multi_contributors,
+            "unique_skill_count": unique_skill_count,
+            "functional_category_entropy": norm_entropy,
+            "missing_category_count": missing_category_count,
+            "core_skill_redundancy": core_skill_redundancy,
+            "avg_skill_level": avg_skill_level,
+            "mean_pairwise_compatibility": mean_pair_compat,
+            "min_pairwise_compatibility": min_pair_compat,
+            "compatibility_std_dev": std_pair_compat,
+            "cluster_diversity_count": cluster_div,
+            "branch_diversity_count": branch_div,
+            "experience_range_years": exp_range,
+            "domain_interest_jaccard_mean": domain_jaccard_mean,
+            "log_team_total_commits": log_commits,
+            "mean_member_projects": mean_projects,
+            "github_profile_active_ratio": active_gh
+        }
+
+    @classmethod
+    def _generate_health_explainability(cls, feats: dict, health_scores: dict[str, int]) -> dict:
+        """Derive explainable strengths and risk factors from factual features without fabricating."""
+        strengths = []
+        risk_factors = []
+
+        # Strengths
+        if feats.get("mean_pairwise_compatibility", 0) >= 75.0:
+            strengths.append(f"High pairwise compatibility ({feats['mean_pairwise_compatibility']:.1f}%) across team members")
+        if feats.get("missing_category_count", 5) == 0:
+            strengths.append("Complete functional coverage across all 5 core technical domains")
+        elif feats.get("missing_category_count", 5) <= 1:
+            strengths.append("Strong cross-functional coverage with 4+ domains covered")
+
+        if feats.get("multi_contributor_categories", 0) >= 2:
+            strengths.append(f"Resilient multi-contributor depth across {feats['multi_contributor_categories']} functional categories")
+
+        if feats.get("log_team_total_commits", 0) >= 6.0:
+            commits_est = int(round(2**feats['log_team_total_commits'] - 1))
+            strengths.append(f"Active collaborative coding velocity ({commits_est} total commits)")
+
+        if feats.get("cluster_diversity_count", 0) >= 3:
+            strengths.append(f"Diverse builder archetypes represented ({feats['cluster_diversity_count']} distinct KMeans student clusters)")
+
+        if not strengths:
+            strengths.append("Foundational skills present for core hackathon execution")
+
+        # Risk factors
+        missing_cats = [cat for cat, sc in health_scores.items() if sc < 40]
+        if missing_cats:
+            risk_factors.append(f"Critical coverage gap in: {', '.join(missing_cats)}")
+
+        if feats.get("min_pairwise_compatibility", 100) < 65.0:
+            risk_factors.append(f"Pairwise compatibility bottleneck detected (lowest pair score: {feats['min_pairwise_compatibility']:.1f}%)")
+
+        if feats.get("core_skill_redundancy", 1.0) > 2.2:
+            risk_factors.append(f"High skill overlap ({feats['core_skill_redundancy']:.1f}x redundancy) with potential domain gaps")
+
+        if feats.get("github_profile_active_ratio", 1.0) < 0.40:
+            risk_factors.append("Low GitHub code activity linked across team members")
+
+        if feats.get("role_assigned_ratio", 1.0) < 0.50:
+            risk_factors.append("Unassigned or generic roles for majority of team members")
+
+        return {
+            "strengths": strengths[:4],
+            "risk_factors": risk_factors[:4]
         }
 
     @classmethod
     def get_full_team_health(cls, team: Team, db: Optional[Session] = None) -> dict:
         """
         Calculate dynamic ML-based Team Health metrics, missing roles, and detailed explainability.
-        Returns:
-            {
-                "health_scores": {"Frontend": 82, ...},
-                "missing_roles": ["Design"],
-                "health_details": {"Frontend": {...}, ...}
-            }
+        Maintains factual radar category coverage while predicting overall team health via team_health_v1.
         """
-        if not team or not getattr(team, 'members', None):
-            empty_scores = {cat: 0 for cat in CATEGORY_KEYWORDS}
-            empty_missing = ["Frontend React Developer", "Backend Developer", "AI / ML Engineer", "UI/UX Designer", "Product Manager"]
-            empty_details = {
-                cat: {
-                    "score": 0,
-                    "contributors_count": 0,
-                    "relevant_skills": [],
-                    "strongest_skills": [],
-                    "avg_proficiency": "none",
-                    "verified_skill_count": 0,
-                    "has_assigned_role": False,
-                    "assigned_roles": [],
-                    "github_contribution": "N/A",
-                    "cluster_contribution": "N/A",
-                    "explanation": f"{cat} has 0 coverage because there are no members in the team."
-                }
-                for cat in CATEGORY_KEYWORDS
+        empty_scores = {cat: 0 for cat in CATEGORY_KEYWORDS}
+        empty_missing = ["Frontend React Developer", "Backend Developer", "AI / ML Engineer", "UI/UX Designer", "Product Manager"]
+        empty_details = {
+            cat: {
+                "score": 0,
+                "contributors_count": 0,
+                "relevant_skills": [],
+                "strongest_skills": [],
+                "avg_proficiency": "none",
+                "verified_skill_count": 0,
+                "has_assigned_role": False,
+                "assigned_roles": [],
+                "github_contribution": "N/A",
+                "cluster_contribution": "N/A",
+                "explanation": f"{cat} has 0 coverage because there are no members in the team."
             }
+            for cat in CATEGORY_KEYWORDS
+        }
+
+        if not team or not getattr(team, 'members', None):
             return {
                 "health_scores": empty_scores,
                 "missing_roles": empty_missing,
-                "health_details": empty_details
+                "health_details": empty_details,
+                "health_score": 0,
+                "ml_health_score": 0.0,
+                "health_status": "At Risk",
+                "is_ml_powered": False,
+                "model_version": "team_health_v1",
+                "explainability": {
+                    "strengths": [],
+                    "risk_factors": ["No members in team"]
+                }
             }
 
-        # Extract features for all team members
+        # 1. Extract non-PII features for all team members
         members_features = [cls._extract_member_features(m, db) for m in team.members]
 
+        # 2. Compute factual deterministic category scores for Radar
         health_scores = {}
         health_details = {}
 
@@ -176,13 +434,56 @@ class TeamHealthService:
             health_scores[cat] = cat_score
             health_details[cat] = details
 
-        # Determine missing roles for categories under 40%
+        # 3. Determine missing roles for categories under 40%
         missing_roles = cls._calculate_missing_roles_from_scores(health_scores)
+
+        # 4. Deterministic baseline fallback score
+        det_score = int(round(sum(health_scores.values()) / max(1, len(health_scores))))
+
+        # 5. ML Team Health Prediction via team_health_v1
+        is_ml_powered = False
+        ml_health_score = None
+        model_version = "deterministic_fallback"
+        final_health_score = det_score
+        ml_feats = {}
+
+        try:
+            from ml.inference import get_inference_engine
+            engine = get_inference_engine()
+            if engine.is_team_health_model_available():
+                ml_feats = cls._compute_team_health_features(members_features, health_scores, engine)
+                pred = engine.predict_team_health_score(ml_feats)
+                ml_health_score = pred
+                final_health_score = int(round(pred))
+                is_ml_powered = True
+                model_version = engine.team_health_model_version
+            else:
+                ml_feats = cls._compute_team_health_features(members_features, health_scores, None)
+        except Exception as exc:
+            logger.warning(f"Team Health ML inference failed, falling back to deterministic baseline: {exc}")
+            ml_feats = cls._compute_team_health_features(members_features, health_scores, None)
+
+        # 6. Interpret UI Health Status
+        if final_health_score >= 75:
+            health_status = "Healthy"
+        elif final_health_score >= 50:
+            health_status = "Moderate"
+        else:
+            health_status = "At Risk"
+
+        # 7. Explainability factors
+        explainability = cls._generate_health_explainability(ml_feats, health_scores)
 
         return {
             "health_scores": health_scores,
             "missing_roles": missing_roles,
-            "health_details": health_details
+            "health_details": health_details,
+            "health_score": final_health_score,
+            "ml_health_score": ml_health_score,
+            "health_status": health_status,
+            "is_ml_powered": is_ml_powered,
+            "model_version": model_version,
+            "explainability": explainability
         }
 
     @classmethod

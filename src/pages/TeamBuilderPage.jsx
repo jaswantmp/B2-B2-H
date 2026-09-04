@@ -188,8 +188,15 @@ export default function TeamBuilderPage() {
           {/* Radar */}
           <div className="theme-card p-5">
             <h2 className="font-semibold theme-text mb-1">Team Health Radar</h2>
-            <p className="text-xs theme-muted mb-4">Skill coverage across key areas.</p>
-            <TeamHealthRadar scores={team.health_scores || team.healthScores || {}} height={240} />
+            <TeamHealthRadar
+              scores={team.health_scores || team.healthScores || {}}
+              overallScore={team.health_score ?? team.healthScore}
+              isMlPowered={team.is_ml_powered ?? team.isMlPowered}
+              modelVersion={team.model_version ?? team.modelVersion}
+              healthStatus={team.health_status ?? team.healthStatus}
+              explainability={team.explainability}
+              height={240}
+            />
           </div>
 
           {/* Coverage summary */}

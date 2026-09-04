@@ -59,6 +59,93 @@ FEATURE_COLUMNS = [
     "project_description_length"
 ]
 
+# The 23 feature columns required by the hackathon recommendation pipeline
+HACKATHON_FEATURE_COLUMNS = [
+    "tfidf_similarity",
+    "skill_overlap_count",
+    "skill_overlap_ratio",
+    "skill_count",
+    "verified_skill_count",
+    "domain_match",
+    "domain_overlap_count",
+    "interest_overlap_count",
+    "branch_alignment",
+    "year_suitability",
+    "student_branch",
+    "student_year",
+    "student_project_count",
+    "hackathons_participated",
+    "hackathons_won",
+    "github_repos",
+    "github_commits",
+    "github_stars",
+    "profile_completion",
+    "hackathon_track_count",
+    "hackathon_tag_count",
+    "hackathon_description_length",
+    "hackathon_team_size_max"
+]
+
+# The 15 feature columns required by the Level 1 Pairwise Compatibility model
+TEAM_PAIR_FEATURE_COLUMNS = [
+    "skill_overlap_count",
+    "skill_overlap_ratio",
+    "complementary_skill_count",
+    "domain_match",
+    "domain_overlap_count",
+    "interest_overlap_count",
+    "tfidf_similarity",
+    "branch_compatibility",
+    "year_difference",
+    "cluster_synergy",
+    "github_commits_total",
+    "github_repos_total",
+    "project_count_total",
+    "experience_balance",
+    "profile_completion_avg"
+]
+
+# The 15 feature columns required by the Level 2 Team Quality model
+TEAM_QUALITY_FEATURE_COLUMNS = [
+    "team_size",
+    "avg_pair_compatibility",
+    "min_pair_compatibility",
+    "pair_compatibility_std",
+    "unique_skills_count",
+    "category_coverage_count",
+    "category_balance_entropy",
+    "domain_diversity_count",
+    "cluster_diversity_count",
+    "branch_diversity_count",
+    "year_diversity_count",
+    "total_github_commits",
+    "total_projects",
+    "avg_profile_completion",
+    "role_specialization_score"
+]
+
+# The 18 feature columns required by team_health_v1
+TEAM_HEALTH_FEATURE_COLUMNS = [
+    "team_size",
+    "role_assigned_ratio",
+    "multi_contributor_categories",
+    "unique_skill_count",
+    "functional_category_entropy",
+    "missing_category_count",
+    "core_skill_redundancy",
+    "avg_skill_level",
+    "mean_pairwise_compatibility",
+    "min_pairwise_compatibility",
+    "compatibility_std_dev",
+    "cluster_diversity_count",
+    "branch_diversity_count",
+    "experience_range_years",
+    "domain_interest_jaccard_mean",
+    "log_team_total_commits",
+    "mean_member_projects",
+    "github_profile_active_ratio"
+]
+
 
 class MLInferenceEngine:
     _instance = None
@@ -80,10 +167,17 @@ class MLInferenceEngine:
         self.reg_pipeline = None
         self.kmeans_model = None
         self.kmeans_preprocessor = None
+        self.hackathon_pipeline = None
+        self.team_pair_model = None
+        self.team_quality_model = None
+        self.team_health_model = None
 
         self.is_loaded = False
         self.load_error = None
         self.model_version = "GradientBoosting-v1.0"
+        self.hackathon_model_version = "hackathon_recommender_v1"
+        self.team_generator_model_version = "team_generator_v1"
+        self.team_health_model_version = "team_health_v1"
 
         self._initialized = True
 
@@ -105,8 +199,12 @@ class MLInferenceEngine:
             reg_path = os.path.join(self.models_dir, "gradient_boosting_regressor.pkl")
             kmeans_path = os.path.join(self.models_dir, "kmeans_student_segmentation.pkl")
             kmeans_prep_path = os.path.join(self.models_dir, "kmeans_preprocessor.pkl")
+            hk_path = os.path.join(self.models_dir, "hackathon_recommendation_model.pkl")
+            pair_path = os.path.join(self.models_dir, "team_pair_compatibility_model.pkl")
+            team_path = os.path.join(self.models_dir, "team_quality_model.pkl")
+            health_path = os.path.join(self.models_dir, "team_health_model.pkl")
 
-            missing_files = [p for p in [clf_path, reg_path, kmeans_path, kmeans_prep_path] if not os.path.exists(p)]
+            missing_files = [p for p in [clf_path, reg_path, kmeans_path, kmeans_prep_path, hk_path, pair_path, team_path] if not os.path.exists(p)]
             if missing_files:
                 self.load_error = f"Missing model file(s): {', '.join(missing_files)}"
                 logger.warning(f"[MLInferenceEngine] {self.load_error}")
@@ -117,6 +215,11 @@ class MLInferenceEngine:
                 self.reg_pipeline = joblib.load(reg_path)
                 self.kmeans_model = joblib.load(kmeans_path)
                 self.kmeans_preprocessor = joblib.load(kmeans_prep_path)
+                self.hackathon_pipeline = joblib.load(hk_path)
+                self.team_pair_model = joblib.load(pair_path)
+                self.team_quality_model = joblib.load(team_path)
+                if os.path.exists(health_path):
+                    self.team_health_model = joblib.load(health_path)
 
                 self.is_loaded = True
                 self.load_error = None
@@ -127,11 +230,30 @@ class MLInferenceEngine:
                 logger.error(f"[MLInferenceEngine] {self.load_error}", exc_info=True)
                 return False
 
+
     def is_available(self) -> bool:
         """Check if models are loaded and available for inference."""
         if not self.is_loaded:
             return self.load_models()
         return True
+
+    def is_hackathon_model_available(self) -> bool:
+        """Check if hackathon recommendation model is loaded and available."""
+        if not self.is_loaded:
+            self.load_models()
+        return self.hackathon_pipeline is not None
+
+    def is_team_generator_model_available(self) -> bool:
+        """Check if team generator pairwise and team quality models are loaded and available."""
+        if not self.is_loaded:
+            self.load_models()
+        return self.team_pair_model is not None and self.team_quality_model is not None
+
+    def is_team_health_model_available(self) -> bool:
+        """Check if team health model is loaded and available."""
+        if not self.is_loaded:
+            self.load_models()
+        return self.team_health_model is not None
 
     def predict_pair(self, feature_dict: dict) -> dict:
         """
@@ -244,7 +366,97 @@ class MLInferenceEngine:
 
         return results
 
+    def predict_hackathon_scores(self, feature_dicts: list[dict]) -> list[dict]:
+        """
+        Run vectorized batch prediction for hackathon recommendation candidates.
+        Returns list of dicts with ml_score, recommendation_score, and model_version.
+        """
+        if not self.is_available() or self.hackathon_pipeline is None or not feature_dicts:
+            return []
+
+        df_rows = pd.DataFrame(feature_dicts)
+        for col in HACKATHON_FEATURE_COLUMNS:
+            if col not in df_rows.columns:
+                df_rows[col] = "Computer Science" if col == "student_branch" else ("3rd Year" if col == "student_year" else 0.0)
+
+        df_features = df_rows[HACKATHON_FEATURE_COLUMNS]
+
+        try:
+            raw_preds = self.hackathon_pipeline.predict(df_features)
+            results = []
+            for i, val in enumerate(raw_preds):
+                score = float(np.round(np.clip(val, 40.0, 99.0), 2))
+                int_score = int(round(score))
+                results.append({
+                    "ml_score": score,
+                    "recommendation_score": int_score,
+                    "score": int_score,
+                    "model_version": self.hackathon_model_version,
+                    "is_ml_powered": True
+                })
+            return results
+        except Exception as e:
+            logger.warning(f"[MLInferenceEngine] Hackathon scoring failed: {e}", exc_info=True)
+            return []
+
+    def predict_team_pair_scores(self, feature_dicts: list[dict]) -> list[float]:
+        """
+        Predict Level 1 pairwise student compatibility scores (0-100) using HistGradientBoostingRegressor.
+        """
+        if not self.is_available() or self.team_pair_model is None or not feature_dicts:
+            return []
+
+        df_rows = pd.DataFrame(feature_dicts)
+        for col in TEAM_PAIR_FEATURE_COLUMNS:
+            if col not in df_rows.columns:
+                df_rows[col] = 0.0
+
+        df_features = df_rows[TEAM_PAIR_FEATURE_COLUMNS]
+        try:
+            preds = self.team_pair_model.predict(df_features)
+            return [float(np.round(np.clip(val, 40.0, 99.0), 2)) for val in preds]
+        except Exception as e:
+            logger.warning(f"[MLInferenceEngine] Team pair scoring failed: {e}", exc_info=True)
+            return []
+
+    def predict_team_quality_scores(self, feature_dicts: list[dict]) -> list[float]:
+        """
+        Predict Level 2 team-level quality scores (0-100) using HistGradientBoostingRegressor.
+        """
+        if not self.is_available() or self.team_quality_model is None or not feature_dicts:
+            return []
+
+        df_rows = pd.DataFrame(feature_dicts)
+        for col in TEAM_QUALITY_FEATURE_COLUMNS:
+            if col not in df_rows.columns:
+                df_rows[col] = 0.0
+
+        df_features = df_rows[TEAM_QUALITY_FEATURE_COLUMNS]
+        try:
+            preds = self.team_quality_model.predict(df_features)
+            return [float(np.round(np.clip(val, 40.0, 99.0), 2)) for val in preds]
+        except Exception as e:
+            logger.warning(f"[MLInferenceEngine] Team quality scoring failed: {e}", exc_info=True)
+            return []
+
+    def predict_team_health_score(self, feature_dict: dict) -> float:
+        """
+        Predict ML overall team health score (0-100) using HistGradientBoostingRegressor (team_health_v1).
+        """
+        if not self.is_team_health_model_available():
+            raise RuntimeError("Team health ML model (team_health_v1) is not available.")
+
+        df_row = pd.DataFrame([feature_dict])
+        for col in TEAM_HEALTH_FEATURE_COLUMNS:
+            if col not in df_row.columns:
+                df_row[col] = 0.0
+
+        df_features = df_row[TEAM_HEALTH_FEATURE_COLUMNS]
+        pred = float(self.team_health_model.predict(df_features)[0])
+        return float(np.round(np.clip(pred, 35.0, 99.0), 2))
+
     def predict_cluster_detailed(self, student_profile_dict: dict) -> dict:
+
         """
         Predict K-Means cluster segment for a student profile with detailed centroid metrics,
         confidence scores, dominant skills/domains, and explainable rationale.

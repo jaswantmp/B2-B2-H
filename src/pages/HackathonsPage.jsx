@@ -98,7 +98,7 @@ function HackathonCard({ h, isDark, onToggleRegister, onViewDetails }) {
             {recBadge && (
               <span className={`inline-flex items-center gap-1 text-xs font-semibold px-2 py-0.5 rounded-full border ${recBadge.colorClass}`}>
                 <span className={`w-1.5 h-1.5 rounded-full ${recBadge.dotColor}`} />
-                ⭐ {h.recommendation.score}% Match ({recBadge.label})
+                ⭐ {h.recommendation.score}% {h.recommendation.is_ml_powered ? 'ML Match' : 'Match'} ({recBadge.label})
               </span>
             )}
           </div>
@@ -301,9 +301,16 @@ function HackathonDetailsModal({ h, onClose, isDark, onToggleRegister }) {
         {/* AI Recommendations Panel */}
         {rec && (
           <div className="border-t theme-border pt-4 space-y-4">
-            <div className="flex items-center gap-2 text-violet-600 dark:text-violet-400 font-bold text-sm">
-              <Brain size={16} />
-              <span>AI Match Analysis</span>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2 text-violet-600 dark:text-violet-400 font-bold text-sm">
+                <Brain size={16} />
+                <span>ML Match Analysis</span>
+              </div>
+              {rec.model_version && (
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-violet-100 dark:bg-violet-950/40 text-violet-700 dark:text-violet-300 border border-violet-200 dark:border-violet-800">
+                  {rec.model_version}
+                </span>
+              )}
             </div>
 
             {/* Score Breakdown Progress Bars */}
@@ -311,37 +318,37 @@ function HackathonDetailsModal({ h, onClose, isDark, onToggleRegister }) {
               <div>
                 <div className="flex justify-between mb-1">
                   <span className={textMuted}>Skills Match</span>
-                  <span className="font-bold theme-text">{rec.breakdown.skills} / 40</span>
+                  <span className="font-bold theme-text">{rec.breakdown?.skills ?? 0} / 40</span>
                 </div>
                 <div className="w-full h-1.5 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
-                  <div className="h-full bg-violet-500 rounded-full" style={{ width: `${(rec.breakdown.skills / 40) * 100}%` }} />
+                  <div className="h-full bg-violet-500 rounded-full" style={{ width: `${((rec.breakdown?.skills ?? 0) / 40) * 100}%` }} />
                 </div>
               </div>
               <div>
                 <div className="flex justify-between mb-1">
                   <span className={textMuted}>Domains Fit</span>
-                  <span className="font-bold theme-text">{rec.breakdown.domains} / 35</span>
+                  <span className="font-bold theme-text">{rec.breakdown?.domains ?? 0} / 35</span>
                 </div>
                 <div className="w-full h-1.5 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
-                  <div className="h-full bg-cyan-500 rounded-full" style={{ width: `${(rec.breakdown.domains / 35) * 100}%` }} />
+                  <div className="h-full bg-cyan-500 rounded-full" style={{ width: `${((rec.breakdown?.domains ?? 0) / 35) * 100}%` }} />
                 </div>
               </div>
               <div>
                 <div className="flex justify-between mb-1">
                   <span className={textMuted}>Branch fit</span>
-                  <span className="font-bold theme-text">{rec.breakdown.branch} / 15</span>
+                  <span className="font-bold theme-text">{rec.breakdown?.branch ?? 0} / 15</span>
                 </div>
                 <div className="w-full h-1.5 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
-                  <div className="h-full bg-blue-500 rounded-full" style={{ width: `${(rec.breakdown.branch / 15) * 100}%` }} />
+                  <div className="h-full bg-blue-500 rounded-full" style={{ width: `${((rec.breakdown?.branch ?? 0) / 15) * 100}%` }} />
                 </div>
               </div>
               <div>
                 <div className="flex justify-between mb-1">
                   <span className={textMuted}>Academic Year fit</span>
-                  <span className="font-bold theme-text">{rec.breakdown.year} / 10</span>
+                  <span className="font-bold theme-text">{rec.breakdown?.year ?? 0} / 10</span>
                 </div>
                 <div className="w-full h-1.5 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
-                  <div className="h-full bg-emerald-500 rounded-full" style={{ width: `${(rec.breakdown.year / 10) * 100}%` }} />
+                  <div className="h-full bg-emerald-500 rounded-full" style={{ width: `${((rec.breakdown?.year ?? 0) / 10) * 100}%` }} />
                 </div>
               </div>
             </div>
