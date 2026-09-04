@@ -38,7 +38,7 @@ export default function TeamHealthRadar({
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-violet-600 dark:bg-violet-400 animate-pulse" />
             <span className="text-violet-900 dark:text-violet-200 font-semibold">
-              ML Health: {overallScore ?? Math.round(Object.values(scores).reduce((a, b) => a + b, 0) / Math.max(1, Object.keys(scores).length))}%
+              Health: {overallScore ?? Math.round(Object.values(scores).reduce((a, b) => a + b, 0) / Math.max(1, Object.keys(scores).length))}%
             </span>
             {healthStatus && (
               <span
@@ -55,7 +55,7 @@ export default function TeamHealthRadar({
             )}
           </div>
           <span className="text-[10px] text-slate-600 dark:text-slate-400 font-mono font-medium">
-            {modelVersion || 'team_health_v1'}
+            {(modelVersion || 'team_health_v1').replace('_v1', '')}
           </span>
         </div>
       )}
