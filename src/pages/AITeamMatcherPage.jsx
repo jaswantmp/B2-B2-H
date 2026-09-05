@@ -417,7 +417,7 @@ export default function AITeamMatcherPage() {
                     </div>
                     {candidate.model_version != null && (
                       <span className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-violet-100 dark:bg-violet-900/30 text-violet-800 dark:text-violet-300 border border-violet-300 dark:border-violet-700/40 font-medium">
-                        {candidate.model_version}
+                        {candidate.model_version.replace(/[-_]v[\d.]+$/i, '')}
                       </span>
                     )}
                   </div>

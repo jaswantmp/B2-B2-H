@@ -363,12 +363,12 @@ export default function GeneratorPage() {
                     <span className="text-sm font-semibold text-emerald-400">Team blueprint generated</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-violet-600/20 text-violet-300 border border-violet-500/40">
+                    <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-violet-600/20 text-violet-800 dark:text-violet-300 border border-violet-500/40">
                       ⭐ ML Team Quality: {result.team_quality_score ?? 85}%
                     </span>
                     {result.model_version && (
                       <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">
-                        {result.model_version}
+                        {result.model_version.replace(/_v\d+$/, '')}
                       </span>
                     )}
                   </div>
