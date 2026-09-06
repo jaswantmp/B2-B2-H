@@ -110,6 +110,7 @@ class UserResponse(UserBase):
     id: str
     is_active: bool
     is_verified: bool
+    is_admin: bool = False
     onboarding_completed: bool
     profile_views: int
     joined_at: datetime

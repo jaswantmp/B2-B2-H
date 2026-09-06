@@ -4,7 +4,7 @@ import { NavLink, Link, useNavigate } from 'react-router-dom'
 import {
   LayoutDashboard, Users, Sparkles, UsersRound, FolderOpen,
   Calendar, Bell, Settings, Code2, ChevronRight, ChevronUp, Zap, Hammer, LogOut,
-  Lightbulb, UserCheck,
+  Lightbulb, UserCheck, ShieldCheck,
 } from 'lucide-react'
 import logo from '../assets/logo.png'
 import { getNotifications } from '../services/api.js'
@@ -112,6 +112,17 @@ export default function Sidebar() {
             )}
           </NavLink>
         ))}
+
+        {/* Admin Navigation link visible only to administrators */}
+        {user?.is_admin === true && (
+          <NavLink
+            to="/admin"
+            className="flex items-center gap-3 px-3 py-2.5 text-sm font-semibold rounded-xl text-amber-700 dark:text-amber-400 bg-amber-500/10 border border-amber-500/30 hover:bg-amber-500/20 transition-all"
+          >
+            <ShieldCheck size={17} aria-hidden="true" />
+            <span>Admin Dashboard</span>
+          </NavLink>
+        )}
       </div>
 
       {/* User footer with logout menu */}
@@ -122,6 +133,16 @@ export default function Sidebar() {
             style={{ backgroundColor: 'var(--bg-surface)', borderColor: 'var(--border-strong)' }}
             role="menu"
           >
+            {user?.is_admin === true && (
+              <Link
+                to="/admin"
+                onClick={() => setMenuOpen(false)}
+                role="menuitem"
+                className="flex items-center gap-2.5 px-4 py-2.5 text-sm font-medium text-amber-600 dark:text-amber-400 hover:bg-amber-500/10 transition-colors border-b theme-divider"
+              >
+                <ShieldCheck size={15} /> Admin Dashboard
+              </Link>
+            )}
             <Link
               to="/settings"
               onClick={() => setMenuOpen(false)}

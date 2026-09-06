@@ -1206,5 +1206,621 @@ export async function resetDemoAccount(email = 'demo@b2b2h.com') {
   return { status: 'success', message: 'Mock demo account reset.' }
 }
 
+/**
+ * Fetches database-backed administrative platform statistics.
+ * Strictly protected endpoint: requires admin privileges.
+ */
+export async function getAdminStats() {
+  if (BASE) {
+    return request('/api/v1/admin/stats')
+  }
+  await delay(400)
+  return {
+    total_students: users.length,
+    active_students: users.filter(u => u.status !== 'OFFLINE').length,
+    verified_students: users.filter(u => u.verifiedSkills && u.verifiedSkills.length > 0).length,
+    total_projects: projects.length,
+    total_teams: 3,
+    total_hackathons: hackathons.length,
+    total_hackathon_registrations: 12,
+  }
+}
 
+/**
+ * List students with pagination and query filters for admin view.
+ */
+export async function getAdminStudents(params = {}) {
+  const query = new URLSearchParams()
+  if (params.search) query.set('search', params.search)
+  if (params.status) query.set('status', params.status)
+  if (params.is_active !== undefined && params.is_active !== '') query.set('is_active', params.is_active)
+  if (params.is_verified !== undefined && params.is_verified !== '') query.set('is_verified', params.is_verified)
+  if (params.college) query.set('college', params.college)
+  if (params.branch) query.set('branch', params.branch)
+  if (params.year) query.set('year', params.year)
+  if (params.page) query.set('page', params.page)
+  if (params.limit) query.set('limit', params.limit)
+
+  const queryString = query.toString() ? `?${query.toString()}` : ''
+
+  if (BASE) {
+    return request(`/api/v1/admin/students${queryString}`)
+  }
+
+  await delay(400)
+  const page = parseInt(params.page || 1, 10)
+  const limit = parseInt(params.limit || 20, 10)
+  let filtered = [...users]
+
+  if (params.search) {
+    const s = params.search.toLowerCase()
+    filtered = filtered.filter(u =>
+      (u.name && u.name.toLowerCase().includes(s)) ||
+      (u.username && u.username.toLowerCase().includes(s)) ||
+      (u.email && u.email.toLowerCase().includes(s))
+    )
+  }
+  if (params.status) {
+    filtered = filtered.filter(u => u.status === params.status)
+  }
+  if (params.is_active !== undefined && params.is_active !== '') {
+    const act = params.is_active === 'true' || params.is_active === true
+    filtered = filtered.filter(u => (u.status !== 'OFFLINE') === act)
+  }
+  if (params.is_verified !== undefined && params.is_verified !== '') {
+    const ver = params.is_verified === 'true' || params.is_verified === true
+    filtered = filtered.filter(u => (u.verifiedSkills && u.verifiedSkills.length > 0) === ver)
+  }
+
+  const total = filtered.length
+  const total_pages = Math.max(1, Math.ceil(total / limit))
+  const offset = (page - 1) * limit
+  const items = filtered.slice(offset, offset + limit).map(u => ({
+    id: u.id,
+    name: u.name,
+    username: u.username,
+    email: u.email,
+    avatar: u.avatar,
+    college: u.college || u.university,
+    university: u.university,
+    branch: u.branch,
+    year: u.year,
+    status: u.status,
+    is_active: u.status !== 'OFFLINE',
+    is_verified: !!(u.verifiedSkills && u.verifiedSkills.length > 0),
+    is_admin: false,
+    onboarding_completed: true,
+    hackathons_won: u.hackathonsWon || 0,
+    skills_count: u.skills ? u.skills.length : 0,
+    joined_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+  }))
+
+  return { items, total, page, limit, total_pages }
+}
+
+/**
+ * Get detailed profile information for a student in admin view.
+ */
+export async function getAdminStudent(studentId) {
+  if (BASE) {
+    return request(`/api/v1/admin/students/${studentId}`)
+  }
+
+  await delay(400)
+  const student = users.find(u => String(u.id) === String(studentId)) || users[0]
+  return {
+    ...student,
+    is_active: student.status !== 'OFFLINE',
+    is_verified: !!(student.verifiedSkills && student.verifiedSkills.length > 0),
+    is_admin: false,
+    onboarding_completed: true,
+    skills: (student.skills || []).map((s, idx) => ({
+      id: idx + 1,
+      skill_id: idx + 1,
+      name: s,
+      category: 'Technical',
+      proficiency: 'intermediate',
+      is_verified: (student.verifiedSkills || []).includes(s),
+    })),
+    projects: (student.projects || []).map((p, idx) => ({
+      id: `p-${idx}`,
+      title: p.name || p.title,
+      category: 'college',
+      status: 'active',
+      role: 'Creator',
+      is_creator: true,
+      created_at: new Date().toISOString(),
+    })),
+    teams: (student.teams || []).map((t, idx) => ({
+      id: `t-${idx}`,
+      name: t.name || 'Team Hack',
+      hackathon_id: 1,
+      status: 'recruiting',
+      role: 'Team Lead',
+      is_leader: true,
+      created_at: new Date().toISOString(),
+    })),
+    hackathons: (student.hackathons || []).map((h, idx) => ({
+      id: idx + 1,
+      title: h.name || 'Hackathon Event',
+      organizer: 'Tech Community',
+      date: new Date().toISOString(),
+      end_date: new Date().toISOString(),
+      location: 'Online',
+      registered_at: new Date().toISOString(),
+    })),
+  }
+}
+
+/**
+ * Update account active status (activate/deactivate).
+ */
+export async function updateAdminStudentStatus(studentId, isActive) {
+  if (BASE) {
+    return request(`/api/v1/admin/students/${studentId}/status`, {
+      method: 'PATCH',
+      body: JSON.stringify({ is_active: isActive }),
+    })
+  }
+
+  await delay(300)
+  return { id: studentId, is_active: isActive }
+}
+
+/**
+ * Update student verification status.
+ */
+export async function updateAdminStudentVerification(studentId, isVerified) {
+  if (BASE) {
+    return request(`/api/v1/admin/students/${studentId}/verification`, {
+      method: 'PATCH',
+      body: JSON.stringify({ is_verified: isVerified }),
+    })
+  }
+
+  await delay(300)
+  return { id: studentId, is_verified: isVerified }
+}
+
+/**
+ * Fetch paginated list of hackathons with admin statistics (registration counts).
+ */
+export async function getAdminHackathons(params = {}) {
+  if (BASE) {
+    const qp = new URLSearchParams()
+    if (params.search) qp.set('search', params.search)
+    if (params.organizer) qp.set('organizer', params.organizer)
+    if (params.location) qp.set('location', params.location)
+    if (params.tag) qp.set('tag', params.tag)
+    if (params.track) qp.set('track', params.track)
+    if (params.page) qp.set('page', params.page)
+    if (params.limit) qp.set('limit', params.limit)
+    return request(`/api/v1/admin/hackathons?${qp.toString()}`)
+  }
+
+  await delay(400)
+  let filtered = [...hackathons]
+  if (params.search) {
+    const s = params.search.toLowerCase()
+    filtered = filtered.filter(h =>
+      (h.title && h.title.toLowerCase().includes(s)) ||
+      (h.organizer && h.organizer.toLowerCase().includes(s)) ||
+      (h.location && h.location.toLowerCase().includes(s)) ||
+      (h.description && h.description.toLowerCase().includes(s))
+    )
+  }
+  if (params.organizer) {
+    const org = params.organizer.toLowerCase()
+    filtered = filtered.filter(h => h.organizer && h.organizer.toLowerCase().includes(org))
+  }
+  if (params.location) {
+    const loc = params.location.toLowerCase()
+    filtered = filtered.filter(h => h.location && h.location.toLowerCase().includes(loc))
+  }
+  if (params.tag) {
+    filtered = filtered.filter(h => (h.tags || []).some(t => t.toLowerCase() === params.tag.toLowerCase()))
+  }
+  if (params.track) {
+    filtered = filtered.filter(h => (h.tracks || []).some(t => t.toLowerCase() === params.track.toLowerCase()))
+  }
+
+  const page = parseInt(params.page, 10) || 1
+  const limit = parseInt(params.limit, 10) || 12
+  const total = filtered.length
+  const total_pages = Math.max(1, Math.ceil(total / limit))
+  const offset = (page - 1) * limit
+  const items = filtered.slice(offset, offset + limit).map(h => ({
+    ...h,
+    registration_count: h.registeredCount || 0,
+    created_at: h.created_at || new Date().toISOString(),
+    updated_at: h.updated_at || new Date().toISOString(),
+  }))
+
+  return { items, total, page, limit, total_pages }
+}
+
+/**
+ * Fetch detailed hackathon info including full registration list.
+ */
+export async function getAdminHackathon(hackathonId) {
+  if (BASE) {
+    return request(`/api/v1/admin/hackathons/${hackathonId}`)
+  }
+
+  await delay(350)
+  const h = hackathons.find(item => String(item.id) === String(hackathonId)) || hackathons[0]
+  return {
+    ...h,
+    registration_count: h.registeredCount || 0,
+    created_at: h.created_at || new Date().toISOString(),
+    updated_at: h.updated_at || new Date().toISOString(),
+    registrations: (users || []).slice(0, 3).map((u, idx) => ({
+      id: idx + 1,
+      student_id: u.id,
+      name: u.name,
+      email: u.email,
+      avatar: u.avatar,
+      college: u.college || u.university,
+      branch: u.branch,
+      year: u.year,
+      registered_at: new Date().toISOString(),
+    }))
+  }
+}
+
+/**
+ * Create a new hackathon.
+ */
+export async function createAdminHackathon(data) {
+  if (BASE) {
+    return request('/api/v1/admin/hackathons', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    })
+  }
+
+  await delay(500)
+  const newId = Math.max(...hackathons.map(h => Number(h.id) || 0), 0) + 1
+  const created = {
+    id: newId,
+    ...data,
+    registration_count: 0,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+  }
+  hackathons.unshift(created)
+  return created
+}
+
+/**
+ * Update an existing hackathon.
+ */
+export async function updateAdminHackathon(hackathonId, data) {
+  if (BASE) {
+    return request(`/api/v1/admin/hackathons/${hackathonId}`, {
+      method: 'PATCH',
+      body: JSON.stringify(data),
+    })
+  }
+
+  await delay(400)
+  const idx = hackathons.findIndex(h => String(h.id) === String(hackathonId))
+  if (idx !== -1) {
+    hackathons[idx] = { ...hackathons[idx], ...data, updated_at: new Date().toISOString() }
+    return hackathons[idx]
+  }
+  return { id: hackathonId, ...data }
+}
+
+/**
+ * Fetch registrations for a specific hackathon.
+ */
+export async function getAdminHackathonRegistrations(hackathonId) {
+  if (BASE) {
+    return request(`/api/v1/admin/hackathons/${hackathonId}/registrations`)
+  }
+
+  await delay(300)
+  return (users || []).slice(0, 3).map((u, idx) => ({
+    id: idx + 1,
+    student_id: u.id,
+    name: u.name,
+    email: u.email,
+    avatar: u.avatar,
+    college: u.college || u.university,
+    branch: u.branch,
+    year: u.year,
+    registered_at: new Date().toISOString(),
+  }))
+}
+
+/**
+ * Safely delete a hackathon (fails with 409 if active registrations or teams exist).
+ */
+export async function deleteAdminHackathon(hackathonId) {
+  if (BASE) {
+    return request(`/api/v1/admin/hackathons/${hackathonId}`, {
+      method: 'DELETE',
+    })
+  }
+
+  await delay(400)
+  const idx = hackathons.findIndex(h => String(h.id) === String(hackathonId))
+  if (idx !== -1) {
+    hackathons.splice(idx, 1)
+  }
+  return { success: true, message: 'Hackathon deleted successfully' }
+}
+
+/**
+ * Fetch paginated list of projects with admin statistics (member and application counts).
+ */
+export async function getAdminProjects(params = {}) {
+  if (BASE) {
+    const qp = new URLSearchParams()
+    if (params.search) qp.set('search', params.search)
+    if (params.category) qp.set('category', params.category)
+    if (params.status) qp.set('status', params.status)
+    if (params.tech) qp.set('tech', params.tech)
+    if (params.creator_id) qp.set('creator_id', params.creator_id)
+    if (params.page) qp.set('page', params.page)
+    if (params.limit) qp.set('limit', params.limit)
+    return request(`/api/v1/admin/projects?${qp.toString()}`)
+  }
+
+  await delay(400)
+  let filtered = [...projects]
+  if (params.search) {
+    const s = params.search.toLowerCase()
+    filtered = filtered.filter(p =>
+      (p.title && p.title.toLowerCase().includes(s)) ||
+      (p.description && p.description.toLowerCase().includes(s)) ||
+      (p.university && p.university.toLowerCase().includes(s))
+    )
+  }
+  if (params.category) {
+    filtered = filtered.filter(p => p.category && p.category.toLowerCase() === params.category.toLowerCase())
+  }
+  if (params.status) {
+    filtered = filtered.filter(p => p.status && p.status.toLowerCase() === params.status.toLowerCase())
+  }
+  if (params.creator_id) {
+    filtered = filtered.filter(p => p.creator_id && String(p.creator_id) === String(params.creator_id))
+  }
+
+  const page = parseInt(params.page, 10) || 1
+  const limit = parseInt(params.limit, 10) || 15
+  const total = filtered.length
+  const total_pages = Math.max(1, Math.ceil(total / limit))
+  const offset = (page - 1) * limit
+  const items = filtered.slice(offset, offset + limit).map(p => ({
+    ...p,
+    member_count: (p.team || p.members || []).length || 1,
+    application_count: 0,
+    created_at: p.created_at || new Date().toISOString(),
+    updated_at: p.updated_at || new Date().toISOString(),
+    creator: p.creator || {
+      id: p.creator_id || '1',
+      name: 'Project Creator',
+      username: 'creator',
+      email: 'creator@example.com',
+      avatar: null,
+      college: 'CIT Coimbatore',
+      branch: 'Computer Science',
+      year: '3rd Year',
+      is_active: true,
+      is_verified: true,
+    }
+  }))
+
+  return { items, total, page, limit, total_pages }
+}
+
+/**
+ * Fetch detailed project info including creator, members, and applications.
+ */
+export async function getAdminProject(projectId) {
+  if (BASE) {
+    return request(`/api/v1/admin/projects/${projectId}`)
+  }
+
+  await delay(350)
+  const p = projects.find(item => String(item.id) === String(projectId)) || projects[0]
+  return {
+    ...p,
+    member_count: (p.team || []).length || 1,
+    application_count: 2,
+    created_at: p.created_at || new Date().toISOString(),
+    updated_at: p.updated_at || new Date().toISOString(),
+    creator: p.creator || {
+      id: p.creator_id || '1',
+      name: 'Project Creator',
+      username: 'creator',
+      email: 'creator@example.com',
+      avatar: null,
+      college: 'CIT Coimbatore',
+      branch: 'Computer Science',
+      year: '3rd Year',
+      is_active: true,
+      is_verified: true,
+    },
+    members: (p.team || []).map((m, idx) => ({
+      id: `pm-${idx}`,
+      student_id: m.id || `u-${idx}`,
+      name: m.name,
+      username: m.username || m.name?.toLowerCase().replace(/\s+/g, '') || `user${idx}`,
+      email: m.email || `${m.name?.toLowerCase().replace(/\s+/g, '') || 'user'}@college.edu`,
+      avatar: m.avatar,
+      college: m.college || m.university || 'CIT Coimbatore',
+      branch: m.branch || 'Information Technology',
+      year: m.year || '3rd Year',
+      role: m.role || 'Contributor',
+      joined_at: new Date().toISOString(),
+    })),
+    applications: [
+      {
+        id: 'app-1',
+        project_id: projectId,
+        student_id: users[1]?.id || '2',
+        name: users[1]?.name || 'Priya Sharma',
+        username: users[1]?.username || 'priyasharma',
+        email: users[1]?.email || 'priya@college.edu',
+        avatar: users[1]?.avatar || null,
+        college: users[1]?.college || 'PSG Tech',
+        branch: users[1]?.branch || 'Computer Science',
+        year: users[1]?.year || '2nd Year',
+        status: 'pending',
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      }
+    ]
+  }
+}
+
+/**
+ * Moderate or update an existing project.
+ */
+export async function updateAdminProject(projectId, data) {
+  if (BASE) {
+    return request(`/api/v1/admin/projects/${projectId}`, {
+      method: 'PATCH',
+      body: JSON.stringify(data),
+    })
+  }
+
+  await delay(400)
+  const idx = projects.findIndex(p => String(p.id) === String(projectId))
+  if (idx !== -1) {
+    projects[idx] = { ...projects[idx], ...data, updated_at: new Date().toISOString() }
+    return projects[idx]
+  }
+  return { id: projectId, ...data }
+}
+
+/**
+ * Fetch applications for a specific project.
+ */
+export async function getAdminProjectApplications(projectId) {
+  if (BASE) {
+    return request(`/api/v1/admin/projects/${projectId}/applications`)
+  }
+
+  await delay(300)
+  return [
+    {
+      id: 'app-1',
+      project_id: projectId,
+      student_id: users[1]?.id || '2',
+      name: users[1]?.name || 'Priya Sharma',
+      username: users[1]?.username || 'priyasharma',
+      email: users[1]?.email || 'priya@college.edu',
+      avatar: users[1]?.avatar || null,
+      college: users[1]?.college || 'PSG Tech',
+      branch: users[1]?.branch || 'Computer Science',
+      year: users[1]?.year || '2nd Year',
+      status: 'pending',
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    }
+  ]
+}
+
+/**
+ * Safely delete a project (fails with 409 if applications or collaborator members exist).
+ */
+export async function deleteAdminProject(projectId) {
+  if (BASE) {
+    return request(`/api/v1/admin/projects/${projectId}`, {
+      method: 'DELETE',
+    })
+  }
+
+  await delay(400)
+  const idx = projects.findIndex(p => String(p.id) === String(projectId))
+  if (idx !== -1) {
+    projects.splice(idx, 1)
+  }
+  return { success: true, message: 'Project deleted successfully' }
+}
+
+// ─── ADMIN TEAMS API ─────────────────────────────────────────────────────────
+
+/**
+ * Fetch paginated list of teams for admin management.
+ */
+export async function getAdminTeams({ page = 1, limit = 10, search = '', status = '', hackathon_id = null } = {}) {
+  if (BASE) {
+    const params = new URLSearchParams()
+    params.set('page', page)
+    params.set('limit', limit)
+    if (search) params.set('search', search)
+    if (status) params.set('status', status)
+    if (hackathon_id) params.set('hackathon_id', hackathon_id)
+
+    return request(`/api/v1/admin/teams?${params.toString()}`)
+  }
+
+  await delay(300)
+  return {
+    items: [],
+    total: 0,
+    page,
+    limit,
+    total_pages: 1,
+  }
+}
+
+/**
+ * Fetch comprehensive team details for admin moderation.
+ */
+export async function getAdminTeam(teamId) {
+  if (BASE) {
+    return request(`/api/v1/admin/teams/${teamId}`)
+  }
+
+  await delay(300)
+  throw new Error('Not implemented in mock mode')
+}
+
+/**
+ * Moderates team details (name, description, status, max_members, hackathon_id).
+ */
+export async function updateAdminTeam(teamId, data) {
+  if (BASE) {
+    return request(`/api/v1/admin/teams/${teamId}`, {
+      method: 'PATCH',
+      body: JSON.stringify(data),
+    })
+  }
+
+  await delay(400)
+  return { id: teamId, ...data }
+}
+
+/**
+ * Fetch invitations sent by a specific team.
+ */
+export async function getAdminTeamInvites(teamId) {
+  if (BASE) {
+    return request(`/api/v1/admin/teams/${teamId}/invites`)
+  }
+
+  await delay(300)
+  return []
+}
+
+/**
+ * Safely delete a team (fails with 409 if invitations or collaborator members exist).
+ */
+export async function deleteAdminTeam(teamId) {
+  if (BASE) {
+    return request(`/api/v1/admin/teams/${teamId}`, {
+      method: 'DELETE',
+    })
+  }
+
+  await delay(400)
+  return { success: true, message: 'Team deleted successfully' }
+}
 

@@ -1,7 +1,7 @@
 // src/components/AppNavbar.jsx
 import { useState, useEffect } from 'react'
 import { Link, NavLink, useNavigate } from 'react-router-dom'
-import { Code2, Menu, X, Bell, LogOut, Settings } from 'lucide-react'
+import { Code2, Menu, X, Bell, LogOut, Settings, ShieldCheck } from 'lucide-react'
 import logo from '../assets/logo.png'
 import PulseAvatar from './PulseAvatar.jsx'
 import ThemeToggle from './ThemeToggle.jsx'
@@ -103,6 +103,17 @@ export default function AppNavbar() {
           ))}
 
           <div className="pt-2 mt-2 border-t theme-divider space-y-1">
+            {user?.is_admin === true && (
+              <NavLink
+                to="/admin"
+                onClick={() => setOpen(false)}
+                className={({ isActive }) =>
+                  `flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-semibold transition-all text-amber-700 dark:text-amber-400 bg-amber-500/10 border border-amber-500/30 ${isActive ? 'active' : ''}`
+                }
+              >
+                <ShieldCheck size={16} /> Admin Dashboard
+              </NavLink>
+            )}
             <NavLink
               to="/settings"
               onClick={() => setOpen(false)}

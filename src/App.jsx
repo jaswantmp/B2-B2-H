@@ -9,6 +9,17 @@ import LandingPage from './pages/LandingPage.jsx'
 
 const ProtectedRoute = lazy(() => import('./components/ProtectedRoute.jsx'))
 const MainLayout = lazy(() => import('./layouts/MainLayout.jsx'))
+const AdminRoute = lazy(() => import('./components/AdminRoute.jsx'))
+const AdminLayout = lazy(() => import('./layouts/AdminLayout.jsx'))
+const AdminDashboardPage = lazy(() => import('./pages/admin/AdminDashboardPage.jsx'))
+const AdminStudentsPage = lazy(() => import('./pages/admin/AdminStudentsPage.jsx'))
+const AdminStudentDetailPage = lazy(() => import('./pages/admin/AdminStudentDetailPage.jsx'))
+const AdminHackathonsPage = lazy(() => import('./pages/admin/AdminHackathonsPage.jsx'))
+const AdminHackathonDetailPage = lazy(() => import('./pages/admin/AdminHackathonDetailPage.jsx'))
+const AdminProjectsPage = lazy(() => import('./pages/admin/AdminProjectsPage.jsx'))
+const AdminProjectDetailPage = lazy(() => import('./pages/admin/AdminProjectDetailPage.jsx'))
+const AdminTeamsPage = lazy(() => import('./pages/admin/AdminTeamsPage.jsx'))
+const AdminTeamDetailPage = lazy(() => import('./pages/admin/AdminTeamDetailPage.jsx'))
 
 const LoginPage = lazy(() => import('./pages/auth/LoginPage.jsx'))
 const SignUpPage = lazy(() => import('./pages/auth/SignUpPage.jsx'))
@@ -68,6 +79,22 @@ export default function App() {
                     <Route path="/settings"        element={<SettingsPage />} />
                     <Route path="/ai-team-matcher" element={<AITeamMatcherPage />} />
                     <Route path="/ai-hackathon-recommender" element={<Navigate to="/hackathons" replace />} />
+                  </Route>
+                </Route>
+
+                {/* Protected Admin Routes */}
+                <Route element={<AdminRoute />}>
+                  <Route element={<AdminLayout />}>
+                    <Route path="/admin" element={<AdminDashboardPage />} />
+                    <Route path="/admin/students" element={<AdminStudentsPage />} />
+                    <Route path="/admin/students/:studentId" element={<AdminStudentDetailPage />} />
+                    <Route path="/admin/hackathons" element={<AdminHackathonsPage />} />
+                    <Route path="/admin/hackathons/:hackathonId" element={<AdminHackathonDetailPage />} />
+                    <Route path="/admin/projects" element={<AdminProjectsPage />} />
+                    <Route path="/admin/projects/:projectId" element={<AdminProjectDetailPage />} />
+                    <Route path="/admin/teams" element={<AdminTeamsPage />} />
+                    <Route path="/admin/teams/:teamId" element={<AdminTeamDetailPage />} />
+                    <Route path="/admin/statistics" element={<Navigate to="/admin" replace />} />
                   </Route>
                 </Route>
 

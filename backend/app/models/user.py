@@ -57,6 +57,7 @@ class User(Base):
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
     is_verified: Mapped[bool] = mapped_column(Boolean, default=False)
     onboarding_completed: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
+    is_admin: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
 
     # Stats (denormalized for quick reads)
     hackathons_won: Mapped[int] = mapped_column(Integer, default=0)
