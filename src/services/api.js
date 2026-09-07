@@ -1824,3 +1824,16 @@ export async function deleteAdminTeam(teamId) {
   return { success: true, message: 'Team deleted successfully' }
 }
 
+/**
+ * Retrieve aggregated ML/AI operational usage analytics and active model metadata.
+ */
+export async function getAdminMLStatistics() {
+  if (BASE) {
+    return request('/api/v1/admin/statistics/ml')
+  }
+
+  await delay(300)
+  throw new Error('Not implemented in mock mode')
+}
+
+

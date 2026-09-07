@@ -1,7 +1,9 @@
 # app/api/v1/admin.py
+import time
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy import or_, and_, func, String
 from sqlalchemy.orm import Session, joinedload, selectinload
+from app.services.ml_usage_service import log_ml_usage
 from app.database import get_db
 from app.dependencies import get_current_admin
 from app.models.user import User, Skill, UserSkill, AvailabilityStatus
@@ -40,7 +42,9 @@ from app.schemas.admin import (
     AdminTeamInviteItem,
     AdminTeamDetailResponse,
     AdminTeamUpdate,
+    AdminMLStatisticsResponse,
 )
+from app.services.admin_ml_statistics_service import AdminMLStatisticsService
 
 router = APIRouter(
     prefix="/admin",
@@ -76,6 +80,20 @@ def get_admin_stats(
         total_hackathons=total_hackathons,
         total_hackathon_registrations=total_hackathon_registrations,
     )
+
+
+# ─── ML Operational Usage Analytics ──────────────────────────────────────────
+@router.get("/statistics/ml", response_model=AdminMLStatisticsResponse, status_code=status.HTTP_200_OK)
+@router.get("/stats/ml", response_model=AdminMLStatisticsResponse, status_code=status.HTTP_200_OK, include_in_schema=False)
+def get_admin_ml_statistics(
+    db: Session = Depends(get_db),
+    admin_user: User = Depends(get_current_admin),
+):
+    """
+    Retrieve aggregated ML/AI operational usage analytics and active model metadata.
+    Strictly protected: requires admin privileges.
+    """
+    return AdminMLStatisticsService.get_ml_statistics(db)
 
 
 # ─── Student Management: List & Filter ────────────────────────────────────────
@@ -1421,9 +1439,31 @@ def get_admin_team_detail(
         )
 
     # Compute dynamic read-only ML team health
+    start_time = time.perf_counter()
     try:
         health_info = TeamHealthService.get_full_team_health(team, db)
+        elapsed_ms = int(round((time.perf_counter() - start_time) * 1000))
+        model_ver = health_info.get("model_version", "team_health_v1")
+        log_ml_usage(
+            db=db,
+            user_id=admin_user.id,
+            feature="team_health",
+            model_version=model_ver,
+            success=True,
+            response_time_ms=elapsed_ms,
+            commit=True,
+        )
     except Exception:
+        elapsed_ms = int(round((time.perf_counter() - start_time) * 1000))
+        log_ml_usage(
+            db=db,
+            user_id=admin_user.id,
+            feature="team_health",
+            model_version="team_health_v1",
+            success=False,
+            response_time_ms=elapsed_ms,
+            commit=True,
+        )
         health_info = {}
 
     members = [
@@ -1500,6 +1540,54 @@ def get_admin_team_detail(
         model_version=health_info.get("model_version"),
         explainability=health_info.get("explainability", {}),
     )
+
+
+@router.get("/teams/{team_id}/health", status_code=status.HTTP_200_OK)
+def get_admin_team_health(
+    team_id: str,
+    db: Session = Depends(get_db),
+    admin_user: User = Depends(get_current_admin),
+):
+    """
+    Retrieve dynamic ML team health analysis for a specific team.
+    """
+    team = db.query(Team).filter(Team.id == team_id).first()
+    if not team:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Team with ID {team_id} not found.",
+        )
+
+    start_time = time.perf_counter()
+    try:
+        health_info = TeamHealthService.get_full_team_health(team, db)
+        elapsed_ms = int(round((time.perf_counter() - start_time) * 1000))
+        model_ver = health_info.get("model_version", "team_health_v1")
+        log_ml_usage(
+            db=db,
+            user_id=admin_user.id,
+            feature="team_health",
+            model_version=model_ver,
+            success=True,
+            response_time_ms=elapsed_ms,
+            commit=True,
+        )
+        return health_info
+    except Exception as e:
+        elapsed_ms = int(round((time.perf_counter() - start_time) * 1000))
+        log_ml_usage(
+            db=db,
+            user_id=admin_user.id,
+            feature="team_health",
+            model_version="team_health_v1",
+            success=False,
+            response_time_ms=elapsed_ms,
+            commit=True,
+        )
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to calculate team health: {str(e)}",
+        )
 
 
 # ─── Team Management: Moderation / Update ─────────────────────────────────────

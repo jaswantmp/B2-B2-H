@@ -92,6 +92,9 @@ class User(Base):
     created_projects: Mapped[list["Project"]] = relationship(
         "Project", back_populates="creator", foreign_keys="Project.creator_id"
     )
+    ml_usage_events: Mapped[list["MLUsageEvent"]] = relationship(
+        "MLUsageEvent", back_populates="user", cascade="all, delete-orphan"
+    )
 
     def __repr__(self) -> str:
         return f"<User {self.username}>"

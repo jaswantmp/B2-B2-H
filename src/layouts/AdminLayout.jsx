@@ -17,7 +17,7 @@ const ADMIN_NAV_ITEMS = [
   { to: '/admin/hackathons', icon: Calendar, label: 'Hackathons', enabled: true },
   { to: '/admin/projects', icon: FolderOpen, label: 'Projects', enabled: true },
   { to: '/admin/teams', icon: UsersRound, label: 'Teams', enabled: true },
-  { to: '/admin/statistics', icon: BarChart3, label: 'Statistics', enabled: false },
+  { to: '/admin/statistics', icon: BarChart3, label: 'Statistics', enabled: true },
 ]
 
 export default function AdminLayout() {

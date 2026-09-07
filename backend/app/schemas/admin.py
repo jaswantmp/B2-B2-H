@@ -439,3 +439,73 @@ class AdminTeamUpdate(BaseModel):
     max_members: int | None = Field(None, ge=2, le=10)
 
 
+# ─── ML / AI Operational Usage Analytics Schemas ──────────────────────────────
+class MLOverallSummary(BaseModel):
+    total_requests: int
+    successful_requests: int
+    failed_requests: int
+    success_rate: float
+    unique_users: int
+    average_response_time_ms: float | None = None
+
+
+class MLFeatureUsageItem(BaseModel):
+    feature: str
+    total_requests: int
+    successful_requests: int
+    failed_requests: int
+    success_rate: float
+    unique_users: int
+    average_response_time_ms: float | None = None
+    last_used_at: datetime | None = None
+
+
+class MLTimeWindowStats(BaseModel):
+    total_requests: int
+    successful_requests: int
+    failed_requests: int
+    unique_users: int
+
+
+class MLTimeWindows(BaseModel):
+    today: MLTimeWindowStats
+    last_7_days: MLTimeWindowStats
+    last_30_days: MLTimeWindowStats
+
+
+class MLModelVersionItem(BaseModel):
+    feature: str
+    model_version: str
+    request_count: int
+    successful_requests: int
+    failed_requests: int
+    average_response_time_ms: float | None = None
+    last_used_at: datetime | None = None
+
+
+class MLTeamHealthAnalytics(BaseModel):
+    total_teams: int
+    average_health_score: float | None = None
+    healthy_count: int
+    moderate_count: int
+    at_risk_count: int
+
+
+class MLActiveModelItem(BaseModel):
+    feature: str
+    feature_name: str
+    model_version: str
+    description: str
+    is_tracked: bool = True
+
+
+class AdminMLStatisticsResponse(BaseModel):
+    overall_summary: MLOverallSummary
+    feature_usage: list[MLFeatureUsageItem]
+    time_windows: MLTimeWindows
+    model_version_analytics: list[MLModelVersionItem]
+    team_health_analytics: MLTeamHealthAnalytics
+    active_models: list[MLActiveModelItem]
+
+
+

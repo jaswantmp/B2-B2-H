@@ -1,9 +1,17 @@
 # app/models/ai.py
-from datetime import datetime, date
-from sqlalchemy import String, Integer, DateTime, ForeignKey, UniqueConstraint, Date, JSON
-from sqlalchemy.orm import Mapped, mapped_column
+import uuid
+from datetime import datetime, date, timezone
+from typing import TYPE_CHECKING
+from sqlalchemy import (
+    String, Integer, Boolean, DateTime, ForeignKey,
+    UniqueConstraint, Date, JSON, Index, func, text,
+)
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.dialects.postgresql import UUID
 from app.database import Base
+
+if TYPE_CHECKING:
+    from app.models.user import User
 
 
 class AIUsage(Base):
@@ -43,3 +51,34 @@ class AICache(Base):
 
     def __repr__(self) -> str:
         return f"<AICache key={self.cache_key} feature={self.feature_name}>"
+
+
+class MLUsageEvent(Base):
+    __tablename__ = "ml_usage_events"
+    __table_args__ = (
+        Index("ix_ml_usage_events_feature_created_at", "feature", "created_at"),
+    )
+
+    id: Mapped[str] = mapped_column(
+        UUID(as_uuid=False), primary_key=True, default=lambda: str(uuid.uuid4())
+    )
+    user_id: Mapped[str] = mapped_column(
+        UUID(as_uuid=False), ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    feature: Mapped[str] = mapped_column(String(100), nullable=False, index=True)
+    model_version: Mapped[str | None] = mapped_column(String(100), nullable=True)
+    success: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True, server_default=text("true"))
+    response_time_ms: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        nullable=False,
+        server_default=func.now(),
+        default=lambda: datetime.now(timezone.utc),
+        index=True,
+    )
+
+    # Relationships
+    user: Mapped["User"] = relationship("User", back_populates="ml_usage_events")
+
+    def __repr__(self) -> str:
+        return f"<MLUsageEvent id={self.id} user_id={self.user_id} feature={self.feature} success={self.success}>"

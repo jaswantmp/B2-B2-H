@@ -20,6 +20,7 @@ const AdminProjectsPage = lazy(() => import('./pages/admin/AdminProjectsPage.jsx
 const AdminProjectDetailPage = lazy(() => import('./pages/admin/AdminProjectDetailPage.jsx'))
 const AdminTeamsPage = lazy(() => import('./pages/admin/AdminTeamsPage.jsx'))
 const AdminTeamDetailPage = lazy(() => import('./pages/admin/AdminTeamDetailPage.jsx'))
+const AdminStatisticsPage = lazy(() => import('./pages/admin/AdminStatisticsPage.jsx'))
 
 const LoginPage = lazy(() => import('./pages/auth/LoginPage.jsx'))
 const SignUpPage = lazy(() => import('./pages/auth/SignUpPage.jsx'))
@@ -94,7 +95,7 @@ export default function App() {
                     <Route path="/admin/projects/:projectId" element={<AdminProjectDetailPage />} />
                     <Route path="/admin/teams" element={<AdminTeamsPage />} />
                     <Route path="/admin/teams/:teamId" element={<AdminTeamDetailPage />} />
-                    <Route path="/admin/statistics" element={<Navigate to="/admin" replace />} />
+                    <Route path="/admin/statistics" element={<AdminStatisticsPage />} />
                   </Route>
                 </Route>
 
