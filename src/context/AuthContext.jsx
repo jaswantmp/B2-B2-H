@@ -1,6 +1,6 @@
 // src/context/AuthContext.jsx
 import { createContext, useContext, useEffect, useState, useCallback, useRef, useMemo } from 'react'
-import { resetDemoAccount } from '../services/api.js'
+import { resetDemoAccount, requestPasswordReset as apiRequestPasswordReset } from '../services/api.js'
 
 const AuthContext = createContext(null)
 
@@ -402,8 +402,7 @@ export function AuthProvider({ children }) {
 
   // ── Forgot password ─────────────────────────────────────────────────────
   const requestPasswordReset = useCallback(async ({ email }) => {
-    await delay(900)
-    return { success: true, email: email.trim().toLowerCase() }
+    return apiRequestPasswordReset(email)
   }, [])
 
   const value = useMemo(() => ({

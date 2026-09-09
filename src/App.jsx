@@ -25,6 +25,7 @@ const AdminStatisticsPage = lazy(() => import('./pages/admin/AdminStatisticsPage
 const LoginPage = lazy(() => import('./pages/auth/LoginPage.jsx'))
 const SignUpPage = lazy(() => import('./pages/auth/SignUpPage.jsx'))
 const ForgotPasswordPage = lazy(() => import('./pages/auth/ForgotPasswordPage.jsx'))
+const ResetPasswordPage = lazy(() => import('./pages/auth/ResetPasswordPage.jsx'))
 const DashboardPage = lazy(() => import('./pages/DashboardPage.jsx'))
 const OnboardingPage = lazy(() => import('./pages/OnboardingPage.jsx'))
 const DiscoverPage = lazy(() => import('./pages/DiscoverPage.jsx'))
@@ -60,6 +61,7 @@ export default function App() {
                 <Route path="/login"           element={<LoginPage />} />
                 <Route path="/signup"          element={<SignUpPage />} />
                 <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+                <Route path="/reset-password"  element={<ResetPasswordPage />} />
 
                 {/* Protected app shell — redirects to /login if not authenticated */}
                 <Route element={<ProtectedRoute />}>

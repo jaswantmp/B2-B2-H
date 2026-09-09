@@ -6,6 +6,7 @@ from app.models.project import Project, ProjectMember, ProjectApplication
 from app.models.hackathon import Hackathon, HackathonRegistration
 from app.models.ai import AIUsage, AICache, MLUsageEvent
 from app.models.chat import ChatMessage
+from app.models.password_reset_token import PasswordResetToken
 
 __all__ = [
     "User",
@@ -25,6 +26,7 @@ __all__ = [
     "AICache",
     "MLUsageEvent",
     "ChatMessage",
+    "PasswordResetToken",
 ]
 
 

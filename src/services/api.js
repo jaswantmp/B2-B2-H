@@ -1836,4 +1836,36 @@ export async function getAdminMLStatistics() {
   throw new Error('Not implemented in mock mode')
 }
 
+/**
+ * Request password reset email for a user.
+ */
+export async function requestPasswordReset(email) {
+  const normalizedEmail = (email || '').trim().toLowerCase()
+  if (BASE) {
+    return request('/api/v1/auth/forgot-password', {
+      method: 'POST',
+      body: JSON.stringify({ email: normalizedEmail }),
+    })
+  }
+
+  await delay(600)
+  return { message: 'If an account exists with this email, a password reset link has been sent.' }
+}
+
+/**
+ * Confirm password reset with token and new password.
+ */
+export async function confirmPasswordReset(token, newPassword) {
+  if (BASE) {
+    return request('/api/v1/auth/reset-password', {
+      method: 'POST',
+      body: JSON.stringify({ token: (token || '').trim(), new_password: newPassword }),
+    })
+  }
+
+  await delay(600)
+  return { message: 'Password has been reset successfully. You can now log in with your new password.' }
+}
+
+
 

@@ -95,6 +95,9 @@ class User(Base):
     ml_usage_events: Mapped[list["MLUsageEvent"]] = relationship(
         "MLUsageEvent", back_populates="user", cascade="all, delete-orphan"
     )
+    password_reset_tokens: Mapped[list["PasswordResetToken"]] = relationship(
+        "PasswordResetToken", back_populates="user", cascade="all, delete-orphan"
+    )
 
     def __repr__(self) -> str:
         return f"<User {self.username}>"
@@ -136,3 +139,4 @@ from app.models.github import GithubProfile  # noqa: E402
 from app.models.notification import Notification  # noqa: E402
 from app.models.team import TeamMember, Team  # noqa: E402
 from app.models.project import ProjectMember, Project  # noqa: E402
+from app.models.password_reset_token import PasswordResetToken  # noqa: E402

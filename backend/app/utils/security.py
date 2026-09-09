@@ -29,3 +29,22 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None) -> s
     to_encode.update({"exp": int(expire.timestamp())})
     encoded_jwt = jwt.encode(to_encode, settings.secret_key, algorithm=settings.algorithm)
     return encoded_jwt
+
+
+def hash_reset_token(token: str) -> str:
+    """Generate SHA-256 hex digest of a raw reset token."""
+    import hashlib
+    return hashlib.sha256(token.encode("utf-8")).hexdigest()
+
+
+def generate_password_reset_token() -> tuple[str, str]:
+    """
+    Generate a cryptographically secure 32-byte URL-safe reset token and its SHA-256 hash.
+    Returns:
+        (raw_token, token_hash)
+    """
+    import secrets
+    raw_token = secrets.token_urlsafe(32)
+    token_hash = hash_reset_token(raw_token)
+    return raw_token, token_hash
+

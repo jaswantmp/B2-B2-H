@@ -27,7 +27,7 @@ export default function ForgotPasswordPage() {
     try {
       await requestPasswordReset({ email })
       setSent(true)
-      push('Password reset link sent. Check your inbox.', 'success')
+      push('If an account exists with this email, a password reset link has been sent.', 'success')
     } catch {
       setError('Something went wrong. Please try again.')
     } finally {
@@ -46,7 +46,7 @@ export default function ForgotPasswordPage() {
             <MailCheck size={26} className="text-emerald-400" aria-hidden="true" />
           </div>
           <p className="text-sm theme-text-secondary leading-relaxed mb-1">
-            We sent a password reset link to
+            If an account exists with this email, we've sent a password reset link to
           </p>
           <p className="text-sm font-semibold theme-text mb-6">{email}</p>
           <p className="text-xs theme-muted leading-relaxed mb-6">
