@@ -1,7 +1,7 @@
 // src/pages/auth/LoginPage.jsx
 import { useState } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
-import { Eye, EyeOff, LogIn, Zap } from 'lucide-react'
+import { Eye, EyeOff, LogIn, Zap, Info } from 'lucide-react'
 import AuthLayout from '../../layouts/AuthLayout.jsx'
 import FormField from '../../components/auth/FormField.jsx'
 import { useAuth } from '../../context/AuthContext.jsx'
@@ -65,6 +65,21 @@ export default function LoginPage() {
       title="Welcome back"
       subtitle="Log in to continue finding your team."
     >
+      {/* ── Demo / Seeded Data Disclosure Notice ── */}
+      <div
+        className="mb-5 p-3.5 rounded-xl border text-xs flex items-start gap-2.5 transition-all"
+        style={{
+          backgroundColor: 'rgba(139, 92, 246, 0.05)',
+          borderColor: 'rgba(139, 92, 246, 0.25)',
+        }}
+      >
+        <Info size={16} className="text-violet-400 flex-shrink-0 mt-0.5" aria-hidden="true" />
+        <div className="leading-relaxed" style={{ color: 'var(--text-secondary, #94a3b8)' }}>
+          <span className="font-semibold text-violet-300 block mb-0.5">Demo Environment Notice: </span>
+          This application is a functional prototype using seeded sample data for demonstration purposes. Student profiles, projects, teams, hackathons, registrations, and activity shown in the demo are not real-world users or events.
+        </div>
+      </div>
+
       {/* ── Single Refined Demo Login Card ── */}
       <div className="mb-5">
         <button

@@ -459,6 +459,22 @@ export async function getMyTeam() {
   return myTeam
 }
 
+// GET /api/v1/teams/invites
+export async function getUserTeamInvites() {
+  if (BASE) {
+    try {
+      const data = await request('/api/v1/teams/invites')
+      return Array.isArray(data) ? data : []
+    } catch (e) {
+      console.warn('Failed to fetch user team invites:', e)
+      return []
+    }
+  }
+
+  await delay()
+  return []
+}
+
 // POST /api/v1/teams/
 export async function createTeam(data) {
   if (BASE) {

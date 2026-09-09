@@ -2,14 +2,14 @@
 import { useState, useEffect, useCallback } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import {
-  Sparkles, TrendingUp, Users, Calendar, ArrowRight,
+  Sparkles, FolderGit2, Users, Calendar, ArrowRight,
   Bell, Trophy, ChevronRight, Zap, Clock, RefreshCw,
 } from 'lucide-react'
 import PulseAvatar from '../components/PulseAvatar.jsx'
 import SkillBadge from '../components/SkillBadge.jsx'
 import AvailabilityIndicator from '../components/AvailabilityIndicator.jsx'
 import { useAuth } from '../context/AuthContext.jsx'
-import { getHackathons, getRecommendations, getNotifications } from '../services/api.js'
+import { getHackathons, getRecommendations, getNotifications, getUserTeamInvites, getProjects } from '../services/api.js'
 
 
 const STATUS_OPTIONS = [
@@ -29,6 +29,8 @@ export default function DashboardPage() {
   const [hackathonsList, setHackathonsList]           = useState([])
   const [recommendationsList, setRecommendationsList] = useState([])
   const [notificationsList, setNotificationsList]     = useState([])
+  const [teamInvitesList, setTeamInvitesList]         = useState([])
+  const [projectsList, setProjectsList]               = useState([])
 
   const [recsLoading, setRecsLoading] = useState(true)
   const [recsError, setRecsError]     = useState(null)
@@ -70,12 +72,35 @@ export default function DashboardPage() {
       .then(nList => { if (!cancelled) setNotificationsList(nList || []) })
       .catch(err => console.warn('Failed to load notifications:', err))
 
+    getUserTeamInvites()
+      .then(iList => { if (!cancelled) setTeamInvitesList(iList || []) })
+      .catch(err => console.warn('Failed to load team invites:', err))
+
+    getProjects()
+      .then(pList => { if (!cancelled) setProjectsList(pList || []) })
+      .catch(err => console.warn('Failed to load projects:', err))
+
     loadRecommendations()
 
     return () => {
       cancelled = true
     }
   }, [authLoading, user?.id, loadRecommendations])
+
+  // Derive real statistics for the logged-in user
+  const userProjects = projectsList.filter(p => {
+    const uid = String(user?.id || '')
+    if (!uid) return false
+    if (p.creator_id && String(p.creator_id) === uid) return true
+    if (p.creator?.id && String(p.creator.id) === uid) return true
+    if (Array.isArray(p.members) && p.members.some(m => String(m.user_id || m.user?.id || m.id) === uid)) return true
+    if (Array.isArray(p.team) && p.team.some(b => String(b.id) === uid)) return true
+    return false
+  })
+  const projectsCount = userProjects.length || (user?.projects?.length ?? 0)
+  const invitesCount = teamInvitesList.length
+  const registeredHackathonsCount = hackathonsList.filter(h => Boolean(h.userRegistered || h.user_registered)).length
+  const winsCount = (user?.hackathonsWon ?? user?.hackathons_won ?? 0).toString()
 
   const unread             = notificationsList.filter(n => !n.read).length
   const upcomingHackathons = hackathonsList.slice(0, 3)
@@ -137,9 +162,14 @@ export default function DashboardPage() {
           <div className="flex items-center gap-4">
             <PulseAvatar user={{ ...user, status }} size="xl" />
             <div>
-              <h1 className="text-2xl font-bold theme-text">
-                Good evening, {user.name.split(' ')[0]} 👋
-              </h1>
+              <div className="flex items-center gap-2.5 flex-wrap">
+                <h1 className="text-2xl font-bold theme-text">
+                  Good evening, {user.name.split(' ')[0]} 👋
+                </h1>
+                <span className="inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-full bg-violet-500/10 border border-violet-500/25 text-violet-400">
+                  Demo Environment
+                </span>
+              </div>
               <p className="theme-muted text-sm mt-1">
                 {user.branch} · {user.university}
               </p>
@@ -197,13 +227,37 @@ export default function DashboardPage() {
         </div>
       </section>
 
-      {/* ── Stats row ──────────────────────────────────────────────── */}
+      {/* ── Stats row (Real Database-Derived Metrics) ─────────────── */}
       <section aria-label="Your stats" className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         {[
-          { icon: TrendingUp, label: 'Profile Views', value: '24',  sub: '+6 this week',  color: 'text-violet-500' },
-          { icon: Users,      label: 'Team Invites',  value: '3',   sub: '2 pending',     color: 'text-amber-500'  },
-          { icon: Calendar,   label: 'Hackathons',    value: '2',   sub: 'registered',    color: 'text-cyan-500'   },
-          { icon: Trophy,     label: 'Wins',          value: user.hackathonsWon.toString(), sub: 'all time', color: 'text-emerald-500' },
+          {
+            icon: FolderGit2,
+            label: 'Projects',
+            value: projectsCount.toString(),
+            sub: projectsCount === 0 ? 'no projects' : projectsCount === 1 ? '1 active / joined' : `${projectsCount} active / joined`,
+            color: 'text-violet-500',
+          },
+          {
+            icon: Users,
+            label: 'Team Invites',
+            value: invitesCount.toString(),
+            sub: invitesCount === 0 ? '0 pending' : invitesCount === 1 ? '1 pending' : `${invitesCount} pending`,
+            color: 'text-amber-500',
+          },
+          {
+            icon: Calendar,
+            label: 'Hackathons',
+            value: registeredHackathonsCount.toString(),
+            sub: registeredHackathonsCount === 1 ? '1 registered' : `${registeredHackathonsCount} registered`,
+            color: 'text-cyan-500',
+          },
+          {
+            icon: Trophy,
+            label: 'Wins',
+            value: winsCount,
+            sub: 'all time',
+            color: 'text-emerald-500',
+          },
         ].map(({ icon: Icon, label, value, sub, color }) => (
           <div
             key={label}

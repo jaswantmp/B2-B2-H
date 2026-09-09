@@ -2274,26 +2274,22 @@ def seed_hackathons(db: Session):
     with open(json_path, "r", encoding="utf-8") as f:
         hackathons_data = json.load(f)
 
-    now = datetime.utcnow()
+    # Deterministic base schedule starting Sept 19, 2026 for demo readiness
+    demo_anchor = datetime(2026, 9, 19, 9, 0, 0)
+    schedule_offsets = [
+        (0, 2), (5, 3), (12, 2), (16, 3), (19, 3), (23, 3), (27, 3), (31, 3),
+        (35, 3), (38, 3), (43, 3), (47, 3), (51, 3), (55, 3), (59, 3), (63, 3),
+        (67, 3), (71, 3), (75, 3), (80, 3)
+    ]
     
-    for h_data in hackathons_data:
+    for idx, h_data in enumerate(hackathons_data):
         # Check duplicate
         db_h = db.query(Hackathon).filter(Hackathon.title == h_data["title"]).first()
         
-        # Calculate dates based on status
-        status = h_data["status"]
-        if status == "Open Registration":
-            start_date = now + timedelta(days=30)
-            end_date = now + timedelta(days=32)
-            reg_deadline = now + timedelta(days=25)
-        elif status == "Upcoming":
-            start_date = now + timedelta(days=5)
-            end_date = now + timedelta(days=7)
-            reg_deadline = now + timedelta(days=2)
-        else:  # Ongoing
-            start_date = now - timedelta(days=1)
-            end_date = now + timedelta(days=1)
-            reg_deadline = now - timedelta(days=3)
+        offset_start, duration = schedule_offsets[idx % len(schedule_offsets)]
+        start_date = demo_anchor + timedelta(days=offset_start)
+        end_date = start_date + timedelta(days=duration)
+        reg_deadline = start_date - timedelta(days=2)
 
         # Include registration deadline in the description
         deadline_str = reg_deadline.strftime("%d %b %Y")
@@ -2313,17 +2309,17 @@ def seed_hackathons(db: Session):
                 team_size=f"1-{h_data['max_team_size']}",
                 tracks=h_data["tracks"],
                 tags=h_data["tags"],
-                created_at=now - timedelta(days=10)
+                created_at=demo_anchor - timedelta(days=10)
             )
             db.add(db_h)
             db.commit()
             db.refresh(db_h)
             print(f"Created Hackathon: {db_h.title}")
         else:
-            print(f"Hackathon '{db_h.title}' already exists, updating properties.")
-            db_h.description = description_with_deadline
-            db_h.date = start_date
-            db_h.end_date = end_date
+            print(f"Hackathon '{db_h.title}' already exists, preserving existing dates and updating details.")
+            # Only update description if it does not already contain a deadline
+            if "Registration Deadline:" not in db_h.description:
+                db_h.description = description_with_deadline
             db_h.location = h_data["location"]
             db_h.prize = h_data["prize_pool"]
             db_h.team_size = f"1-{h_data['max_team_size']}"

@@ -164,6 +164,12 @@ class TestMLInstrumentation(unittest.TestCase):
         self.db.query(MLUsageEvent).filter(MLUsageEvent.user_id.in_(user_ids)).delete(synchronize_session=False)
         self.db.commit()
 
+    def tearDown(self):
+        # Clean usage events after each test
+        user_ids = [self.student_user.id, self.candidate_user.id, self.admin_user.id]
+        self.db.query(MLUsageEvent).filter(MLUsageEvent.user_id.in_(user_ids)).delete(synchronize_session=False)
+        self.db.commit()
+
     def test_01_team_matcher_instrumentation(self):
         """Verify POST /api/v1/ai/team-match records a team_matcher event."""
         resp = self.client.post(

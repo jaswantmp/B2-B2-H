@@ -621,10 +621,15 @@ export default function HackathonsPage() {
 
       {/* Page header */}
       <div>
-        <h1 className="text-2xl font-bold mb-1 flex items-center gap-2 theme-text">
-          <Calendar size={22} className="text-violet-500" />
-          Hackathons
-        </h1>
+        <div className="flex items-center gap-2.5 flex-wrap mb-1">
+          <h1 className="text-2xl font-bold flex items-center gap-2 theme-text">
+            <Calendar size={22} className="text-violet-500" />
+            Hackathons
+          </h1>
+          <span className="inline-flex items-center gap-1 text-[11px] font-medium px-2 py-0.5 rounded-full bg-violet-500/10 border border-violet-500/25 text-violet-400">
+            Demo Environment
+          </span>
+        </div>
         <p className={`text-sm ${muted}`}>
           {hackathonsList.length} upcoming events · {registeredCount} registered
         </p>

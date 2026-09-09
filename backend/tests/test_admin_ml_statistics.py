@@ -59,7 +59,9 @@ class TestAdminMLStatistics(unittest.TestCase):
         cls.admin_email = "test_admin_stats@b2b2h.com"
         cls.user2_email = "test_user2_stats@b2b2h.com"
 
-        # 1. Clean up any existing test records
+        # 1. Clean up any existing test records & ML usage events
+        cls.db.query(MLUsageEvent).delete(synchronize_session=False)
+        cls.db.commit()
         cls._cleanup_test_data()
 
         # 2. Create Student User
@@ -139,19 +141,19 @@ class TestAdminMLStatistics(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
+        cls.db.query(MLUsageEvent).delete(synchronize_session=False)
+        cls.db.commit()
         cls._cleanup_test_data()
         cls.db.close()
 
     def setUp(self):
-        # Clear usage events before each test to have deterministic baselines
-        user_ids = [self.student_user.id, self.admin_user.id, self.user2.id]
-        self.db.query(MLUsageEvent).filter(MLUsageEvent.user_id.in_(user_ids)).delete(synchronize_session=False)
+        # Clear all usage events before each test to guarantee a clean ml_usage_events table and deterministic isolation
+        self.db.query(MLUsageEvent).delete(synchronize_session=False)
         self.db.commit()
 
     def tearDown(self):
-        # Clean usage events after each test
-        user_ids = [self.student_user.id, self.admin_user.id, self.user2.id]
-        self.db.query(MLUsageEvent).filter(MLUsageEvent.user_id.in_(user_ids)).delete(synchronize_session=False)
+        # Clean all usage events after each test
+        self.db.query(MLUsageEvent).delete(synchronize_session=False)
         self.db.commit()
 
     # ──────────────────────────────────────────────────────────────────────────
