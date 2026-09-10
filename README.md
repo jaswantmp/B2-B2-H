@@ -295,38 +295,48 @@ The frontend production build also completed successfully.
 B2B2H/
 │
 ├── backend/
+│   ├── alembic/
 │   ├── app/
 │   │   ├── api/
+│   │   │   └── v1/
 │   │   ├── models/
 │   │   ├── schemas/
 │   │   ├── services/
 │   │   ├── utils/
-│   │   ├── dependencies.py
 │   │   ├── config.py
+│   │   ├── database.py
+│   │   ├── dependencies.py
 │   │   └── main.py
-│   │
-│   ├── alembic/
-│   ├── ml/
-│   │   ├── models/
-│   │   ├── data/
-│   │   ├── inference.py
-│   │   └── training scripts
-│   │
 │   ├── tests/
+│   ├── alembic.ini
 │   └── requirements.txt
 │
+├── ml/
+│   ├── data/
+│   ├── models/
+│   ├── inference.py
+│   ├── nlp_skill_extractor.py
+│   ├── recommendation_engine.py
+│   └── train_*.py (training & evaluation pipelines)
+│
 ├── src/
+│   ├── assets/
 │   ├── components/
+│   ├── constants/
 │   ├── context/
 │   ├── layouts/
 │   ├── pages/
 │   │   ├── admin/
 │   │   └── auth/
 │   ├── services/
-│   └── App.jsx
+│   ├── App.jsx
+│   ├── index.css
+│   └── main.jsx
 │
 ├── public/
+├── index.html
 ├── package.json
+├── vite.config.js
 └── README.md
 ```
 ---
